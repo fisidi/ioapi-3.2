@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: M3PROBE.html 146 2015-02-02 17:04:47Z coats $" -->
+<!-- "$Id: M3PROBE.html 151 2015-02-06 17:18:13Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> Program M3PROBE </TITLE>
 </HEAD>
@@ -24,9 +24,10 @@
     REPORT-file.
     <P>
 
-    Source code for program <CODE>m3probe</CODE> is available
-    <A HREF = "gpl.txt">under the GNU GPL License, Version 2</A>,
-    and can be downloaded as part of the I/O&nbsp;API distribution tar-ball 
+    Source code for program <CODE>m3probe</CODE> is available <A HREF =
+    "gpl.txt">under the GNU GPL License, Version 2</A>, can be found <A
+    HREF="M3PROBE.txt">here</A>,  and can be downloaded from the CMAS
+    web site as part of the I/O&nbsp;API distribution tar-ball
     <A HREF = "AVAIL.html">from this page</A>.
 
 <H2> Usage </H2>
@@ -39,14 +40,19 @@
     where <VAR>INFILE</VAR> is the <A HREF = "LOGICALS.html"> logical
     name </A>  of the input file, and <VAR>REPORT</VAR> is the logical
     name of the  report file to which the ASCII time series report is
-    printed.   <STRONG>The program will prompt you</STRONG> for the
-    starting and ending date time and the time step for the report
-    period, the variable to be reported, and (repeatedly) for the
-    grid/vector coordinates for the selected set of points.  End the
-    list of points with a zero (<CODE>0</CODE> response to the relevant
-    prompt.  Default values for the time period are computed from the
-    metadata in the <VAR>INFILE</VAR> header, and may be accepted by
-    hitting the <CODE>RETURN</CODE> key.
+    printed.  <VAR>INFILE</VAR> must be of type <CODE>GRDDED3</CODE>,
+    <CODE>CUSTOM<3</CODE>, or <CODE>BNDARY3</CODE>. <STRONG>The program
+    will prompt you</STRONG> for the starting and ending date and time and
+    the time step for the report period, the variable to be reported,
+    and (repeatedly) for the grid/vector coordinates for the selected
+    set of points to be reported.  End the list of points with a zero
+    (<CODE>0</CODE>) response to the relevant prompt for 
+    <CODE>GRDDED3</CODE> or <CODE>CUSTOM<3</CODE> files, or
+    <CODE>-9999</CODE> for <CODE>BNDARY3</CODE> files.  Default values
+    for the time period are computed from the metadata in the
+    <VAR>INFILE</VAR> header, and may be accepted by hitting the
+    <CODE>RETURN</CODE> key.  At most 256 points will be accepted
+    for the report (and that will give very long lines :-).
     <P> 
 
     If you want to run this program in <STRONG>batch mode</STRONG> 
@@ -56,12 +62,13 @@
     pattern of responses then becomes either a command-input file which 
     is redirected into the program in the script, or becomes a 
     &quot;here-document&quot; fed into the execution.  The following 
-    is an excerpt of a script that probes a SMOKE <VAR>MTMP</VAR> file (a
-    degenerate GRIDDED file with in this case <CODE>NCOLS=1</CODE>,
+    is an excerpt of a script that probes a SMOKE <VAR>MTMP</VAR> file
+    (a degenerate GRIDDED file with in this case <CODE>NCOLS=1</CODE>,
     <CODE>NROWS=402768</CODE>, and<CODE>NLAYS=1</CODE>, and
     starting date and time <CODE>2013239:000000</CODE>, time step one
     hour (<CODE>10000</CODE>, and <CODE>MXREC3=25</CODE> time steps
-    (hence ending date and time <CODE>2013240:000000</CODE>):
+    (hence ending date and time <CODE>2013240:000000</CODE>) for variable
+    <VAR>TSFC</VAR>:
     <P>
 <PRE>
     ...
@@ -69,18 +76,19 @@
     setenv REPORT ${data}/SPEED.base.2013239.txt
     set    UI  = /tmp/speed.$$
 
-    echo "Yes           " >&! ${UI}     #  Yes, continue with program
+    echo "Yes           " >&amp;! ${UI}     #  Yes, continue with program
     echo "              " >>  ${UI}     #  default starting date for run
     echo "              " >>  ${UI}     #  default starting time
     echo "              " >>  ${UI}     #  default time step
     echo "              " >>  ${UI}     #  default ending date
     echo "              " >>  ${UI}     #  default ending time
-    echo "1             " >>  ${UI}     #  col for first point
-    echo "4000          " >>  ${UI}     #  row for first point
-    echo "1             " >>  ${UI}     #  col for first point
-    echo "5000          " >>  ${UI}     #  row for first point
-    echo "1             " >>  ${UI}     #  col for first point
-    echo "7000          " >>  ${UI}     #  row for first point
+    echo "TSFC          " >>  ${UI}     #  name of the variable to be reported
+    echo "1             " >>  ${UI}     #  col for first  point to be reported
+    echo "4000          " >>  ${UI}     #  row for first  point...
+    echo "1             " >>  ${UI}     #  col for second point...
+    echo "5000          " >>  ${UI}     #  row for second point...
+    echo "1             " >>  ${UI}     #  col for third  point...
+    echo "7000          " >>  ${UI}     #  row for third  point...
     echo "0             " >>  ${UI}     #  no more points to process
 
     m3probe < ${UI}
@@ -95,7 +103,8 @@
     The output file for this run has four columns&mdash;the first column
     for the date and time, and one column for each of the requested
     points <CODE>(1,4000)</CODE>, <CODE>(1,5000)</CODE>,
-    <CODE>(1,7000)</CODE>:
+    <CODE>(1,7000)</CODE> as given below.  Note that this is purely a
+    &quot;stream&quot; output, with no header labelling:
 
 <PRE>
   2013239:000000    2.554426E+01    1.913849E+01    4.619951E+01

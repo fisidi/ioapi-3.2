@@ -61,7 +61,7 @@
     setenv VARLIST "TA2,QV2"
     set    UI  = /tmp/m3totxt.$$
 
-    echo "Yes           " >&! ${UI}     #  Yes, continue with program
+    echo "Yes           " >&amp;! ${UI}     #  Yes, continue with program
     echo "1979003       " >>  ${UI}     #  starting date for run
     echo "120000        " >>  ${UI}     #  starting time
     echo "              " >>  ${UI}     #  default time step

@@ -2,7 +2,7 @@
 MODULE MODGCTP
 
     !!***************************************************************
-    !!  Version "$Id: modgctp.f90 100 2015-01-16 16:52:16Z coats $"
+    !!  Version "$Id: modgctp.f90 147 2015-02-03 19:57:42Z coats $"
     !!  Copyright (c) 2014 UNC Institute for the Environment.
     !!  Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
     !!  See file "LGPL.txt" for conditions of use.
@@ -177,12 +177,12 @@ MODULE MODGCTP
 
 
     CHARACTER*132, SAVE :: SVN_ID = &
-'$Id:: modgctp.f90 100 2015-01-16 16:52:16Z coats                     $'
+'$Id:: modgctp.f90 147 2015-02-03 19:57:42Z coats                     $'
 
 
     !!  internal state-variables for SETSPHERE, INITSPHERES, SPHEREDAT:
 
-    INTEGER, SAVE :: ISPH   = 8      !  default GRS80
+    INTEGER, SAVE :: KSPH   = 8      !  default GRS80
     INTEGER, SAVE :: NCALLS = 0
 
     REAL*8, SAVE :: AXISMAJ = 0.0D0
@@ -307,7 +307,7 @@ CONTAINS    ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
             SETSPHERE = .FALSE.
         ELSE
             NCALLS    = NCALLS + 1
-            ISPH      = I1
+            KSPH      = I1
             AXISMAJ   = P1
             AXISMIN   = P2
             SETSPHERE = .TRUE.
@@ -386,7 +386,7 @@ CONTAINS    ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
             IF ( EFLAG ) THEN
                 INITSPHERES = .FALSE.
             ELSE
-                ISPH    = I1
+                KSPH    = I1
                 AXISMAJ = P1
                 AXISMIN = P2
                 INITSPHERES = .TRUE.
@@ -408,7 +408,7 @@ CONTAINS    ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
         !!........  Body  ......................................................
 
-            INSPHERE     = ISPH
+            INSPHERE     = KSPH
             INPARAM( 1 ) = AXISMAJ
             INPARAM( 2 ) = AXISMIN
             IOPARAM( 1 ) = AXISMAJ
@@ -3473,6 +3473,16 @@ CONTAINS    ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
         END IF  ! if non-Lam grid (etc...) for GTP0 input
 
+        IF ( .NOT. INITSPHERES() ) THEN
+            EFLAG = .TRUE.
+            MESG  = 'SETSPHERE/INITSPHERES() failure'
+            CALL M3MESG( MESG )
+        ELSE
+            ISPH     = KSPH
+            TPA( 1 ) = AXISMAJ
+            TPA( 2 ) = AXISMIN
+        END IF
+
         M3TOGTPZ1 = ( .NOT.EFLAG )
 
         RETURN
@@ -3507,7 +3517,7 @@ CONTAINS    ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
         ISPH = NINT( SPHER )
 
         IF ( SPHER .GT. 19.5 ) THEN
-            ISPH    = -2
+            ISPH   = -2
             TPA(1) = SPHER
         ELSE IF ( SPHER .LT. -0.05 ) THEN
             EFLAG = .TRUE.

@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: AA.html 146 2015-02-02 17:04:47Z coats $" -->
+<!-- "$Id: AA.html 152 2015-02-09 13:59:25Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE">
 <TITLE>  The BAMS/EDSS/Models-3 I/O&nbsp;API </TITLE>
 </HEAD>
@@ -22,20 +22,12 @@ Contents
 </A></H2>
 
     <UL>
-        <LI>  <A HREF = "index.html">      Back to the IOAPI Home Page </A>
-        <!--
-        <LI>  <A HREF = "#note" >          Note on the 2002
-                                           <CODE>CMAQ</CODE>
-                                           Code Fork</A>
-        -->
-        <LI>  <A HREF = "AVAIL.html" >     Availability/Download/Installation </A>
-        <LI>  <A HREF = "TUTORIAL.html" >  Tutorial </A>
-        <LI>  <A HREF = "NEWSTUFF.html" >
-              Research Directions / &quot;What's New&quot;</A>
-        <LI>  <A HREF = "CHANGES.html" >
-              Changes from I/O&nbsp;API Version&nbsp;1 to Version&nbsp;2
-              and then to Version&nbsp;3</A>
-        <LI>  <A HREF = "#conventions">      Conventions </A>
+        <LI>  <A HREF = "index.html"   >Back to the I/O&nbsp;API Home Page </A>
+        <LI>  <A HREF = "AVAIL.html"   >Availability/Download/Installation </A>
+        <LI>  <A HREF = "TUTORIAL.html">Tutorial </A>
+        <LI>  <A HREF = "NEWSTUFF.html">Change
+                Log&nbsp;/&nbsp;&quot;What's New&quot;&nbsp;/&nbsp;Research Directions</A>
+        <LI>  <A HREF = "#conventions" >Conventions</A>
               <UL>
                   <LI><A HREF = "LOGICALS.html"   >Logical Names</A>
                   <LI><A HREF = "ENVIRONMENT.html">Standard
@@ -54,36 +46,35 @@ Contents
                                                     and buffered and
                                                     PVM virtual files</A>
               </UL>
-        <LI>  <A HREF = "DATATYPES.html" >   Data Types </A>
+        <LI>  <A HREF = "DATATYPES.html"    >Data Types </A>
         <LI>  <A HREF = "LIBS.html">         Object Libraries and
                                              Executables</A>
-        <LI>  <A HREF = "INCLUDE.html">      <CODE>MODULE</CODE>s and 
+        <LI>  <A HREF = "INCLUDE.html"      ><CODE>MODULE</CODE>s and 
                                              Public INCLUDE FILES </A>
-        <LI>  <A HREF = "#ioapi">            Public I/O Routines </A>
-        <LI>  <A HREF = "#coordstuff">       Coordinate and Grid
+        <LI>  <A HREF = "#ioapi"            >Public I/O Routines </A>
+        <LI>  <A HREF = "#coordstuff"       >Coordinate and Grid
                                              Related Routines </A>
-        <LI>  <A HREF = "#datestuff">        Date-Time Manipulation
+        <LI>  <A HREF = "#datestuff"        >Date-Time Manipulation
                                              Routines </A>
-        <LI>  <A HREF = "#utility">          Utility Routines </A>
-        <LI>  <A HREF = "#tools">            Related Programs; Examples </A>
-        <LI>  <A HREF = "#python">           Python <VAR>ioapiTools</VAR></A>
-        <LI>  <A HREF = "ERRORS.html" >      I/O API Troubleshooting </A>
-        <LI>  <A HREF = "REQUIREMENTS.html" >
-                                             Requirements Document  </A>
-        <LI>  <A HREF = "NOTICES.html" >     Notices:  Copyright,
+        <LI>  <A HREF = "#utility"          >Utility Routines </A>
+        <LI>  <A HREF = "#tools"            >Related Programs:
+                                             <VAR>m3tools</VAR>; Examples </A>
+        <LI>  <A HREF = "#python"           >Python <VAR>ioapiTools</VAR></A>
+        <LI>  <A HREF = "ERRORS.html"       >I/O API Troubleshooting </A>
+        <LI>  <A HREF = "REQUIREMENTS.html" >Requirements Document  </A>
+        <LI>  <A HREF = "NOTICES.html"      >Notices:  Copyright,
                                              Acknowledgements</A>
                                              <P>
-        <LI>  <A HREF =
-	      "http://www.unidata.ucar.edu/packages/netcdf/index.html" >
+        <LI>  <A HREF = "http://www.unidata.ucar.edu/packages/netcdf/index.html" >
                                              netCDF User's Guide </A>
                                              (at NCAR's netCDF home
                                              web-site)
-        <LI>  <A HREF = "http://www.netlib.org/pvm3/book/pvm-book.html" >
-                                             PVM: Parallel Virtual
-                                             Machine <BR>
+        <LI>  <A HREF = "http://www.netlib.org/pvm3/book/pvm-book.html" >PVM:
+                                             Parallel Virtual
+                                             Machine</A> <BR>
                                              A Users' Guide and Tutorial
                                              for Networked Parallel
-                                             Computing</A>
+                                             Computing
                                              (at Oak Ridge's web site)
     </UL>
 
@@ -164,17 +155,9 @@ Contents
 <HR> <!- ------------------------------------------------------------- ->
 
 <H2> <A HREF = "AVAIL.html" >
-     Availability/Download of the BAMS&nbsp;EDSS/EPA&nbsp;Models-3 I/O&nbsp;API
-     </A></H2>
-
-    Back to <STRONG><EM><A HREF = "#contents">Contents</A></EM></STRONG>
-    <P>
-
-<HR> <!- ------------------------------------------------------------- ->
-
-<H2> <A HREF = "CHANGES.html">
-Changes from I/O&nbsp;API Version&nbsp;1
-</A> </H2>
+     Availability/Download/Installation</A><BR>
+     of the UNC&nbsp;IE&nbsp;/BAMS/&nbsp;EDSS/EPA&nbsp;Models-3 I/O&nbsp;API
+     </H2>
 
     Back to <STRONG><EM><A HREF = "#contents">Contents</A></EM></STRONG>
     <P>
@@ -207,7 +190,8 @@ Changes from I/O&nbsp;API Version&nbsp;1
         <DT> <A HREF = "C.html">
              <STRONG>Calling from C</STRONG>:
              </A>
-             (but use <VAR>f77</VAR> to link the &quot;.o&quot; files)
+             (but use <VAR>f90</VAR> (etc.) to link the
+             <VAR>&quot;.o&quot;</VAR> files)
         <DT> <A HREF = "VBLE.html">
              <STRONG>File Structure</STRONG>:
              </A>
@@ -554,7 +538,7 @@ Changes from I/O&nbsp;API Version&nbsp;1
                      operations
                 <P>              
                 <DT> <STRONG><CODE><A HREF = "LAMBERT.html">INITPROJ,
-                ..., LAMBERT(), ..., ALB2EQM</CODE></STRONG></A>
+                ..., LAMBERT(), ..., ALB2EQM()</A></CODE></STRONG>
                 <DD> (Legacy) single-precision single-point
                      coordinate tranforms
              </DL></BLOCKQUOTE>
@@ -1004,7 +988,7 @@ Changes from I/O&nbsp;API Version&nbsp;1
 <HR> <!- ------------------------------------------------------------- ->
 
 <H2> <A NAME = "tools">
-     I/O API Related Programs and Examples
+     I/O&nbsp;API Related Programs and Examples
 </A> </H2>
 
     The following programs are designed to do simple interactive
@@ -1017,12 +1001,17 @@ Changes from I/O&nbsp;API Version&nbsp;1
 
     With the exception of programs designed specifically for
     manipulating dates and times in scripts (<VAR>greg2jul, jul2greg,
-    juldiff, julshift, timeshift</VAR>), these programs begin by
+    juldiff, julshift, timeshift</VAR>), these programs are designed
+    for easy interactive use.  They begin by
     displaying a &quot;splash screen&quot; displaying the name, usage,
-    and version for the program, and then promt the user for the
+    and version for the program, and then prompt the user for the
     sepcifications for the program-run.  Most of these prompts have
     default values computed from the metadata in input-file headers;
     defaults may be accepted by hitting the <CODE>RETURN</CODE> key.
+    To develop scripts for them, it is generally best to run them
+    interactively once, recording all the responses you give to the
+    prompts, and  then use that information to develop a command-file
+    which redirect into the program within the script.
     <P>
 
     <BLOCKQUOTE><DL>
@@ -1053,8 +1042,8 @@ Changes from I/O&nbsp;API Version&nbsp;1
              <STRONG>bcwndw</STRONG>:
              </A>
              extract data data from a gridded file to the boundary of
-             a subgrid window (see <STRONG>m3wndw</STRONG> for extracting
-             to the window itself)
+             a subgrid window (see <STRONG>m3wndw</STRONG> below for
+             extracting to the window itself)
         <P>
         <DT> <A HREF = "CAMXTOM3.html" >
              <STRONG>camxtom3</STRONG>:
@@ -1098,7 +1087,7 @@ Changes from I/O&nbsp;API Version&nbsp;1
              </A>
              build a file according to user specifications,
              filled with dummy data, or with data read in from a
-             set of user-supplied CSV files.
+             set of user-supplied ASCII CSV files.
         <DT> <A HREF = "M3MERGE.html" >
              <STRONG>m3merge</STRONG>:
              </A>
@@ -1140,8 +1129,8 @@ Changes from I/O&nbsp;API Version&nbsp;1
              <STRONG>m3wndw</STRONG>:
              </A>
              window data from a gridded file to a subgrid (see
-             <STRONG>bcwndw</STRONG> for extracting
-             to the boundary of the subgrdi window)
+             <STRONG>bcwndw</STRONG> above, for extracting
+             to the boundary of the subgrid window)
         <DT> <A HREF = "M3XTRACT.html" >
              <STRONG>m3xtract</STRONG>:
              </A>
@@ -1241,13 +1230,7 @@ Changes from I/O&nbsp;API Version&nbsp;1
              systems.
         <P>
         <DT> <STRONG>Programs for date-manipulation </STRONG><P>
-             Verbose, prompt based, for interactive use:
-        <DT> <A HREF = "DATSHIFT.html" >
-             <STRONG>datshift</STRONG>:
-             </A>
-             Takes Gregorian-calendar date <CODE>YYYYMMDD</CODE>, adds a
-             specified number of days <CODE>D</CODE>, and reports the
-             result.
+             Verbose, prompt based, <STRONG>for interactive use</STRONG>:
         <DT> <A HREF = "GREGDATE.html" >
              <STRONG>gregdate</STRONG>:
              </A>
@@ -1273,26 +1256,24 @@ Changes from I/O&nbsp;API Version&nbsp;1
              <CODE>YESTERDAY, TODAY, TOMORROW</CODE> as command-line
              arguments.
         <P>
-        <DT> <A HREF = "GREG2JUL.html">
-             <STRONG>greg2jul</STRONG>:
-             </A> Convert a Gregorian-style date <CODE>YYYYMMDD</CODE> to
+        <DT> <A HREF = "DATSHIFT.html" ><STRONG>datshift</STRONG></A>:
+             Shift a Gregorian-calendar date <CODE>YYYYMMDD</CODE> by a 
+             specified number of days and echo the result.
+        <DT> <A HREF = "GREG2JUL.html"><STRONG>greg2jul</STRONG></A>:</A>
+             Convert a Gregorian-style date <CODE>YYYYMMDD</CODE> to
              Julian-style  <CODE>YYYYDDD</CODE> and echo the result.
-        <DT> <A HREF = "JUL2GREG.html">
-             <STRONG>jul2greg</STRONG>:
-             </A> Convert Julian-style date  <CODE>YYYYDDD</CODE>
+        <DT> <A HREF = "JUL2GREG.html"><STRONG>jul2greg</STRONG></A>:
+             Convert Julian-style date  <CODE>YYYYDDD</CODE>
              to Gregorian-style <CODE>YYYYMMDD</CODE> and
              echo the result.
-        <DT> <A HREF = "JULDIFF.html">
-             <STRONG>juldiff</STRONG>:
-             </A> Compute the number of days between two Julian dates and
+        <DT> <A HREF = "JULDIFF.html"><STRONG>juldiff</STRONG></A>:
+             Compute the number of days between two Julian dates and
              echo the result.
-        <DT> <A HREF = "JULSHIFT.html">
-             <STRONG>julshift</STRONG>:
-             </A> Shift a Julian date <CODE>YYYYDDD</CODE> by a specified number of days and
+        <DT> <A HREF = "JULSHIFT.html"><STRONG>julshift</STRONG></A>:
+             Shift a Julian date <CODE>YYYYDDD</CODE> by a specified number of days and
              echo the result.
-        <DT> <A HREF = "TIMESHIFT.html">
-             <STRONG>timeshift</STRONG>:
-             </A> Shift a Julian date&amp;time
+        <DT> <A HREF = "TIMESHIFT.html"><STRONG>timeshift</STRONG></A>:
+             Shift a Julian date&amp;time
              <CODE>YYYYDDD.HHMMSS</CODE> by a specified time step
              <CODE>HHMMSS</CODE> and
              echo the result.
@@ -1390,7 +1371,7 @@ Send comments to
 
 <!--#include virtual="/INCLUDES/footer.html" -->
     <PRE>
-    $Id: AA.html 146 2015-02-02 17:04:47Z coats $
+    $Id: AA.html 152 2015-02-09 13:59:25Z coats $
     </PRE>
 
 </BODY>

@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: M3TOGTPZ.html 117 2015-01-19 16:50:41Z coats $" -->
+<!-- "$Id: M3TOGTPZ.html 148 2015-02-03 20:28:20Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> M3TOGTPZ </TITLE>
 </HEAD>
@@ -18,9 +18,9 @@
 &quot;Generic&quot; Fortran-90 routine with an optional
 <CODE>SPHER</CODE> argument:
 <PRE>
-    LOGICAL FUNCTION  M3TOGTPZ( GDTYP, IZONE1, P_ALP, P_BET, P_GAM, YCENT,   &
+    LOGICAL FUNCTION  M3TOGTPZ( GDTYP, IZONE1, P_ALP, P_BET, P_GAM, YCENT,   &amp;
                                 TPA, ISYS, IZONE, IUNIT, ISPH )
-    LOGICAL FUNCTION  M3TOGTPZ( GDTYP, IZONE1, P_ALP, P_BET, P_GAM, YCENT, SPHER,  &
+    LOGICAL FUNCTION  M3TOGTPZ( GDTYP, IZONE1, P_ALP, P_BET, P_GAM, YCENT, SPHER,  &amp;
                                 TPA, ISYS, IZONE, IUNIT, ISPH )
 
         INTEGER, INTENT(IN   ) :: GDTYP                 !!  I/O API projection type LATGRD3, ...
@@ -48,6 +48,7 @@
     <STRONG>See also</STRONG> Coordinate-coordinate conversion routines:
     <UL>
         <LI> <A HREF = "GCTP.html">GCTP package from USGS</A><BR>
+        <LI> <A HREF = "MODGCTP.html">MODULE MODGCTP</A><BR>
     </UL>
 
 
@@ -85,7 +86,7 @@
     INTEGER*4       LENGTH          !  NAD* record-length
     INTEGER*4       IFLG            !  error flag
     ...
-    IF ( .NOT.M3TOGTPZ( GDTYP2, 70, P_ALP2, P_BET2, P_GAM2, YCENT2,    &
+    IF ( .NOT.M3TOGTPZ( GDTYP2, 70, P_ALP2, P_BET2, P_GAM2, YCENT2,    &amp;
                         TPAIN, INSYS, INZONE, INUNIT, INSPH ) ) THEN
         EFLAG = .TRUE.
         MESG = 'Lat-Lon, LAM, UTM, TRM, POL, EQM, and ALB supported'
@@ -94,7 +95,7 @@
         CALL M3MESG( MESG )
     END IF
 
-    IF ( .NOT.M3TOGTPZ( GDTYP1, 80, P_ALP1, P_BET1, P_GAM1, YCENT1,     &
+    IF ( .NOT.M3TOGTPZ( GDTYP1, 80, P_ALP1, P_BET1, P_GAM1, YCENT1,     &amp;
                         TPOUT, IOSYS, IOZONE, IOUNIT, INSPH ) ) THEN
         MESG = 'Lat-Lon, LAM, UTM, TRM, POL, EQM, and ALB supported'
         CALL M3MSG2( MESG )
@@ -102,16 +103,16 @@
         CALL M3EXIT( PNAME, 0, 0, MESG, 2 )
     END IF  ! if non-Lam grid (etc...) for GTP0 input
     ...
-    CALL GTPZ0( CRDIN, INSYS, INZONE, TPAIN, INUNIT, INSPH,     &
-                IPR, JPR, LEMSG, LPARM, CRDIO, IOSYS, IOZONE,   &
-                TPOUT, IOUNIT, LN27, LN83, FN27, FN83,          &
+    CALL GTPZ0( CRDIN, INSYS, INZONE, TPAIN, INUNIT, INSPH,     &amp;
+                IPR, JPR, LEMSG, LPARM, CRDIO, IOSYS, IOZONE,   &amp;
+                TPOUT, IOUNIT, LN27, LN83, FN27, FN83,          &amp;
                 LENGTH, IFLG )
     ...
     </PRE>
 
 
 <HR> <!----------------------------------------------------------------->
-</A><P> 
+<P> 
 
 <A HREF = "MODGCTP.html" >
 Up:  <STRONG>MODULE MODGCTP</STRONG>

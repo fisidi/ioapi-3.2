@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML> 
 <HEAD>
-<!-- "$Id: NEWSTUFF.html 146 2015-02-02 17:04:47Z coats $" -->
+<!-- "$Id: NEWSTUFF.html 152 2015-02-09 13:59:25Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> 
     What's New with the I/O&nbsp;API
@@ -16,7 +16,7 @@
       MARGINWIDTH="15">
 
     <EM>
-    $Id: NEWSTUFF.html 146 2015-02-02 17:04:47Z coats $
+    $Id: NEWSTUFF.html 152 2015-02-09 13:59:25Z coats $
     </EM>
     <HR>
 
@@ -468,6 +468,8 @@
         <LI>  <A HREF = "#addl" > Additional supported platforms </A>
         <LI>  <A HREF = "#mcpl" > MCPL:  an I/O&nbsp;API output
                                   module for MM5 </A>
+        <P>
+        <LI>  <A HREF = "CHANGES.html">Changes from I/O&nbsp;API Version&nbsp;1</A>
     </UL>
     <P>
     Go to the <STRONG><EM><A HREF = "AVAIL.html">I/O&nbsp;API
@@ -576,14 +578,15 @@
                         and <CODE>SPHERENAMES(0:21)</CODE> for GCTP spheroid
                         names and indices;
                   <LI>  <CODE>GTPZ0()</CODE>-argument initialization procedure
-                        <CODE>M3TOGTPZ()</CODE>
+                        <A HREF="M3TOGTPZ.html"><CODE>M3TOGTPZ()</CODE></A>
                   <LI>  Scattered-point-array generic coordinate-transform
-                        procedure <CODE>XY2XY()</CODE>
+                        procedure <A HREF="XY2XY.html"><CODE>XY2XY()</CODE></A>
                   <LI>  Grid-node-array generic coordinate-transform
-                        procedure <CODE>GRID2XY()</CODE>
+                        procedure <A HREF="GRID2XY.html"><CODE>GRID2XY()</CODE></A>
                   <LI>  High-performance OpenMP-Parallel generic bilinear
-                        interpolation package <CODE>GRID2INDX(), PNTS2INDX(),
-                        INDXMULT()</CODE>
+                        interpolation package 
+                        <A HREF="GRID2INDX.html"><CODE>GRID2INDX(), PNTS2INDX(),
+                        INDXMULT()</CODE></A>
               </UL>
               <P>
         <LI>  New <A HREF="M3ATTS.html"><CODE>MODULE&nbsp;M3ATTS</CODE></A>
@@ -708,7 +711,7 @@
     <UL>
         <LI> Define standard <VAR>CMAQ</VAR> and <VAR>SMOKE</VAR>
              metadata and finish the relevant routines in 
-             <A HREF="M3ATTS.html"><CODE>MODULE&nbsp;M3ATTS<CODE></A>
+             <A HREF="M3ATTS.html"><CODE>MODULE&nbsp;M3ATTS</CODE></A>
              accordingly.
              <P>
         <LI> Do overloaded <CODE>LL2LAM()</CODE> routines, to support
@@ -721,7 +724,7 @@
         <LI> Tension-spline interpolation module and tools-programs?
              <P>
         <LI> <VAR>m3tools</VAR> development&mdash;standardized,
-             overfloow-proof interfaces, free-format F90,
+             overflow-proof interfaces, free-format F90,
              OpenMP-parallel where reasonable?
              <P>
         <LI> <VAR>Tutorial</VAR> development?&nbsp;&mdash;new stuff, best
@@ -822,7 +825,7 @@
     <P>
     New <CODE>INTEGER*8</CODE>-keytuple search and sort routines
     <A HREF="FINDS.html"><CODE>FINDL1(), FINDL2(), FINDL3(), FINDL4()</CODE></A>,
-    <A HREF="LOCATS.html"><CODE>LOCATS.html">LOCATL1(), LOCATL2(), LOCATL3(), LOCATL4()</CODE></A>,
+    <A HREF="LOCATS.html"><CODE>LOCATL1(), LOCATL2(), LOCATL3(), LOCATL4()</CODE></A>,
     and
     <A HREF="SORTI.html"><CODE>SORTL1(), SORTL2(), SORTL3(), SORTL4()</CODE>
     and their C counterparts <CODE>qsortl1(), qsortl2(), qsortl3(), and
@@ -5244,7 +5247,7 @@ Send comments to
 
 
     <PRE>
-    $Id: NEWSTUFF.html 146 2015-02-02 17:04:47Z coats $
+    $Id: NEWSTUFF.html 152 2015-02-09 13:59:25Z coats $
     </PRE>
 </BODY>      <!--end body  -->
 </HTML>      <!--end html  -->

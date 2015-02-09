@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: M3ATTS.html 141 2015-01-28 18:38:30Z coats $" -->
+<!-- "$Id: M3ATTS.html 148 2015-02-03 20:28:20Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE>MODULE M3ATTS</TITLE>
 </HEAD>
@@ -144,10 +144,10 @@ Contents of <CODE>MODULE M3ATTS</CODE>
 <H3> <A NAME="initmtxatt"> INITMTXATT</A></H3>
 
     <PRE>
-    SUBROUTINE  INITMTXATT(                                             &
-            GDNAM1, GDTYP1, P_ALP1, P_BET1, P_GAM1, XCENT1, YCENT1,     &
-                    XORIG1, YORIG1, XCELL1, YCELL1, NCOLS1, NROWS1,     &
-            GDNAM2, GDTYP2, P_ALP2, P_BET2, P_GAM2, XCENT2, YCENT2,     &
+    SUBROUTINE  INITMTXATT(                                             &amp;
+            GDNAM1, GDTYP1, P_ALP1, P_BET1, P_GAM1, XCENT1, YCENT1,     &amp;
+                    XORIG1, YORIG1, XCELL1, YCELL1, NCOLS1, NROWS1,     &amp;
+            GDNAM2, GDTYP2, P_ALP2, P_BET2, P_GAM2, XCENT2, YCENT2,     &amp;
                     XORIG2, YORIG2, XCELL2, YCELL2, NCOLS2, NROWS2 )
 
         CHARACTER( LEN=* ), INTENT( IN ) :: GDNAM1, GDNAM2
@@ -180,8 +180,8 @@ Contents of <CODE>MODULE M3ATTS</CODE>
 
     <PRE>
     GENERIC INTERFACE:
-    LOGICAL FUNCTION  GETMTXATT( FNAME, IMODE, GDNAM,                       &
-                                 GDTYP, P_ALP, P_BET, P_GAM, XCENT, YCENT,  &
+    LOGICAL FUNCTION  GETMTXATT( FNAME, IMODE, GDNAM,                       &amp;
+                                 GDTYP, P_ALP, P_BET, P_GAM, XCENT, YCENT,  &amp;
                                  XORIG, YORIG, XCELL, YCELL, NCOLS, NROWS )
 
         CHARACTER( LEN=* ), INTENT(  IN ):: FNAME  !! logical file name
@@ -200,10 +200,10 @@ Contents of <CODE>MODULE M3ATTS</CODE>
         INTEGER           , INTENT( OUT ):: NCOLS  !! Grid dimension
         INTEGER           , INTENT( OUT ):: NROWS  !!  "
 
-    LOGICAL FUNCTION  GETMTXATT( FNAME,                                 &
-            GDNAM1, GDTYP1, P_ALP1, P_BET1, P_GAM1, XCENT1, YCENT1,     &
-                    XORIG1, YORIG1, XCELL1, YCELL1, NCOLS1, NROWS1,     &
-            GDNAM2, GDTYP2, P_ALP2, P_BET2, P_GAM2, XCENT2, YCENT2,     &
+    LOGICAL FUNCTION  GETMTXATT( FNAME,                                 &amp;
+            GDNAM1, GDTYP1, P_ALP1, P_BET1, P_GAM1, XCENT1, YCENT1,     &amp;
+                    XORIG1, YORIG1, XCELL1, YCELL1, NCOLS1, NROWS1,     &amp;
+            GDNAM2, GDTYP2, P_ALP2, P_BET2, P_GAM2, XCENT2, YCENT2,     &amp;
                     XORIG2, YORIG2, XCELL2, YCELL2, NCOLS2, NROWS2 )
 
         CHARACTER( LEN=* ), INTENT(IN   ) :: FNAME
@@ -237,8 +237,8 @@ Contents of <CODE>MODULE M3ATTS</CODE>
 
     <PRE>
     GENERIC INTERFACE:
-    LOGICAL FUNCTION  SETMTXATT( FNAME, IMODE, GDNAM,                       &
-                                 GDTYP, P_ALP, P_BET, P_GAM, XCENT, YCENT,  &
+    LOGICAL FUNCTION  SETMTXATT( FNAME, IMODE, GDNAM,                       &amp;
+                                 GDTYP, P_ALP, P_BET, P_GAM, XCENT, YCENT,  &amp;
                                  XORIG, YORIG, XCELL, YCELL, NCOLS, NROWS )
 
         CHARACTER( LEN=* ), INTENT( IN ):: FNAME  !! logical file name
@@ -257,10 +257,10 @@ Contents of <CODE>MODULE M3ATTS</CODE>
         INTEGER           , INTENT( IN ):: NCOLS  !! Grid dimension
         INTEGER           , INTENT( IN ):: NROWS  !!  "
 
-    LOGICAL FUNCTION  SETMTXATT2( FNAME,                                &
-            GDNAM1, GDTYP1, P_ALP1, P_BET1, P_GAM1, XCENT1, YCENT1,     &
-                    XORIG1, YORIG1, XCELL1, YCELL1, NCOLS1, NROWS1,     &
-            GDNAM2, GDTYP2, P_ALP2, P_BET2, P_GAM2, XCENT2, YCENT2,     &
+    LOGICAL FUNCTION  SETMTXATT2( FNAME,                                &amp;
+            GDNAM1, GDTYP1, P_ALP1, P_BET1, P_GAM1, XCENT1, YCENT1,     &amp;
+                    XORIG1, YORIG1, XCELL1, YCELL1, NCOLS1, NROWS1,     &amp;
+            GDNAM2, GDTYP2, P_ALP2, P_BET2, P_GAM2, XCENT2, YCENT2,     &amp;
                     XORIG2, YORIG2, XCELL2, YCELL2, NCOLS2, NROWS2 )
                     
         CHARACTER( LEN=* ), INTENT( IN ) :: FNAME
@@ -298,8 +298,8 @@ Contents of <CODE>MODULE M3ATTS</CODE>
 
     <PRE>
     GENERIC INTERFACE:
-    LOGICAL FUNCTION  CHKMTXATT( FNAME, IMODE, GDNAM,                          &
-                                 GDTYP, P_ALP, P_BET, P_GAM, XCENT, YCENT,     &
+    LOGICAL FUNCTION  CHKMTXATT( FNAME, IMODE, GDNAM,                          &amp;
+                                 GDTYP, P_ALP, P_BET, P_GAM, XCENT, YCENT,     &amp;
                                  XORIG, YORIG, XCELL, YCELL, NCOLS, NROWS )
 
         CHARACTER( LEN=* ), INTENT( IN ):: FNAME  !! logical file name
@@ -318,10 +318,10 @@ Contents of <CODE>MODULE M3ATTS</CODE>
         INTEGER           , INTENT( IN ):: NCOLS  !! Grid dimension
         INTEGER           , INTENT( IN ):: NROWS  !!  "
 
-    LOGICAL FUNCTION  CHKMTXATT( FNAME,                             &
-           GDNAM1, GDTYP1, P_ALP1, P_BET1, P_GAM1, XCENT1, YCENT1,  &
-                   XORIG1, YORIG1, XCELL1, YCELL1, NCOLS1, NROWS1,  &
-           GDNAM2, GDTYP2, P_ALP2, P_BET2, P_GAM2, XCENT2, YCENT2,  &
+    LOGICAL FUNCTION  CHKMTXATT( FNAME,                             &amp;
+           GDNAM1, GDTYP1, P_ALP1, P_BET1, P_GAM1, XCENT1, YCENT1,  &amp;
+                   XORIG1, YORIG1, XCELL1, YCELL1, NCOLS1, NROWS1,  &amp;
+           GDNAM2, GDTYP2, P_ALP2, P_BET2, P_GAM2, XCENT2, YCENT2,  &amp;
                    XORIG2, YORIG2, XCELL2, YCELL2, NCOLS2, NROWS2 )
 
         CHARACTER( LEN=* ), INTENT(IN   ) :: FNAME
