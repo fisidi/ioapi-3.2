@@ -2,15 +2,16 @@
         LOGICAL FUNCTION CRTFIL3( EQNAME, FID, PGNAME )
 
 C***********************************************************************
-C Version "$Id: crtfil3.F 147 2015-02-03 19:57:42Z coats $"
+C Version "$Id: crtfil3.F 154 2015-02-12 17:32:28Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2011 Baron Advanced Meteorological Systems, and
-C (C) 2011 David Wong
+C (C) 2003-2011 Baron Advanced Meteorological Systems,
+C (C) 2011 David Wong, (C) 2007-2013 Carlie J. Coats, Jr., and 
+C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  subroutine body starts at line 128
+C  subroutine body starts at line 130
 C
 C  FUNCTION:  Create netCDF file FNAME using info stored in the FDESC3
 C             common.  Record history,   Leave file open for update.
@@ -53,7 +54,7 @@ C       Martin Otte, US EPA -- remove NF_WRITE.
 C       Modified 03/20010 by CJC: F9x changes for I/O API v3.1
 C       Revised 4/2011 by David Wong, US EPA, and by CJC, to add state for
 C       full buffered-file file descriptions.
-C       Revised 12.2014 by CJC:  USE M3UTILIO; USE M3EXTRA; extra-attribute
+C       Revised 12.2014 by CJC:  USE M3UTILIO; USE M3ATTS extra-attribute
 C       calls 
 C***********************************************************************
 

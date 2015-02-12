@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: M3UTILIO.html 117 2015-01-19 16:50:41Z coats $" -->
+<!-- "$Id: M3UTILIO.html 155 2015-02-12 17:40:21Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE>MODULE M3UTILIO</TITLE>
 </HEAD>
@@ -130,6 +130,12 @@
         <DD>Find a key-tuple of <CODE>CHARACTER</CODE> strings, <CODE>INTEGER</CODE>s, 
          <CODE>INTEGER*8</CODE>s, or <CODE>REAL</CODE>s in a key-tuple
          table.
+        <P>
+        <DT><VAR><CODE>&lt;type&gt; FUNCTION GETVAL()</CODE></VAR><BR>
+        <DD>Prompt for a numeric (<CODE>INTEGER</CODE>,
+        <CODE>REAL</CODE>, <CODE>DOUBLE</CODE>, or <CODE>LOGICAL</CODE>)
+        value, with optional <CODE>LO, HI</CODE> bounds or
+        menu of <CODE>CHOICES</CODE>, and <CODE>DEFAULT</CODE> response.
         <P>
         <DT><VAR><CODE>INTEGER FUNCTION FINDKEY()</CODE></VAR><BR>
         <DD>Find the subscript for a key-tuple of

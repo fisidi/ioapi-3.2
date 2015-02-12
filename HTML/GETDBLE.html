@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: GETDBLE.html 103 2015-01-16 16:55:45Z coats $" -->
+<!-- "$Id: GETDBLE.html 155 2015-02-12 17:40:21Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> GETDBLE() </TITLE>
 </HEAD>
@@ -17,6 +17,7 @@
 <H2> Fortran version: </H2>
 <PRE>
     REAL*8 FUNCTION GETDBLE( LO , HI , DEFAULT , PROMPT )
+    REAL*8 FUNCTION GETDBLE1( DEFAULT , PROMPT )
         REAL*8       , INTENT(IN   ) :: LO      ! Minimum allowed return value
         REAL*8       , INTENT(IN   ) :: HI      ! Maximum allowed return value
         REAL*8       , INTENT(IN   ) :: DEFAULT ! Default return value
@@ -28,15 +29,15 @@
 
 <H2> Summary: </H2>
 
-    Display the  <CODE>PROMPT</CODE>  to standard output for a double
-    precision number between  <CODE>LO</CODE>  and  <CODE>HI</CODE>,
-    get the user's response and check  that it is within range.  Return
-    <CODE>DEFAULT</CODE> if the user hits &lt;RET&gt;.   Reprompts on
-    error for up to 5 attempts; exits in case of more  than 5 entry
-    errors.  If <A HREF = "ENVIRONMENT.html">environment variable
-    PROMPTFLAG</A> is set to &quot;N&quot;, returns
-    <CODE>DEFAULT</CODE> without prompting the user.  Logs the value
-    returned, for tracking  and validation purposes.
+    Display the  <CODE>PROMPT</CODE>  to standard output, get the user's
+    response as a <CODE>REAL*8</CODE> and for <CODE>GETDBLE()</CODE>,
+    check  that it is within range.  Return <CODE>DEFAULT</CODE> if the
+    user hits &lt;RET&gt;.   Reprompts on error for up to 5 attempts;
+    exits in case of more  than 5 entry errors.  If <A HREF =
+    "ENVIRONMENT.html">environment variable PROMPTFLAG</A> is set to
+    &quot;N&quot;, returns <CODE>DEFAULT</CODE> without prompting the
+    user.  Logs the value returned, for tracking  and validation
+    purposes.
     <P>
     
     The default is displayed in square brackets at the end of the
@@ -46,7 +47,10 @@
     For Fortran-90 declarations and interface checking:    
     <PRE>
     <A HREF = "M3UTILIO.html">USE M3UTILIO</A>
-    </PRE><P>
+    </PRE>
+    <EM><CODE>GETDBLE1</CODE> is for I/O&nbsp;API-3.2 and later,
+    only.</EM>
+    <P>
 
     See also <A HREF = "GETREAL.html"> GETREAL() </A>,
     <A HREF = "GETMENU.html"> GETMENU() </A>,

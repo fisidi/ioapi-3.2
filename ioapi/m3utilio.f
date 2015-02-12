@@ -2,7 +2,7 @@
         MODULE M3UTILIO
 
         !!-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-        !! Version "$Id: m3utilio.f 126 2015-01-23 14:48:02Z coats $"
+        !! Version "$Id: m3utilio.f 154 2015-02-12 17:32:28Z coats $"
         !! Copyright (c) 2004-2013 Baron Advanced Meteorological Systems,
         !! (c) 2007-2013 Carlie J. Coats, Jr., and
         !! (C) 2014 UNC Institute for the Environment.
@@ -40,7 +40,7 @@
             INCLUDE 'IODECL3.EXT'       !  I/O API function declarations
 
             CHARACTER*72, PRIVATE, SAVE :: ID =
-     &'$Id:: m3utilio.f 126 2015-01-23 14:48:02Z coats                $'
+     &'$Id:: m3utilio.f 154 2015-02-12 17:32:28Z coats                $'
 
 
             !!........  PUBLIC Routines:
@@ -525,14 +525,6 @@
             END INTERFACE
 
             INTERFACE
-                REAL*8 FUNCTION GETDBLE( LO, HI, DEFAULT, PROMPT )
-                REAL*8       , INTENT(IN   ) :: LO , HI
-                REAL*8       , INTENT(IN   ) :: DEFAULT
-                CHARACTER*(*), INTENT(IN   ) :: PROMPT
-                END FUNCTION GETDBLE
-            END INTERFACE                       ! GETDBLE
-
-            INTERFACE
                 INTEGER FUNCTION GETDFILE( LNAME, RDONLY,
      &                                     FMTFLAG, RECLEN, CALLER )
                 CHARACTER*(*), INTENT(IN   ) :: LNAME          !  logical file name
@@ -565,30 +557,6 @@
             END INTERFACE
 
             INTERFACE
-                INTEGER FUNCTION GETMENU( ITEMCNT, DEFAULT,
-     &                                    PROMPT, CHOICES )
-                INTEGER      , INTENT(IN   ) :: ITEMCNT         !  number of choices
-                INTEGER      , INTENT(IN   ) :: DEFAULT         !  default response
-                CHARACTER*(*), INTENT(IN   ) :: PROMPT          !  prompt string
-                CHARACTER*(*), INTENT(IN   ) :: CHOICES ( * )   !  array of choice strings
-                END FUNCTION GETMENU
-            END INTERFACE
-
-            INTERFACE
-                INTEGER FUNCTION GETNUM ( LO , HI , DEFAULT , PROMPT )
-                INTEGER      , INTENT(IN   ) :: LO, HI, DEFAULT
-                CHARACTER*(*), INTENT(IN   ) :: PROMPT
-                END FUNCTION GETNUM
-            END INTERFACE
-
-            INTERFACE
-                REAL   FUNCTION GETREAL ( LO , HI , DEFAULT , PROMPT )
-                REAL         , INTENT(IN   ) :: LO , HI , DEFAULT
-                CHARACTER*(*), INTENT(IN   ) :: PROMPT
-                END FUNCTION GETREAL
-            END INTERFACE                       !  GETREAL
-
-            INTERFACE
                 SUBROUTINE GETSTR ( PROMPT, DEFAULT, RESPONSE )
                 CHARACTER*(*), INTENT(IN   ) :: PROMPT, DEFAULT
                 CHARACTER*(*), INTENT(  OUT) :: RESPONSE
@@ -602,12 +570,52 @@
                 END SUBROUTINE GETDTTIME
             END INTERFACE
 
-            INTERFACE
+            INTERFACE GETVAL
+
+                REAL*8 FUNCTION GETDBLE( LO, HI, DEFAULT, PROMPT )
+                REAL*8       , INTENT(IN   ) :: LO , HI, DEFAULT
+                CHARACTER*(*), INTENT(IN   ) :: PROMPT
+                END FUNCTION GETDBLE
+
+                REAL*8 FUNCTION GETDBLE1( DEFAULT, PROMPT )
+                REAL*8       , INTENT(IN   ) :: DEFAULT
+                CHARACTER*(*), INTENT(IN   ) :: PROMPT
+                END FUNCTION GETDBLE1
+
+                INTEGER FUNCTION GETMENU( ITEMCNT, DEFAULT,
+     &                                    PROMPT, CHOICES )
+                INTEGER      , INTENT(IN   ) :: ITEMCNT         !  number of choices
+                INTEGER      , INTENT(IN   ) :: DEFAULT         !  default response
+                CHARACTER*(*), INTENT(IN   ) :: PROMPT          !  prompt string
+                CHARACTER*(*), INTENT(IN   ) :: CHOICES ( * )   !  array of choice strings
+                END FUNCTION GETMENU
+
+                INTEGER FUNCTION GETNUM ( LO , HI , DEFAULT , PROMPT )
+                INTEGER      , INTENT(IN   ) :: LO, HI, DEFAULT
+                CHARACTER*(*), INTENT(IN   ) :: PROMPT
+                END FUNCTION GETNUM
+
+                INTEGER FUNCTION GETNUM1( DEFAULT , PROMPT )
+                INTEGER      , INTENT(IN   ) :: DEFAULT
+                CHARACTER*(*), INTENT(IN   ) :: PROMPT
+                END FUNCTION GETNUM1
+
+                REAL   FUNCTION GETREAL ( LO , HI , DEFAULT , PROMPT )
+                REAL         , INTENT(IN   ) :: LO , HI , DEFAULT
+                CHARACTER*(*), INTENT(IN   ) :: PROMPT
+                END FUNCTION GETREAL
+
+                REAL   FUNCTION GETREAL1( DEFAULT , PROMPT )
+                REAL         , INTENT(IN   ) :: DEFAULT
+                CHARACTER*(*), INTENT(IN   ) :: PROMPT
+                END FUNCTION GETREAL1
+
                 LOGICAL FUNCTION  GETYN ( PROMPT , DEFAULT )
                 CHARACTER*(*), INTENT(IN   ) :: PROMPT
                 LOGICAL      , INTENT(IN   ) :: DEFAULT
                 END FUNCTION  GETYN
-            END INTERFACE
+
+            END INTERFACE       !!  getval()
 
             INTERFACE
                 LOGICAL FUNCTION GRDCHK3( FNAME,

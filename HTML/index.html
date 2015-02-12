@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: index.html 151 2015-02-06 17:18:13Z coats $" -->
+<!-- "$Id: index.html 153 2015-02-11 18:17:24Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE">
 <TITLE>
     The EDSS/Models-3 I/O&nbsp;API
@@ -19,25 +19,55 @@
 
 <HR> <!----------------------------------------------------------------->
 
-     <BLOCKQUOTE><STRONG>
-     <U>NOTES:</U>
+    <UL>
+        <LI> <A HREF = "#abstract"        >Abstract</A>
+        <LI> <A HREF = "AA.html"          >User (Programming) Manual</A>
+        <LI> <A HREF = "TUTORIAL.html"    >Tutorial</A>
+        <LI> <A HREF = "REQUIREMENTS.html">Requirements Document
+                                           (1991-2001)</A>
+        <LI> <A HREF = "BINIO.html"       >Native-Binary Mode Extension
+                                           for NCEP</A>
+        <LI> <A HREF = "COUPLING.html"    >Coupling-Mode Extensions for Coupled Models</A>
+        <LI> <A HREF = "NEWSTUFF.html"    >Change-Log; &quot;What's New&quot&mdash;
+                                           New Research and Development
+                                           with the I/O&nbsp;API</A>
+        <LI> <A HREF = "AVAIL.html"       >Availability/Download/Installation</A>
+        <LI> <A HREF = "ERRORS.html"      >Trouble-Shooting</A>
+        <LI> <A HREF = "MCPL.html"        >MCPL: an I/O&nbsp;API
+                                           output module for MM5</A>
+        <LI> <A HREF = "NOTICES.html"     >Notices:  Copyright,
+                                           Acknowledgements</A>
+        <LI> <A HREF = "WRF_IOAPI.html"   >Layering the WRF I/O&nbsp;API
+                                           on Top of the Models-3/EDSS
+                                           I/O&nbsp;API</A>
+     </UL>
+
+<HR> <!----------------------------------------------------------------->
+
+    <H2><A NAME="notes">NOTES</A></H2>
+    <BLOCKQUOTE>
+    <STRONG>
      <DL>
-         <DT> The Models-3 I/O&nbsp;API is <EM><U>not a data format&nbsp;!!</U></EM>
+         <DT> The Models-3 I/O&nbsp;API is 
+         <A HREF="https://en.wikipedia.org/wiki/Application_programming_interface"><EM>
+         <U>not a data format&nbsp;!!</U></EM></A>
          <P>
          <DT> <EM>I/O&nbsp;API files are <U>not synonymous</U> with
-              netCDF files&nbsp;!!</EM>
+              &quot;netCDF files&quot;&nbsp;!!</EM>
      </DL>
      </STRONG>
      Instead, netCDF is one of <U>four distinct lower layers</U> on
      which the data and metadata structures for I/O&nbsp;API files are
-     currently available; additional lower layers may very well be
-     incorporated at various times in the future (<EM>Does anyone want
-     to fund development of an MPI&nbsp;2 lower layer? -- Contact the
-     author!</EM>)
+     currently available; additional lower layers have been incorporated
+     at times in the past, and may very well be incorporated at various
+     times in the future.
+     <BR>
+     (<EM>Does anyone want to fund development of an MPI&nbsp;2 lower
+     layer? -- Contact the author!</EM>)
 
      <P>
      The I/O&nbsp;API follows a &quot;punctuated rolling release&quot;
-     model:  great effort has been expended to provide upwards
+     model:  great effort has been expended to provide and maintain upwards
      compatibility, so that <STRONG>any program developed to use
      the I/O&nbsp;API will work correctly with any subsequent release of
      the I/O&nbsp;API</STRONG>.  Newer releases will contain
@@ -45,10 +75,13 @@
      There are only the following upward-compatibility issues:
      <DL>
         <DT>  <STRONG>I/O&nbsp;API-2.1 to I/O&nbsp;API-3.0:</STRONG>  <EM>2002</EM>
-        <DD>  <EM> requires re-linking</EM> due to <VAR>netCDF</VAR>
+        <DD>  <EM> requires re-linking</EM> due to <VAR>netCDF</VAR> API
         changes&mdash;fully source- and object-file compatible:  uses
         <VAR>netCDF-3.x</VAR> which was not fully compatible with
         <VAR>netCDF-2.x</VAR>.
+        <BR>
+        Targets Fortran-90 compilers only, and starts to use Fortran-90
+        features such as <CODE>MODULE</CODE>s
         <BR>
         New features for 3.0 include <CODE>MODULE&nbsp;M3UTILIO</CODE>,
         containing  <CODE>INTERFACE</CODE>s, <CODE>INCLUDE</CODE>-files
@@ -60,7 +93,7 @@
         replacement <VAR>m3tools/projtool</VAR>.
         <P>
 
-        <DT>  <STRONG>:I/O&nbsp;API-3.0 to I/O&nbsp;API-3.1:</STRONG> <EM>2013</EM>
+        <DT>  <STRONG>I/O&nbsp;API-3.0 to I/O&nbsp;API-3.1:</STRONG> <EM>2013</EM>
         <DD>  <EM>Requires re-compile:</EM> Fully source compatible but
         not object compatible&mdash;fundamental
         <CODE>PARAMETER&nbsp;MXVARS3</CODE>
@@ -83,37 +116,17 @@
         <CODE>INTERFACE</CODE>s formerly in
         <CODE>MODULE&nbsp;M3UTILIO</CODE>.
         <BR>
-        Delete previously-deprecated <VAR>m3tools/utmtool</VAR>
+        Remove previously-deprecated <VAR>m3tools/utmtool</VAR>
+        (superseded by <VAR>m3tools/projtool</VAR>).
      </DL>
      <P>
      </BLOCKQUOTE>
 
 <HR> <!----------------------------------------------------------------->
 
-    <UL>
-        <LI> <A HREF = "AA.html"          >User (Programming) Manual</A>
-        <LI> <A HREF = "TUTORIAL.html"    >Tutorial</A>
-        <LI> <A HREF = "REQUIREMENTS.html">Requirements Document
-                                           (1991-2001)</A>
-        <LI> <A HREF = "BINIO.html"       >Native-Binary Mode Extension
-                                           for NCEP</A>
-        <LI> <A HREF = "COUPLING.html"    >Coupling-Mode Extensions for Coupled Models</A>
-        <LI> <A HREF = "NEWSTUFF.html"    >Change-Log; &quot;What's New&quot; --
-                                           New Research and Development
-                                           with the I/O&nbsp;API</A>
-        <LI> <A HREF = "AVAIL.html"       >Availability/Download/Installation</A>
-        <LI> <A HREF = "ERRORS.html"      >Trouble-Shooting</A>
-        <LI> <A HREF = "MCPL.html"        >MCPL: an I/O&nbsp;API
-                                           output module for MM5</A>
-        <LI> <A HREF = "NOTICES.html"     >Notices:  Copyright,
-                                           Acknowledgements</A>
-        <LI> <A HREF = "WRF_IOAPI.html"   >Layering the WRF I/O&nbsp;API
-                                           on Top of the Models-3/EDSS
-                                           I/O&nbsp;API</A>
-     </UL>
+    <H2><A NAME="abstract">Abstract</A></H2>
 
-<HR> <!----------------------------------------------------------------->
-
+    <BLOCKQUOTE>
     The Models-3/EDSS Input/Output Applications Programming Interface
     (I/O&nbsp;API) provides the environmental model developer with an
     easy-to-learn, easy-to-use <STRONG>programming library for data
@@ -261,27 +274,32 @@
     for moving-mesh plume-in-grid modeling).
     <P>
 
+    <STRONG>Copyright</STRONG>
+    <BR> 
     These web pages are copyright &copy; 1992-2002 MCNC and
-    Carlie&nbsp;J.&nbsp;Coats,&nbsp;Jr., 2003-2005 by Baron Advanced
-    Meteorological Systems (hereinafter, BAMS), &copy; 2005-2013
-    Carlie&nbsp;J.&nbsp;Coats, Jr., and &copy; 2014- UNC Institute
-    for the Environment. The I/O&nbsp;API source code and documentation
-    are copyright 1992-2002 MCNC and
-    Carlie&nbsp;J.&nbsp;Coats,&nbsp;Jr., 2003-2013 BAMS, &copy;
-    2005-2013 Carlie&nbsp;J.&nbsp;Coats, Jr., and &copy; 2014- UNC Institute
-    for the Environment.  The library source code is distributed under the
+    Carlie&nbsp;J.&nbsp;Coats,&nbsp;Jr.,  &copy; 2003-2005 by Baron
+    Advanced Meteorological Systems (hereinafter, BAMS), &copy;
+    2005-2013 Carlie&nbsp;J.&nbsp;Coats, Jr., and &copy; 2014- UNC
+    Institute for the Environment. The I/O&nbsp;API source code and
+    documentation are copyright  &copy; 1992-2002 MCNC and
+    Carlie&nbsp;J.&nbsp;Coats,&nbsp;Jr.,  &copy; 2003-2013 BAMS,
+    &copy; 2005-2013 Carlie&nbsp;J.&nbsp;Coats, Jr., and &copy; 2014-
+    UNC Institute for the Environment.  The library source code is
+    distributed under the
     <A HREF="https://www.gnu.org/licenses/lgpl-2.1.html">GNU
     Lesser (library) Public License (LGPL) Version&nbsp;2.1</A>,
     and the tools-program source code is distrubuted under the
     <A HREF=""https://www.gnu.org/licenses/gpl-2.0.html>GNU General
     Public License, Version&nbsp;2</A>, subject to
-    copyright-statement retention constraints. See
-    <A HREF = "NOTICES.html">the <EM>Notices:  Copyright, and
-    Acknowledgements</EM> page.</A>
+    copyright-statement retention constraints. See the
+    <A HREF = "NOTICES.html"><EM>Notices:  Copyright, and
+    Acknowledgements</EM></A> page.
     <P>
 
+    </BLOCKQUOTE>
+
     <PRE>
-    $Id: index.html 151 2015-02-06 17:18:13Z coats $
+    $Id: index.html 153 2015-02-11 18:17:24Z coats $
     </PRE>
 
  </BODY>

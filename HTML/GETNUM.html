@@ -2,14 +2,14 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: GETNUM.html 103 2015-01-16 16:55:45Z coats $" -->
+<!-- "$Id: GETNUM.html 155 2015-02-12 17:40:21Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> GETNUM() </TITLE>
 </HEAD>
 
 <BODY BGCOLOR="#FFFFFF" 
       TOPMARGIN="15" 
-      MARGINHEIGHT="15" 
+      MARGINHEIGHT="15"
       LEFTMARGIN="15" 
       MARGINWIDTH="15">
 <H1>    GETNUM() </H1>
@@ -28,15 +28,15 @@
 
 <H2> Summary: </H2>
 
-    Display the  <CODE>PROMPT</CODE>  to standard output for an integer
-    between   <CODE>LO</CODE>  and  <CODE>HI</CODE>, get the user's
-    response and check that it is within  range.  Return
-    <CODE>DEFAULT</CODE> if the user hits &lt;RET&gt;.  Reprompts on
-    error for up to 5 attempts; exits in case of more than 5 entry
-    errors. If <A HREF = "ENVIRONMENT.html">environment variable
-    PROMPTFLAG</A> is set to &quot;N&quot;, returns
-    <CODE>DEFAULT</CODE> without prompting the user.  Logs the value
-    returned, for tracking and validation purposes.
+    Display the  <CODE>PROMPT</CODE>  to standard output, get the user's
+    response as an <CODE>INTEGER</CODE> and for <CODE>GETNUM()</CODE>,
+    check  that it is within range.  Return <CODE>DEFAULT</CODE> if the
+    user hits &lt;RET&gt;.  Reprompts on error for up to 5 attempts;
+    exits in case of more than 5 entry errors. If <A HREF =
+    "ENVIRONMENT.html">environment variable PROMPTFLAG</A> is set to
+    &quot;N&quot;, returns <CODE>DEFAULT</CODE> without prompting the
+    user.  Logs the value returned, for tracking and validation
+    purposes.
     <P>
 
     The default is displayed in square brackets at the end of the
@@ -45,7 +45,9 @@
     For Fortran-90 declarations and interface checking:    
     <PRE>
     <A HREF = "M3UTILIO.html">USE M3UTILIO</A>
-    </PRE><P>
+    </PRE>
+    <EM><CODE>GETNUM1</CODE> is for I/O&nbsp;API-3.2 and later,
+    only.</EM>
     <P> 
 
     See also <A HREF = "GETYN.html"> GETYN() </A>,

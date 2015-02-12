@@ -2,10 +2,12 @@
         INTEGER FUNCTION GETNUM ( LO , HI , DEFAULT , PROMPT )
 
 C********************************************************************
-C Version "$Id: getnum.f 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: getnum.f 154 2015-02-12 17:32:28Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C (c) 2004-2007 Baron Advanced Meteorological Systems,
+C (c) 2007-2013 Carlie J. Coats, Jr., and (C) 2014 UNC Institute
+C for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
@@ -33,6 +35,7 @@ C       of log-messages
 C       Revised 6/2003 by CJC:  factor through M3PROMPT to ensure flush()
 C       of PROMPT for IRIX F90v7.4  
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C       Modified 02/2014 by CJC: ENTRY GETNUM1() does not have bounds LO, HI;
 C
 C  ARGUMENT LIST DESCRIPTION:
 C
@@ -56,6 +59,7 @@ C.......   ARGUMENTS:
         INTEGER      , INTENT(IN   ) :: LO , HI , DEFAULT
         CHARACTER*(*), INTENT(IN   ) :: PROMPT
 
+        INTEGER     GETNUM1
 
 C.......   EXTERNAL FUNCTIONS:
 
@@ -65,6 +69,7 @@ C.......   EXTERNAL FUNCTIONS:
 
 C.......   LOCAL VARIABLES:
 
+        INTEGER         MODE                !!  mode=1 for getnum(), mode=0 for getnum1()
         INTEGER         J, M
         INTEGER         LLO , LHI , LDF
         INTEGER         ANSWER
@@ -79,6 +84,10 @@ C.......   LOCAL VARIABLES:
 
 C......................................................................
 C       begin GETNUM
+
+        MODE = 1
+
+11      CONTINUE        !!  target of entry getdble1()
 
         IF( FIRSTIME ) THEN
 
@@ -114,7 +123,7 @@ C       begin GETNUM
 
         IF ( IOS .NE. 0 ) THEN
             GO TO  900
-        ELSE IF ( BUFFER ( 1:1 )  .EQ. ' ' )  THEN
+        ELSE IF ( BUFFER  .EQ. ' ' )  THEN
             GETNUM  =  LDF
             WRITE( MESG, '( A, I10 )' ) 'Using default', LDF
         ELSE
@@ -160,6 +169,13 @@ C       begin GETNUM
         END IF
 
 C................   end body of GETNUM  .......................................
+
+        ENTRY GETNUM1( DEFAULT , PROMPT )   !!  no "lo" nor "hi" bounds for result
+        
+        MODE = 0
+        GO TO 11
+
+C................   end body of GETNUM1  .......................................
 
 
 92000   FORMAT ( /5X , '>>> ERROR IN ROUTINE GETNUM <<< ' ,

@@ -2,10 +2,12 @@
         INTEGER FUNCTION INIT3 ( )
 
 C***********************************************************************
-C Version "$Id: init3.F 128 2015-01-23 18:51:52Z coats $"
+C Version "$Id: init3.F 154 2015-02-12 17:32:28Z coats $"
 C EDSS/Models-3 I/O API.
-C Copyright (C) 1992-2002 MCNC, (C) 1992-2013 Carlie J. Coats, Jr.,
-C and (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
+C (c) 2004-2007 Baron Advanced Meteorological Systems,
+C (c) 2007-2013 Carlie J. Coats, Jr., and (C) 2014 UNC Institute
+C for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
@@ -127,7 +129,7 @@ C...........   SCRATCH LOCAL VARIABLES and their descriptions:
         CHARACTER *80 VARVER
         CHARACTER *80 NCFVER
         CHARACTER *80, PARAMETER :: IOAPILIBVER =
-     &'$Id:: init3.F 128 2015-01-23 18:51:52Z coats                   $'
+     &'$Id:: init3.F 154 2015-02-12 17:32:28Z coats                   $'
 #ifdef IOAPICPL
         CHARACTER *80 IOCPLVER
         CHARACTER *80 PVMVER

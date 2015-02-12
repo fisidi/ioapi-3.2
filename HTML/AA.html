@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: AA.html 152 2015-02-09 13:59:25Z coats $" -->
+<!-- "$Id: AA.html 155 2015-02-12 17:40:21Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE">
 <TITLE>  The BAMS/EDSS/Models-3 I/O&nbsp;API </TITLE>
 </HEAD>
@@ -788,6 +788,11 @@ Contents
              <STRONG>GET_ENDIAN</STRONG>:
              </A>
              get host-machine byte order.
+        <DT> <A HREF = "GETDBLE.html" >
+             <STRONG>GETDBLE</STRONG> and <STRONG>GETDBLE1</STRONG>:
+             </A>
+             prompt user for DOUBLE and get response, with default and
+             range checking
         <DT> <A HREF = "GETDFILE.html" >
              <STRONG>GETDFILE</STRONG>:
              </A>
@@ -802,27 +807,34 @@ Contents
              open sequential Fortran file with
              <VAR>&lt;logical name&gt;</VAR>,  <VAR>&lt;formatting&gt;</VAR>
              and  <VAR>&lt;read-write status&gt;</VAR>
-        <DT> <A HREF = "GETDBLE.html" >
-             <STRONG>GETDBLE</STRONG>:
-             </A>
-             prompt user for DOUBLE and get response, with default and
-             range checking
         <DT> <A HREF = "GETMENU.html" >
              <STRONG>GETMENU</STRONG>:
              </A>
              prompt user for menu choice, etc.
         <DT> <A HREF = "GETNUM.html" >
-             <STRONG>GETNUM</STRONG>:
+             <STRONG>GETNUM</STRONG> and <STRONG>GETNUM1</STRONG>:
              </A>
              prompt user for INTEGER, etc.
         <DT> <A HREF = "GETREAL.html" >
-             <STRONG>GETREAL</STRONG>:
+             <STRONG>GETREAL</STRONG> and <STRONG>GETREAL1</STRONG>:
              </A>
              prompt user for REAL, etc.
         <DT> <A HREF = "GETSTR.html" >
              <STRONG>GETSTR</STRONG>:
              </A>
              prompt user for CHARACTER STRING, etc.
+        <DT> <STRONG>GETVAL</STRONG>: <EM>I/O&nbsp;API-3.2 or later, only</EM>
+        <DD> prompt user for a numeric or <CODE>LOGICAL</CODE> answer,
+             with <CODE>DEFAULT</CODE>.
+             <BR>
+             <EM>Fortran-90 generic function for:</EM>
+             <BLOCKQUOTE><CODE><STRONG>
+             <A HREF = "GETDBLE.html" >GETDBLE</A>,<BR>
+             <A HREF = "GETMENU.html" >GETMENU</A>,<BR>
+             <A HREF = "GETNUM.html"  >GETNUM</A>,<BR>
+             <A HREF = "GETREAL.html" >GETREAL</A>,<BR>
+             <A HREF = "GETYN.html"   >GETYN</A>,<BR>
+             </STRONG></CODE></BLOCKQUOTE>
         <DT> <A HREF = "GETYN.html" >
              <STRONG>GETYN</STRONG>:
              </A>
@@ -1259,7 +1271,7 @@ Contents
         <DT> <A HREF = "DATSHIFT.html" ><STRONG>datshift</STRONG></A>:
              Shift a Gregorian-calendar date <CODE>YYYYMMDD</CODE> by a 
              specified number of days and echo the result.
-        <DT> <A HREF = "GREG2JUL.html"><STRONG>greg2jul</STRONG></A>:</A>
+        <DT> <A HREF = "GREG2JUL.html"><STRONG>greg2jul</STRONG></A>:
              Convert a Gregorian-style date <CODE>YYYYMMDD</CODE> to
              Julian-style  <CODE>YYYYDDD</CODE> and echo the result.
         <DT> <A HREF = "JUL2GREG.html"><STRONG>jul2greg</STRONG></A>:
@@ -1371,7 +1383,7 @@ Send comments to
 
 <!--#include virtual="/INCLUDES/footer.html" -->
     <PRE>
-    $Id: AA.html 152 2015-02-09 13:59:25Z coats $
+    $Id: AA.html 155 2015-02-12 17:40:21Z coats $
     </PRE>
 
 </BODY>
