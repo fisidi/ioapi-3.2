@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: GCTP.html 103 2015-01-16 16:55:45Z coats $" -->
+<!-- "$Id: GCTP.html 156 2015-02-12 22:04:24Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> GCTP() </TITLE>
 </HEAD>
@@ -57,13 +57,23 @@
     Interchange&quot; which has been proposed as Federal Information
     Processing Standards Publication 70-1.
     <P>
-    <A HREF="GCTP.pdf">Here is the PDF USGS document for GCTP.</A>
+    <A HREF="GCTP.pdf">Here is the USGS PDF document for GCTP.</A>
     <P> 
 
-    For Fortran-90 declarations and interface checking:    
+    For Fortran-90 declarations and interface checking, for
+    I/O&nbsp;API-3.1 and earlier:    
     <PRE>
     <A HREF = "M3UTILIO.html">USE M3UTILIO</A>
-    </PRE><P>
+    </PRE>
+    For  I/O&nbsp;API-3.2 and later:     
+    <PRE>
+    <A HREF = "MODGCTP.html">USE MODGCTP</A>
+    </PRE>
+    in which case <CODE>MODULE MODGCTP</CODE> also provides routines
+    that set up the (admittedly-complex) argument lists for
+    <CODE>GTPZ0()</CODE>, and which use that routine for a number of
+    common modeling related tasks.
+    <P>
 
 
 <H2> Preconditions: </H2>  none

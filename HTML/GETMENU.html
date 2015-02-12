@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: GETMENU.html 130 2015-01-26 14:01:23Z coats $" -->
+<!-- "$Id: GETMENU.html 156 2015-02-12 22:04:24Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> GETMENU() </TITLE>
 </HEAD>
@@ -47,17 +47,22 @@
     should be at most 999, in any case.
     <P>
 
-    See also <A HREF = "GETYN.html"> GETYN() </A>,
-    <A HREF = "GETNUM.html">  GETNUM()  </A>,
-    <A HREF = "GETREAL.html"> GETREAL() </A>,
-    <A HREF = "GETDBLE.html"> GETDBLE() </A>, and
-    <A HREF = "GETSTR.html"> GETSTR() </A>.
+    <STRONG>See also: </STRONG>
+    <A HREF = "GETDATE.html">GETDATE()</A>,
+    <A HREF = "GETDBLE.html">GETDBLE()</A>,
+    <A HREF = "GETNUM.html" >GETNUM()</A>,
+    <A HREF = "GETREAL.html">GETREAL()</A>,
+    <A HREF = "GETSTR.html" >GETSTR()</A>,  and
+    <A HREF = "GETYN.html"  >GETYN()</A>.
 <P> 
 
         
 <H2> Preconditions </H2>
 
-    Number ITEMCNT of choices at least 1.
+    Number <CODE>ITEMCNT</CODE> of choices at least 1 and at most 999.  
+    In practice, <CODE>ITEMCNT</CODE> should be at most 20, so that the
+    menu will cleanly fit &quot;on-screen&quot;. <CODE>PROMPT</CODE> and
+    <CODE>CHOICES</CODE> should have (trimmed) length at most 72
 <P> 
 
     

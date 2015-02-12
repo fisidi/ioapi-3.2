@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: GETDATE.html 103 2015-01-16 16:55:45Z coats $" -->
+<!-- "$Id: GETDATE.html 156 2015-02-12 22:04:24Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> GETDATE() </TITLE>
 </HEAD>
@@ -29,11 +29,13 @@
     Display the  <CODE>PROMPT</CODE>  to standard output for a date
     in either of two formats: <CODE>YYYYDDD</CODE> or
     <CODE>YYYYMMDD</CODE>, and get the user's response and convert it
-    into the corresponding value according to EDSS/Models-3
-    <A HREF = "DATETIME.html">date and time conventions</A>.  Returns
-    <CODE>DEFAULT</CODE> if the user hits &lt;RET&gt;.   Reprompts on
-    error for up to 5 attempts; exits in case of more than  5 entry
-    errors. Logs the value returned, for tracking and validation
+    into the corresponding value in Julian format YYYYDDD, according to
+    EDSS/Models-3 <A HREF = "DATETIME.html">date and time conventions</A>.
+    Returns <CODE>DEFAULT</CODE> if the user hits &lt;RET&gt;.   
+    Insists that the result be in the date-range [1970001,2100365],
+    so <EM>NOT APPROPRIATE FOR LONG-PERIOD MODELING.</EM>
+    Reprompts on error for up to 5 attempts; exits in case of more than 
+    5 entry errors. Logs the value returned, for tracking and validation
     purposes.
     <P>
 
