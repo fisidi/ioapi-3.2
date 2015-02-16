@@ -1,5 +1,5 @@
 #.........................................................................
-# VERSION "$Id: Makefile 107 2015-01-16 18:49:22Z coats $"
+# VERSION "$Id: Makefile 157 2015-02-16 19:50:30Z coats $"
 #    EDSS/Models-3 I/O API Version 3.1
 #.........................................................................
 # COPYRIGHT
@@ -147,7 +147,7 @@ wrpatch.F     wrprofil.F    wrvars.F      yr2day.F
 
 MSRC = m3utilio.f
 
-M90SRC = modgctp.f90 m3atts.f90
+M90SRC = modgctp.f90 modatts3.f90
 
 EXTS =\
 ATDSC3.EXT   CONST3.EXT   FDESC3.EXT   IODECL3.EXT  NETCDF.EXT  \
@@ -247,7 +247,7 @@ nametest: ${LIB} ${OBJDIR}/libnetcdff.a
 
 # init3() needs the library-version:
 #  gctp requires "SAVE all variables" flag;
-#  crtfil3, m3atts and modgctp USE M3UTILIO
+#  crtfil3, modatts3 and modgctp USE M3UTILIO
 
 init3.o:  ${EXTS} ${IODIR}/Makeinclude.${BIN}
 	echo $(VFLAG)
@@ -257,9 +257,9 @@ gctp.o: ${IODIR}/gctp.f ${IODIR}/Makeinclude.${BIN}
 	cd ${OBJDIR}; $(FC) -c $(FSFLAGS) $(FFLAGS) ${IODIR}/gctp.f
 
 
-crtfil3.o:  m3utilio.mod m3atts.mod
+crtfil3.o:  m3utilio.mod modatts3.mod
 
-m3atts.o   m3atts.mod   :  m3utilio.mod
+modatts3.o modatts3.mod :  m3utilio.mod
 modgctp.o  modgctp.mod  :  m3utilio.mod
 
 

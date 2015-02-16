@@ -2,7 +2,7 @@
 PROGRAM MTXCALC
 
     !!***********************************************************************
-    !! Version "$Id: MTXCALC.txt 103 2015-01-16 16:55:45Z coats $"
+    !! Version "$Id: MTXCALC.txt 159 2015-02-16 19:51:39Z coats $"
     !! EDSS/Models-3 M3TOOLS.
     !! Copyright (C) 1992-2002 MCNC,
     !! (C) 1995-2002, 2005-2013 Carlie J. Coats, Jr.,
@@ -39,22 +39,21 @@ PROGRAM MTXCALC
     !!      Lines 732-2
     !!      Version   12/2006 by CJC:  Bug-fix to GTYPES menu
     !!      Version    6/2008 by CJC:  Albers support
-    !!      Version    8/2008 by CJC:  USE M3UTILIO, M3ATTS to put
+    !!      Version    8/2008 by CJC:  USE M3UTILIO, MODATTS3 to put
     !!      grid-attributes into matrix.
     !!      Version   12/2008 by CJC:  heuristic to compensate for WMO screw-up
     !!      that declares all longitudes should be positive
     !!      Version 02/2010 by CJC for I/O API v3.1:  Fortran-90 only;
     !!      USE M3UTILIO, and related changes.
     !!      Version 12/2014 by CJC for I/O API v3.2:  USE MODGCTP::GRID2XY(),
-    !!      USE M3ATTS::SETMTXATT()
+    !!      USE MODATTS3::SETMTXATT()
     !!      Version  01/2015 by CJC for I/O API v3.2:  F90 free-format source,
     !!      in-this-code (but external) BLDMATRIX; new environment variable
-    !!      SCALEFAC; USE routine GRID2XY from MODULE MODGCTP; USE routine
-    !!      SETMTXATT from MODULE M3ATTS
+    !!      SCALEFAC; USE routine GRID2XY from MODULE MODGCTP
     !!***********************************************************************
 
     USE M3UTILIO
-    USE M3ATTS
+    USE MODATTS3
     USE MODGCTP
 
     IMPLICIT NONE
@@ -213,7 +212,7 @@ PROGRAM MTXCALC
 '    Chapel Hill, NC 27599-1105',                                               &
 '',                                                                             &
 'Program version: ',                                                            &
-'$Id: MTXCALC.txt 103 2015-01-16 16:55:45Z coats $',&
+'$Id: MTXCALC.txt 159 2015-02-16 19:51:39Z coats $',&
 ' '
 
     IF ( .NOT. GETYN( 'Continue with program?', .TRUE. ) ) THEN
