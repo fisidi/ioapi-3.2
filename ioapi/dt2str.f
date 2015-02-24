@@ -1,8 +1,8 @@
 
-        CHARACTER*24 FUNCTION  DT2STR ( JDATE , JTIME )
+        CHARACTER*24 FUNCTION  DT2STR( JDATE, JTIME ) RESULT( DTBUF )
 
 C***********************************************************************
-C Version "$Id: dt2str.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: dt2str.f 168 2015-02-24 07:51:22Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,
@@ -62,7 +62,7 @@ C   begin body of function  DT2STR
         CALL NEXTIME( J, T, 0 )
         TIMBUF = HHMMSS( T )
         DATBUF = MMDDYY( J )
-        DT2STR = TIMBUF // DATBUF
+        DTBUF  = TIMBUF // DATBUF
         RETURN
 
         END FUNCTION  DT2STR
