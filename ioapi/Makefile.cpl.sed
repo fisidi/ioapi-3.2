@@ -1,5 +1,5 @@
 #.........................................................................
-# VERSION "$Id: Makefile.cpl.sed 157 2015-02-16 19:50:30Z coats $"
+# VERSION "$Id: Makefile.cpl.sed 166 2015-02-24 07:03:00Z coats $"
 #    EDSS/Models-3 I/O API Version 3.
 #.........................................................................
 # COPYRIGHT
@@ -228,26 +228,30 @@ nametest: $(LIB) $(OBJDIR)/libnetcdf.a
 	$(IODIR)/nm_test.csh $(OBJDIR)/$(LIB) $(OBJDIR)/libnetcdf.a nf_open
 
 
-#  ---------------------------  Dependencies:  --------------------------
+#  ---------------------------  RULES:  --------------------------
 
 %.o : %.mod        #  Disable "gmake"s obnoxious implicit Modula-2 rule !!
+%.f : %.F          #  Hack for some versions of  "gmake" + "gfortran"
 
-.c.o:  $(hSRC) $(IODIR)/Makeinclude.$(BIN)
-	cd $(OBJDIR); $(CC) -c $(CFLAGS) $(IODIR)/$<
+.c.o:  $(hSRC) ${IODIR}/Makeinclude.${BIN}
+	cd ${OBJDIR}; $(CC) -c $(CFLAGS) ${IODIR}/$<
 
-.m4.c:  $(hSRC) $(IODIR)/Makeinclude.$(BIN)
+.m4.c:  $(hSRC) ${IODIR}/Makeinclude.${BIN}
 	$(M4) $(M4DEFFILE) $< > $(<:.m4=.c)
 
-.m4.o:  $(hSRC) $(IODIR)/Makeinclude.$(BIN)
+.m4.o:  $(hSRC) ${IODIR}/Makeinclude.${BIN}
 	$(M4) $(M4DEFFILE) $< > $(<:.m4=.c)
-	cd $(OBJDIR); $(CC) $(CFLAGS) -c $(IODIR)/$(<:.m4=.c) -o $(<:.m4=.o)
+	cd ${OBJDIR}; $(CC) $(CFLAGS) -c ${IODIR}/$(<:.m4=.c) -o $(<:.m4=.o)
 	rm -f $(<:.m4=.c)
 
-.F.o:  $(EXTS) $(IODIR)/Makeinclude.$(BIN)
-	cd $(OBJDIR); $(FC) -c $(FPPFLAGS) $(FFLAGS) $(IODIR)/$<
+.F.o:  ${EXTS} ${IODIR}/Makeinclude.${BIN}
+	cd ${OBJDIR}; $(FC) -c $(FPPFLAGS) $(FFLAGS) ${IODIR}/$<
 
-.f.o:  $(EXTS) $(IODIR)/Makeinclude.$(BIN)
-	cd $(OBJDIR); $(FC) -c $(FFLAGS) $(IODIR)/$<
+.f.o:  ${EXTS} ${IODIR}/Makeinclude.${BIN}
+	cd ${OBJDIR}; $(FC) -c $(FFLAGS) ${IODIR}/$<
+
+.f.mod:  ${EXTS} ${IODIR}/Makeinclude.${BIN}
+	cd ${OBJDIR}; $(FC) -c $(FFLAGS) ${IODIR}/$<
 
 .f90.o:
 	cd ${OBJDIR};  ${FC} ${FFLAGS} -c ${IODIR}/$<
@@ -259,6 +263,8 @@ nametest: $(LIB) $(OBJDIR)/libnetcdf.a
 	cd ${OBJDIR}; $(FC) $(FPPFLAGS) $(FFLAGS) -c ${IODIR}/$<
 
 
+#  ---------------------------  Dependencies:  --------------------------
+
 # init3() needs the library-version:
 #  gctp requires "SAVE all variables" flag;
 #  crtfil3, modatts3 and modgctp USE M3UTILIO
@@ -267,49 +273,103 @@ init3.o:  ${EXTS} ${IODIR}/Makeinclude.${BIN}
 	echo $(VFLAG)
 	cd ${OBJDIR}; $(FC) -c $(FPPFLAGS) $(FFLAGS) $(VFLAG) ${IODIR}/init3.F -o $@
 
+modatts3.o modatts3.mod :  m3utilio.mod
+modgctp.o  modgctp.mod  :  m3utilio.mod
+
 gctp.o: ${IODIR}/gctp.f ${IODIR}/Makeinclude.${BIN}
 	cd ${OBJDIR}; $(FC) -c $(FSFLAGS) $(FFLAGS) ${IODIR}/gctp.f
 
 
-crtfil3.o:  m3utilio.mod modatts3.mod
+check3.o      :  m3utilio.mod
+chkfil3.o     :  m3utilio.mod
+ckdesc.o      :  m3utilio.mod
+ckfile3.o     :  m3utilio.mod
+ckgeom.o      :  m3utilio.mod
+cktflag3.o    :  m3utilio.mod
+crtbuf3.o     :  m3utilio.mod
+crtfil3.o     :  m3utilio.mod modatts3.mod
+crtkf.o       :  m3utilio.mod
+currec.o      :  m3utilio.mod
+curstep.o     :  m3utilio.mod
+ddtvar3.o     :  m3utilio.mod
+ddtvar3v.o    :  m3utilio.mod
+desc3.o       :  m3utilio.mod
+dt2str.o      :  m3utilio.mod
+filchk3.o     :  m3utilio.mod
+getdate.o     :  m3utilio.mod
+getdfile.o    :  m3utilio.mod
+getefile.o    :  m3utilio.mod
+getmenu.o     :  m3utilio.mod
+getstr.o      :  m3utilio.mod
+getyn.o       :  m3utilio.mod
+getdate.o     :  m3utilio.mod
+gridops.o     :  m3utilio.mod
+inqatt3.o     :  m3utilio.mod
+intppqv.o     :  m3utilio.mod
+jstep3.o      :  m3utilio.mod
+kfindx.o      :  m3utilio.mod
+kfopen.o      :  m3utilio.mod
+kfwrite.o     :  m3utilio.mod
+open3.o       :  m3utilio.mod
+opnlist3.o    :  m3utilio.mod
+opnlog3.o     :  m3utilio.mod
+promptdfile.o :  m3utilio.mod
+promptffile.o :  m3utilio.mod
+promptgrid.o  :  m3utilio.mod
+promptmfile.o :  m3utilio.mod
+rddict3.o     :  m3utilio.mod
+rdvars.o      :  m3utilio.mod
+rdtflag.o     :  m3utilio.mod
+read3.o       :  m3utilio.mod
+read4d.o      :  m3utilio.mod
+readsmet.o    :  m3utilio.mod
+sync3.o       :  m3utilio.mod
+synchtao.o    :  m3utilio.mod
+updtvir3.o    :  m3utilio.mod
+utm2ll.o      :  m3utilio.mod
+wrdict3.o     :  m3utilio.mod
+write3.o      :  m3utilio.mod
+write4d.o     :  m3utilio.mod
+wrpatch.o     :  m3utilio.mod
+wrvars.o      :  m3utilio.mod
+xtbuf3.o      :  m3utilio.mod
+xtract3.o     :  m3utilio.mod
+year4.o       :  m3utilio.mod
 
-modatts3.o modatts3.mod :  m3utilio.mod
-modgctp.o  modgctp.mod  :  m3utilio.mod
 
+${LIB}: ${OBJ}
+	cd ${OBJDIR}; $(AR) $(ARFLAGS) ${LIB} ${OBJ} ; ranlib ${LIB}
 
-$(LIB): $(OBJ)
-	cd $(OBJDIR); $(AR) $(ARFLAGS) $(LIB) $(OBJ)
-
-$(OBJDIR):
-	mkdir -p $(OBJDIR)
+${OBJDIR}:
+	mkdir -p ${OBJDIR}
 
 #  "fixed-source" stuff for use with CMAQ "F90 132-column fixed-source"
 #  non-standard source code formatting:
 
-$(FIXDIR):
-	mkdir $(FIXDIR)
+${FIXDIR}:
+	mkdir ${FIXDIR}
 
-$(FIXDIR)/ATDSC3.EXT: ATDSC3.EXT
-	$(IODIR)/fix_src.csh ATDSC3.EXT $(FIXDIR)/ATDSC3.EXT
+${FIXDIR}/ATDSC3.EXT: ATDSC3.EXT
+	${IODIR}/fix_src.csh ATDSC3.EXT ${FIXDIR}/ATDSC3.EXT
 
-$(FIXDIR)/CONST3.EXT: CONST3.EXT
-	$(IODIR)/fix_src.csh CONST3.EXT $(FIXDIR)/CONST3.EXT
+${FIXDIR}/CONST3.EXT: CONST3.EXT
+	${IODIR}/fix_src.csh CONST3.EXT ${FIXDIR}/CONST3.EXT
 
-$(FIXDIR)/FDESC3.EXT: FDESC3.EXT
-	$(IODIR)/fix_src.csh FDESC3.EXT $(FIXDIR)/FDESC3.EXT
+${FIXDIR}/FDESC3.EXT: FDESC3.EXT
+	${IODIR}/fix_src.csh FDESC3.EXT ${FIXDIR}/FDESC3.EXT
 
-$(FIXDIR)/IODECL3.EXT: IODECL3.EXT
-	$(IODIR)/fix_src.csh IODECL3.EXT $(FIXDIR)/IODECL3.EXT
+${FIXDIR}/IODECL3.EXT: IODECL3.EXT
+	${IODIR}/fix_src.csh IODECL3.EXT ${FIXDIR}/IODECL3.EXT
 
-$(FIXDIR)/NETCDF.EXT: NETCDF.EXT
-	$(IODIR)/fix_src.csh NETCDF.EXT $(FIXDIR)/NETCDF.EXT
+${FIXDIR}/NETCDF.EXT: NETCDF.EXT
+	${IODIR}/fix_src.csh NETCDF.EXT ${FIXDIR}/NETCDF.EXT
 
-$(FIXDIR)/NOTICE.EXT: NOTICE.EXT
-	$(IODIR)/fix_src.csh NOTICE.EXT $(FIXDIR)/NOTICE.EXT
+${FIXDIR}/NOTICE.EXT: NOTICE.EXT
+	${IODIR}/fix_src.csh NOTICE.EXT ${FIXDIR}/NOTICE.EXT
 
-$(FIXDIR)/PARMS3.EXT: PARMS3.EXT
-	$(IODIR)/fix_src.csh PARMS3.EXT $(FIXDIR)/PARMS3.EXT
+${FIXDIR}/PARMS3.EXT: PARMS3.EXT
+	${IODIR}/fix_src.csh PARMS3.EXT ${FIXDIR}/PARMS3.EXT
 
-$(FIXDIR)/STATE3.EXT: STATE3.EXT
-	$(IODIR)/fix_src.csh STATE3.EXT $(FIXDIR)/STATE3.EXT
+${FIXDIR}/STATE3.EXT: STATE3.EXT
+	${IODIR}/fix_src.csh STATE3.EXT ${FIXDIR}/STATE3.EXT
 
