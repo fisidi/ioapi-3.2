@@ -3,14 +3,16 @@
      &                           CALLER )
 
 C***********************************************************************
-C Version "$Id: getdfile.F 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: getdfile.F 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C (C) 2003-2013 Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and
+C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line 82
+C  function body starts at line 75
 C
 C  DESCRIPTION:
 C    Gets value of logical name LNAME from the environment, checks for
@@ -38,9 +40,13 @@ C       Modified 7/2003 by CJC:  OMP thread safety -- critical sections
 C       associated with INIT3()
 C
 C       Modified 03/2010, 09/2014 by CJC: F9x changes for I/O API v3.1
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO.
 C***********************************************************************
 
-       IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   ARGUMENTS and their descriptions:
 
@@ -50,12 +56,6 @@ C...........   ARGUMENTS and their descriptions:
        LOGICAL      , INTENT(IN   ) :: FMTFLAG        !  TRUE iff file should be formatted
        INTEGER      , INTENT(IN   ) :: RECLEN         !  record length for direct access
        CHARACTER*(*), INTENT(IN   ) :: CALLER         !  caller-name for logging
-
-C...........   EXTERNAL FUNCTIONS and their descriptions:
-
-        INTEGER, EXTERNAL :: INIT3
-        INTEGER, EXTERNAL :: JUNIT
-
 
 C...........   LOCAL VARIABLES and their descriptions:
 

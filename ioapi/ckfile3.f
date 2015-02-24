@@ -2,10 +2,11 @@
         LOGICAL FUNCTION CKFILE3( FID )
 
 C***********************************************************************
-C Version "$Id: ckfile3.f 100 2015-01-16 16:52:16Z coats $"
-C EDSS/Models-3 I/O API.
-C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
-C (C) 2003-2011 Baron Advanced Meteorological Systems
+C Version "$Id: ckfile3.f 164 2015-02-24 06:50:01Z coats $"
+C BAMS/MCNC/EDSS/Models-3 I/O API.
+C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
+C (C) 2003-2011 Baron Advanced Meteorological Systems, and 
+C (C) 2015 UNC Institute for the Environment
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
@@ -31,15 +32,17 @@ C       Modified  6/06 by CJC: modification to support WRF vertical
 C       coordinates, from Tanya Otte
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
 C       Bug-fix  04/2011 in format 94030  from Matt Turner, UC Boulder.
+C       Modified 02/2015 by CJC for I/O API 3.2: Support for M3INT8. 
+C       USE M3UTILIO
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
-        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
-        INCLUDE 'FDESC3.EXT'
         INCLUDE 'NETCDF.EXT'
 
 
@@ -50,9 +53,7 @@ C...........   ARGUMENTS and their descriptions:
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
-        LOGICAL, EXTERNAL :: CKNAME  !  checks legality of variable-names
-        LOGICAL, EXTERNAL :: ENVYN   !  get Y/N from environment
-        INTEGER, EXTERNAL :: INDEX1  !  name-table lookup
+        LOGICAL, EXTERNAL :: CKNAME     !  checks legality of variable-names
 
 
 C...........   PARAMETER
@@ -381,8 +382,8 @@ C...........   Next, checks on the variable-list
                 RETURN
             END IF
 
-            IF ( VTYPE3( U,FID ) .LT. M3INT  .OR.
-     &           VTYPE3( U,FID ) .GT. M3DBLE ) THEN
+            V = INDEXINT1( VTYPE3( U,FID ), NM3TYPES, M3TYPES )
+            IF ( V .LE. 0 ) THEN
 
                 WRITE( MESG, 94010 )
      &              'Illegal data type ', VTYPE3( U,FID ),

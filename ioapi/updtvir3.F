@@ -3,10 +3,12 @@
         LOGICAL FUNCTION UPDTVIR3 ( FID )
 
 C***********************************************************************
-C Version "$Id: updtvir3.F 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: updtvir3.F 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C (C) 2003-2013 Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and
+C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
@@ -23,29 +25,25 @@ C
 C  SUBROUTINES AND FUNCTIONS CALLED:  
 C
 C  REVISION  HISTORY:
-C       prototype  7/94 by CJC
-C	REvised   10/96 by CJC:  new file type TSERIES3 for hydrology work.
-C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C       prototype  7/1994 by CJC
+C       Modified  10/1996 by CJC:  new file type TSERIES3 for hydrology work.
+C       Modified  03/2010 by CJC: F9x changes for I/O API v3.1
+C       Modified  02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+       IMPLICIT NONE
 
 C...........   INCLUDES:
 
-        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'STATE3V.EXT'
-        INCLUDE 'FDESC3.EXT'
 
 
 C...........   ARGUMENTS and their descriptions:
 
         INTEGER, INTENT(IN   ) :: FID             !  index into STATE3 arrays
-
-
-C...........   EXTERNAL FUNCTIONS and their descriptions:
-
-        INTEGER, EXTERNAL :: INDEX1  !  look up names in tables
 
 
 C...........   SCRATCH LOCAL VARIABLES and their descriptions:

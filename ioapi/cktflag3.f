@@ -1,23 +1,25 @@
 
-      LOGICAL FUNCTION CKTFLAG3( FID, VID, 
+      LOGICAL FUNCTION CKTFLAG3( FID, VID,
      &                           JDATE, JTIME, TSTEP, NSTEPS,
      &                           JSTEP, DELTA )
 
 C***********************************************************************
-C Version "$Id: cktflag3.f 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: cktflag3.f 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
-C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
-C (C) 2003-2013 Baron Advanced Meteorological Systems
+C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
+C (C) 2003-2013 Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and
+C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  81
+C  function body starts at line  79
 C
 C  FUNCTION:
-C       reads and checks time step flags for file # FID and 
-C	variable VID for the time series starting at date and time 
-C	JDATE (coded YYYYDDD) and time JTIME (HHMMSS), and time interval
-C	TSTEP (HHMMSS).
+C       reads and checks time step flags for file # FID and
+C       variable VID for the time series starting at date and time
+C       JDATE (coded YYYYDDD) and time JTIME (HHMMSS), and time interval
+C       TSTEP (HHMMSS).
 C       For time-independent files, JDATE:JTIME:TSTEP are ignored.
 C       If VID is -1, checks all variables.
 C
@@ -25,18 +27,20 @@ C  RETURN VALUE:  TRUE iff the operation succeeds.
 C
 C  PRECONDITIONS REQUIRED:  (FID,VID) valid.
 C
-C  REVISION  HISTORY:  
+C  REVISION  HISTORY:
 C       prototype 5/1996 by CJC
 C       revised   6/1999 by CJC:  OpenMP thread-safety
 C       Modified 03/20010 by CJC: F9x changes for I/O API v3.1
 C       Modified 01/20013 by CJC: Fix possible integer log-output overflow
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
-        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'NETCDF.EXT'
 
@@ -53,12 +57,6 @@ C...........   ARGUMENTS and their descriptions:
         INTEGER, INTENT(  OUT) :: DELTA           !  time-step increment
 
 
-C...........   EXTERNAL FUNCTIONS and their descriptions:
-
-        INTEGER, EXTERNAL :: JSTEP3          !  compute time step record numbers
-        INTEGER, EXTERNAL :: TIME2SEC        !  HHMMSS ~~> seconds
-
-
 C...........   SCRATCH LOCAL VARIABLES and their descriptions:
 
         INTEGER         VAR             !  subscripts for STATE3 arrays
@@ -71,7 +69,7 @@ C...........   SCRATCH LOCAL VARIABLES and their descriptions:
         INTEGER         VV3             !  file vble-count
         INTEGER         TS3             !  file time step
         INTEGER         DT, DT3         !  time steps (in secs)
-	LOGICAL         EFLAG
+        LOGICAL         EFLAG
 
 
 C***********************************************************************
@@ -116,7 +114,7 @@ C...........   Compute record number, and check availability:
                 DT3 = TIME2SEC(TSTEP3( FID ) )
                 IF ( MOD( DT, DT3 ) .NE. 0 ) THEN
                     WRITE( LOGDEV,91031 )
-     &                  'Time step error reading file:  ' // 
+     &                  'Time step error reading file:  ' //
      &                  FLIST3( FID ) ,
      &                  'Requested time step:', TSTEP,
      &                  'File      time step:', TS3
@@ -130,13 +128,13 @@ C...........   Compute record number, and check availability:
 
             ELSE
                     WRITE( LOGDEV,91032 )
-     &                  'Time step error reading file:  ' // 
+     &                  'Time step error reading file:  ' //
      &                  FLIST3( FID ) ,
      &                  'Requested number of steps:', NSTEPS
                     EFLAG = .TRUE.
                     GO TO 999
 
-            END IF    	!  if nsteps >1, or else =1, or not
+            END IF      !  if nsteps >1, or else =1, or not
 
         ELSE    ! tstep3( fid ) = 0
 
@@ -156,25 +154,25 @@ C...........   Compute record number, and check availability:
             FLAG1 = 0
             FLAG2 = 0
         END IF
-        
+
         DIMT( 1 ) = 1           !  field:  date or time
         DELT( 1 ) = 2           !  extent:  entire field
         DIMT( 3 ) = JSTEP       !  timestep dimension
         DELT( 3 ) = 1       !  extent in timestep dimension
-        
+
         IF ( VID .GT. 0 ) THEN  !  reading just one variable
 
             DIMT( 2 ) = VID     !  variable-number
             DELT( 2 ) = 1       !  extent:  one variable
 
             DO  11  STEP = 1, NSTEPS
-            
-                CALL NCVGT( CDFID3( FID ), TINDX3( FID ), 
+
+                CALL NCVGT( CDFID3( FID ), TINDX3( FID ),
      &                      DIMT, DELT, FLAGS( 1,VID ), IERR )
                 IF ( IERR .EQ. 8 ) THEN     !  timestep flag not yet written
 
                     WRITE( LOGDEV,91020 )
-     &              'Reading ' // VLIST3( VID,FID ) // 
+     &              'Reading ' // VLIST3( VID,FID ) //
      &              ' -- date & time:', FLAG1, FLAG2,
      &              'Not yet written in file ' // FLIST3( FID )
                     EFLAG = .TRUE.
@@ -184,7 +182,7 @@ C...........   Compute record number, and check availability:
 
                     WRITE( LOGDEV,91020 )
      &                  'Error reading netCDF time step flag for ' //
-     &                  VLIST3( VID,FID ) // ' from ' // FLIST3( FID ), 
+     &                  VLIST3( VID,FID ) // ' from ' // FLIST3( FID ),
      &                  'Date and time', FLAG1, FLAG2,
      &                  'netCDF error number', IERR
 
@@ -196,35 +194,35 @@ C...........   Compute record number, and check availability:
 
                         WRITE( LOGDEV,91020 )
      &                      'Requested date & time:', FLAG1, FLAG2,
-     &                      'Variable ' // VLIST3( VID,FID ) // 
+     &                      'Variable ' // VLIST3( VID,FID ) //
      &                      ' not available in file ' // FLIST3( FID )
-                   
+
                         EFLAG = .TRUE.
                         GO TO 999
-                   
+
                     END IF          !  if ierr bad or if timestep flags bad
-         
+
                 CALL NEXTIME( FLAG1, FLAG2, TSTEP )
                 DIMT( 3 ) = DIMT( 3 ) + 1
 
-11          CONTINUE	!  end loop on steps
-                   
+11          CONTINUE        !  end loop on steps
+
         ELSE            !  reading all variables
-        
+
             VV3 = MAX( 1, NVARS3( FID ) )
             DIMT( 2 ) = 1               !  initial variable-number
             DELT( 2 ) = VV3             !  extent:  all variables
-        
+
             DO  33  STEP = 1, NSTEPS
-            
-                CALL NCVGT( CDFID3( FID ), TINDX3( FID ), 
+
+                CALL NCVGT( CDFID3( FID ), TINDX3( FID ),
      &                      DIMT, DELT, FLAGS, IERR )
 
                 IF ( IERR .EQ. 8 ) THEN     !  timestep flag not yet written
 
                     WRITE( LOGDEV,91020 )
      &                  'Error reading netCDF time step flag for ' //
-     &                  'ALL VBLES from ' // FLIST3( FID ), 
+     &                  'ALL VBLES from ' // FLIST3( FID ),
      &                  'Date and time', FLAG1, FLAG2,
      &                  'not yet written.'
                     EFLAG = .TRUE.
@@ -234,7 +232,7 @@ C...........   Compute record number, and check availability:
 
                     WRITE( LOGDEV,91020 )
      &                  'Error reading netCDF time step flag for ' //
-     &                  'ALL VBLES from ' // FLIST3( FID ), 
+     &                  'ALL VBLES from ' // FLIST3( FID ),
      &                  'Date and time', FLAG1, FLAG2,
      &                  'netCDF error number', IERR
                     EFLAG = .TRUE.
@@ -254,9 +252,9 @@ C...........   Check time step flags for all variables:
 
                             WRITE( LOGDEV,91020 )
      &                      'Reading ALL variables -- ' //
-     &                      'requested date & time:', 
+     &                      'requested date & time:',
      &                      JDATE, JTIME ,
-     &                      'Time step not available in file ' // 
+     &                      'Time step not available in file ' //
      &                      FLIST3( FID ) //
      &                      ' for variable ' // VLIST3( VAR, FID )
 
@@ -265,9 +263,9 @@ C...........   Check time step flags for all variables:
 
                         END IF          !  if bad flag value
 
-22                  CONTINUE	!  end loop on user-variables VAR
+22                  CONTINUE        !  end loop on user-variables VAR
 
-                ELSE	!  nvars zero (structured no-user-vble time step)
+                ELSE            !  nvars zero (structured no-user-vble time step)
 
                     IF ( FLAGS( 1,1 ) .NE. FLAG1  .OR.
      &                   FLAGS( 2,1 ) .NE. FLAG2  ) THEN
@@ -275,7 +273,7 @@ C...........   Check time step flags for all variables:
                         WRITE( LOGDEV,91020 )
      &                  'Reading entire time step -- ' //
      &                  'requested date & time:', JDATE, JTIME ,
-     &                  'Time step not available in file ' // 
+     &                  'Time step not available in file ' //
      &                  FLIST3( FID )
 
                         EFLAG = .TRUE.
@@ -283,12 +281,12 @@ C...........   Check time step flags for all variables:
 
                     END IF          !  if bad flag value
 
-                END IF	!  if nvars positive, or not
+                END IF      !  if nvars positive, or not
 
                 CALL NEXTIME( FLAG1, FLAG2, TSTEP )
                 DIMT( 3 ) = DIMT( 3 ) + 1
 
-33          CONTINUE	!  end loop on STEP
+33          CONTINUE        !  end loop on STEP
 
         END IF          !  if reading one variable or many (checking flags)
 
@@ -296,8 +294,8 @@ C...........   Check time step flags for all variables:
 
 !$OMP   END CRITICAL( S_NC )
 
-        CKTFLAG3 = ( .NOT. EFLAG ) 
-	RETURN
+        CKTFLAG3 = ( .NOT. EFLAG )
+        RETURN
 
 C******************  FORMAT  STATEMENTS   ******************************
 
@@ -314,7 +312,7 @@ C...........   Error and warning message formats..... 91xxx
 
 91031   FORMAT ( //5X , '>>> WARNING in subroutine CKTFLAG3 <<<',
      &            /5X , A ,
-     &            /5X , A , I10, 
+     &            /5X , A , I10,
      &            /5X , A , I10, // )
 
 91032   FORMAT ( //5X , '>>> WARNING in subroutine CKTFLAG3 <<<',

@@ -3,14 +3,16 @@
      &                            BUFFER )
 
 C***********************************************************************
-C Version "$Id: kfwrite.F 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: kfwrite.F 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C (C) 2003-2013 Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and
+C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  107
+C  function body starts at line  112
 C
 C  FUNCTION:  writes all the data from BUFFER() for for the event at
 C	COL:ROW:JDATE:JTIME and having duration KFLEN (formatted YYYYDDD
@@ -42,13 +44,17 @@ C       Modified 7/2003 by CJC:  bugfix -- clean up critical sections
 C       associated with INIT3()
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO;
+C       support for M3INT8 variables
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
-        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'NETCDF.EXT'
 
@@ -66,18 +72,17 @@ C...........   ARGUMENTS and their descriptions:
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
-        INTEGER, EXTERNAL :: INDEX1     !  look up names in name tables
-        INTEGER, EXTERNAL :: INIT3      !  initialize I/O system files.
-
         EXTERNAL          :: INITBLK3        !!  BLOCK DATA to initialize STATE3 commons
 
 C...........   MACHINE DEPENDENCY !!
 
 #if _CRAY || REAL8
-        INTEGER, PARAMETER :: TYPSIZE( 6 ) = (/ 1, 1, 1, 1, 1, 1 /)
+        INTEGER, PARAMETER :: TYPSIZE( 10 ) =
+     &        (/ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 /)
 #endif
 #if ! ( _CRAY || REAL8 )
-        INTEGER, PARAMETER :: TYPSIZE( 6 ) = (/ 1, 1, 1, 1, 1, 2 /)
+        INTEGER, PARAMETER :: TYPSIZE( 10 ) =
+     &        (/ 1, 1, 1, 1, 1, 2, 1, 1, 1, 2 /)
 #endif
 
 

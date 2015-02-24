@@ -5,14 +5,16 @@
      &                            BUFFER )
 
 C***********************************************************************
-C Version "$Id: xtbuf3.f 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: xtbuf3.f 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
-C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
+C (C) 2003-2010 Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and 
+C (C) 2015 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  83
+C  function body starts at line  87
 C
 C  FUNCTION:  reads data from Models-3 BUFFERED "file" with M3 file
 C       index FID for variable with index VID and indicated col-row-layer
@@ -39,14 +41,18 @@ C	at the level of individual variables.
 C
 C       Modified 5/2002 to support types other than REAL
 C
-C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C       Modified 03/2010 by CJC
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: Support for INTEGER*8,
+C       USE M3UTILIO
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
-        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
 
 C...........   ARGUMENTS and their descriptions:
@@ -66,14 +72,12 @@ C...........   ARGUMENTS and their descriptions:
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
-        INTEGER, EXTERNAL :: JSTEP3     !  compute time step record numbers
         INTEGER, EXTERNAL :: BUFXTR3, BUFXTR3D, BUFXTR3I    !  from bufint3.c
 
 
 C...........   SCRATCH LOCAL VARIABLES and their descriptions:
 
-        INTEGER       STEP            !  time step record number
-        INTEGER       VAR             !  loop counter (over variables)
+        INTEGER       VAR, STEP       !  loop counter (over variables)
         CHARACTER*256 MESG
 
 
@@ -124,6 +128,11 @@ C   begin body of function  XTBUF3
      &                   NLAYS3( FID ), NROWS3( FID ), NCOLS3( FID ),
      &                   STEP, BUFFER ) )
             ELSE IF ( VTYPE3( VID,FID ) .EQ. M3DBLE ) THEN
+                XTBUF3 = ( 0 .NE. BUFXTR3D( FID, VID, 
+     &                   LAY0, LAY1, ROW0, ROW1, COL0, COL1,
+     &                   NLAYS3( FID ), NROWS3( FID ), NCOLS3( FID ),
+     &                   STEP, BUFFER ) )
+            ELSE IF ( VTYPE3( VID,FID ) .EQ. M3INT8 ) THEN
                 XTBUF3 = ( 0 .NE. BUFXTR3D( FID, VID, 
      &                   LAY0, LAY1, ROW0, ROW1, COL0, COL1,
      &                   NLAYS3( FID ), NROWS3( FID ), NCOLS3( FID ),

@@ -2,14 +2,16 @@
         LOGICAL FUNCTION  KFOPEN( FNAME, FSTATUS, PGNAME, KFCOUNT )
 
 C***********************************************************************
-C Version "$Id: kfopen.f 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: kfopen.f 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C (C) 2003-2013 Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and
+C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  82
+C  function body starts at line  78
 C
 C  FUNCTION:  open KF-cloud file with logical name FNAME, with
 C             file status FSTATUS = FSREAD3==1 for read-only,
@@ -38,13 +40,15 @@ C       Modified  5/1996 by CJC to support new mode FSCREA3 for opening files.
 C       Modified  8/1999 by CJC:  OpenMP thread-safe; unified with OPEN3()
 C       Modified  5/2003 by CJC:  critical-section change (deadlock-removal)
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
-        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'NETCDF.EXT'
 
@@ -55,14 +59,6 @@ C...........   ARGUMENTS and their descriptions:
         INTEGER      , INTENT(IN   ) :: FSTATUS !  read-only, read-write, new, or unknown
         CHARACTER*(*), INTENT(IN   ) :: PGNAME  !  name of calling program
         INTEGER      , INTENT(  OUT) :: KFCOUNT( * )  !  gridded event counts
-
-
-C...........   EXTERNAL FUNCTIONS and their descriptions:
-
-        INTEGER, EXTERNAL :: INDEX1  !  look up names in tables
-        INTEGER, EXTERNAL :: INIT3   !  initialize I/O system files
-        LOGICAL, EXTERNAL :: OPEN3
-
 
 C...........   SCRATCH LOCAL VARIABLES and their descriptions:
 

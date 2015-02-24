@@ -1,11 +1,12 @@
 /***********************************************************************
 VERSION:
     EDSS/Models-3 I/O API -- Version 3
-    "iobin3.c" version "$Id: iocpl.c 100 2015-01-16 16:52:16Z coats $"
+    "iobin3.c" version "$Id: iocpl.c 164 2015-02-24 06:50:01Z coats $"
 
 COPYRIGHT
     (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
-    (C) 2003-2010 Baron Advanced Meteorological Systems.
+    (C) 2003-2010 Baron Advanced Meteorological Systems, and
+    (C) 2015 UNC Institute for the Environment.
     Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
     See file "LGPL.txt" for conditions of use.
 
@@ -16,6 +17,8 @@ CALLS:  PVM
 
 REVISION HISTORY:
     Prototype  6/1998 by Atanas Trayanov, MCNC EMC.
+
+    Modified 02/2015 by CJC for I/O API version 3.2:  M3INT8  support
 
 ***********************************************************************/
 
@@ -563,7 +566,7 @@ int read3net(char *fname,
     {
     case M3INT:
       for (i=0; i<skip; i++) {
-	cc |= pvm_upkint( buffer,1,1 );
+	    cc |= pvm_upkint( buffer,1,1 );
       }
       cc |= pvm_upkint( buffer,n,1 );
       break;
@@ -578,6 +581,12 @@ int read3net(char *fname,
 	cc |= pvm_upkdouble( buffer,1,1 );
       }
       cc |= pvm_upkdouble( buffer,n,1 );
+      break;
+    case M3INT8:
+      for (i=0; i<skip; i++) {
+	    cc |= pvm_upklong( buffer,1,1 );
+      }
+      cc |= pvm_upklong( buffer,n,1 );
       break;
     }
   if (cc < 0) {
@@ -629,6 +638,9 @@ int write3net(char *fname, char *vname,
       break;
     case M3DBLE:
       cc = pvm_pkdouble( buffer,n,1 );
+      break;
+    case M3INT8:
+      cc = pvm_pklong( buffer,n,1 );
       break;
     }
   if (cc < 0) {

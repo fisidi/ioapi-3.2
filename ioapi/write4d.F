@@ -1,34 +1,36 @@
-         
-        LOGICAL FUNCTION WRITE4D( FNAME, VNAME, 
+
+        LOGICAL FUNCTION WRITE4D( FNAME, VNAME,
      &                            JDATE, JTIME, TSTEP, NRECS,
      &                            BUFFER )
 
 C***********************************************************************
-C Version "$Id: write4d.F 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: write4d.F 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C (C) 2003-2013 Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and
+C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  129
+C  function body starts at line  133
 C
-C  FUNCTION:  
+C  FUNCTION:
 C       writes all the data from BUFFER() for timestep sequence
 C       JDATE:JTIME:TSTEP:NRECS (formatted YYYYDDD and HHMMSS)
 C       to the time-stepped Models-3 data file with logical name FNAME.
 C
 C  RETURN VALUE:  TRUE iff the operation succeeds
 C
-C  PRECONDITIONS REQUIRED:  
-C        FNAME is a disk-based time-stepped Models-3 data file 
-C        of type GRDDED3, BNDARY3, CUSTOM3, or TSERIES3 that is 
+C  PRECONDITIONS REQUIRED:
+C        FNAME is a disk-based time-stepped Models-3 data file
+C        of type GRDDED3, BNDARY3, CUSTOM3, or TSERIES3 that is
 C        already opened for write access by OPEN3().
 C        Does NOT support ALLVARS3.
-C        Storage order for BUFFER is according to Fortran storage 
+C        Storage order for BUFFER is according to Fortran storage
 C        order for subscript tuple  ( ..., TIMESTEPS )
 C
-C  POSTCONDITIONS REQUIRED:  
+C  POSTCONDITIONS REQUIRED:
 C        subsequent call to SHUT3() to flush the file to disk.
 C
 C  SUBROUTINES AND FUNCTIONS CALLED:
@@ -46,13 +48,17 @@ C       Bug-fix 2/2005 due to Alex Zubrow (U. Chicago):  need to return
 C       WRITE4D = .TRUE. for success.
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO;
+C       support for M3INT8 variables
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
-        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'NETCDF.EXT'
 
@@ -70,10 +76,6 @@ C...........   ARGUMENTS and their descriptions:
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
-        LOGICAL, EXTERNAL :: ENVYN      !  get YES/NO environment variable
-        INTEGER, EXTERNAL :: INDEX1     !  look up names in name tables
-        INTEGER, EXTERNAL :: INIT3      !  initialize I/O system files.
-        INTEGER, EXTERNAL :: JSTEP3     !  compute time step record numbers
         LOGICAL, EXTERNAL :: WRVARS     !  write time step records
 
 
@@ -114,10 +116,12 @@ C...........   PARAMETERs Variables:
      &        'UNKNOWN' /)      !   7:    "
 
 #if _CRAY || REAL8
-        INTEGER, PARAMETER :: TYPSIZE( 6 ) = (/ 1, 1, 1, 1, 1, 1 /)
+        INTEGER, PARAMETER :: TYPSIZE( 10 ) =
+     &        (/ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 /)
 #endif
 #if ! ( _CRAY || REAL8 )
-        INTEGER, PARAMETER :: TYPSIZE( 6 ) = (/ 1, 1, 1, 1, 1, 2 /)
+        INTEGER, PARAMETER :: TYPSIZE( 10 ) =
+     &        (/ 1, 1, 1, 1, 1, 2, 1, 1, 1, 2 /)
 #endif
 
 
@@ -159,7 +163,7 @@ C.......   Find netCDF index for the file, and check time step availability:
      &          'Max vble name length 16; actual:', LEN_TRIM( VNAME )
             CALL M3MSG2( MESG )
         END IF          !  if len( vname ) > 16
-        
+
         IF ( EFLAG ) THEN
             MESG = 'Invalid variable or file name arguments'
             CALL M3WARN( 'WRITE4D', JDATE, JTIME, MESG )
@@ -186,7 +190,7 @@ C.......   Find netCDF index for the file, and check time step availability:
             RETURN
 
         ELSE IF ( CDFID3( FID ) .EQ. BUFFIL3 ) THEN     !  BUFFERED "file"
-        
+
             MESG = 'File:  '//FIL16// ' is BUFFERED.'
             CALL M3WARN( 'WRITE4D', JDATE, JTIME, MESG )
             WRITE4D = .FALSE.
@@ -223,7 +227,7 @@ C.......   Find netCDF index for the file, and check time step availability:
                 WRITE( MESG,93010 )
      &              'netCDF error number', IERR,
      &              'with disk synchronization for file:  '// FIL16
-     &          
+     &
                 CALL M3WARN( 'WRITE4D', JDATE, JTIME, MESG )
                 WRITE4D = .FALSE.
                 RETURN
@@ -279,7 +283,7 @@ C.......   Find netCDF index for the file, and check time step availability:
             DELTA = DELTA * NLAYS3( FID )
 
         ELSE IF ( ITYP .EQ. TSRIES3 ) THEN
- 
+
             DIMS ( 1 ) = 1
             DELTS( 1 ) = NCOLS3( FID )
 
@@ -293,11 +297,11 @@ C.......   Find netCDF index for the file, and check time step availability:
             IT = 4
 
             DELTA = NCOLS3( FID ) * NROWS3( FID ) * NLAYS3( FID )
- 
+
         ELSE
 
             IDUM = MIN( MAX( ITYP, -3 ), 7 )
-            WRITE( MESG, '( A, I7, 1X, 3A )' ) 
+            WRITE( MESG, '( A, I7, 1X, 3A )' )
      &      'File type=', ITYP, '(', TYPNAMES( IDUM ), ')'
             CALL M3MSG2( MESG )
             MESG = 'Filetype not CUSTOM3, GRDDED3, BNDARY3, or TSRIES3'
@@ -310,7 +314,7 @@ C.......   Find netCDF index for the file, and check time step availability:
                         !  custom, gridded, ..., or unknown.
 
 C...........   Get ID for variable to be written.
-            
+
         VID = INDEX1( VAR16, NVARS3( FID ) , VLIST3( 1,FID ) )
 
         IF ( VID .EQ. 0 ) THEN
@@ -321,7 +325,7 @@ C...........   Get ID for variable to be written.
             RETURN
 
         END IF
-        
+
 
 C...........   Compute record number for this time step.  Update
 C...........   max step number if necessary.  Then read data
@@ -333,8 +337,8 @@ C...........   from file into BUFFER(), selecting by file type:
      &                 SDATE3( FID ),
      &                 STIME3( FID ),
      &                 TSTEP3( FID ) )
-        
-        IF ( STEP .LT. 0 ) THEN      
+
+        IF ( STEP .LT. 0 ) THEN
 
             CALL M3MSG2( MESG )
             WRITE( MESG, 93020 )
@@ -350,43 +354,43 @@ C...........   from file into BUFFER(), selecting by file type:
             RETURN
 
         END IF
-            
+
         IS = 1
         DO  IREC = 1, NRECS
-        
+
             STEP = JSTEP3( TFLAG( 1 ),    TFLAG( 2 ),
      &                     SDATE3( FID ), STIME3( FID ),
      &                     TSTEP3( FID ) )
 
             DIMS( IT ) = STEP
 
-            IF ( .NOT. WRVARS( FID,  VID,   TFLAG, STEP, 
+            IF ( .NOT. WRVARS( FID,  VID,   TFLAG, STEP,
      &                         DIMS, DELTS, DELTA, BUFFER( IS ) ) ) THEN
-                
-                WRITE( MESG, '( 5A, I7.7, A, I6.6 )' ) 
-     &              'Error writing "', VNAME, '" to "', FNAME,  
+
+                WRITE( MESG, '( 5A, I7.7, A, I6.6 )' )
+     &              'Error writing "', VNAME, '" to "', FNAME,
      &              '" for date&time ', TFLAG(1), ':', TFLAG(2)
                 CALL M3WARN( 'WRITE4D', TFLAG(1), TFLAG(2), MESG )
                 WRITE4D = .FALSE.
                 RETURN
 
             END IF              !  if WRVARS failed
-            
+
             !!  update state variable MXREC3D, and
             !!  increment time-flag and buffer-pointer:
-            
+
             MXREC3( FID ) = MAX( MXREC3( FID ), ABS( STEP ) )
             IS = IS + DELTA * TYPSIZE( VTYPE3( VID,FID ) )
             CALL NEXTIME( TFLAG( 1 ), TFLAG( 2 ), TSTEP )
-        
+
         END DO          !  end loop on output records.
 
-        WRITE( MESG, '( A, I9, A, I6.6, A, I6.6, A, I10)' ) 
+        WRITE( MESG, '( A, I9, A, I6.6, A, I6.6, A, I10)' )
      &          TRIM( VAR16 ) // ' written to ' //
-     &          TRIM( FIL16 ) // ' for sequence', 
+     &          TRIM( FIL16 ) // ' for sequence',
      &          JDATE, ':', JTIME, ':', TSTEP, ':', NRECS
 	    CALL M3MSG2( MESG )
-        
+
         WRITE4D = .TRUE.
 
         RETURN

@@ -2,7 +2,7 @@
         REAL   FUNCTION GETREAL( LO , HI , DEFAULT , PROMPT )
 
 C********************************************************************
-C Version "$Id: getreal.f 154 2015-02-12 17:32:28Z coats $"
+C Version "$Id: getreal.f 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (c) 2004-2007 Baron Advanced Meteorological Systems,
@@ -11,8 +11,8 @@ C for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C       function getreal()   body starts at line  88
-C       entry    getreal1()  body starts at line 182
+C       function getreal()   body starts at line  92
+C       entry    getreal1()  body starts at line 189
 C
 C   FUNCTION:
 C
@@ -36,6 +36,8 @@ C                 for IRIX F90v7.4
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
 C       Modified 02/2014 by CJC: ENTRY GETREAL1() does not have bounds LO, HI;
 C                 use F90 "READ( BUFFER,*,...)"
+C       Modified 02/2015 by CJC for I/O API 3.2: Fix MH violation of 
+C       coding-standards:  check status IOS from  ENVYN() !!
 C
 C  ARGUMENT LIST DESCRIPTION:
 C
@@ -65,6 +67,8 @@ C.......   EXTERNAL FUNCTION:  interpret I/O errors:
 
         LOGICAL, EXTERNAL :: ENVYN
 
+        CHARACTER*16, PARAMETER :: PNAME   = 'GETREAL'
+
 
 C.......   LOCAL VARIABLES:
 
@@ -93,6 +97,9 @@ C       begin GETREAL
 
             PROMPTON = ENVYN( 'PROMPTFLAG', 'Prompt for input flag',
      &                        .TRUE., IOS )
+            IF ( IOS .GT. 0 ) THEN
+                CALL M3EXIT( PNAME,0,0,'Bad env vble "PROMPTFLAG"', 2 )
+            END IF
             FIRSTIME = .FALSE.
  
         END IF

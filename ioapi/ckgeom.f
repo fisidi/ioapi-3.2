@@ -2,14 +2,16 @@
         LOGICAL FUNCTION CKGEOM( FILE, GRID )
 
 C***********************************************************************
-C Version "$Id: ckgeom.f 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: ckgeom.f 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
-C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
-C (C) 2003-2010 Baron Advanced Meteorological Systems
+C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
+C (C) 2003-2011 Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and 
+C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  program body starts at line  92
+C  program body starts at line  91
 C
 C  DESCRIPTION:
 C       Check consistency of horizontal grid description of the specified
@@ -32,14 +34,16 @@ C       Modified 7/2003 by CJC:  bugfix -- clean up critical sections
 C       associated with INIT3()
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
-      INCLUDE 'PARMS3.EXT'      ! I/O API constants
-      INCLUDE 'IODECL3.EXT'     ! I/O API functions
       INCLUDE 'STATE3.EXT'      ! I/O API state data structure
 
 
@@ -47,12 +51,6 @@ C...........   ARGUMENTS and their descriptions:
 
         CHARACTER*(*), INTENT(IN   ) :: FILE    !  logical name of file to check
         CHARACTER*(*), INTENT(IN   ) :: GRID    !  GRIDDESC name of grid to check
-
-
-C...........   EXTERNAL FUNCTIONS and their descriptions:
-
-        LOGICAL, EXTERNAL :: DSCGRID
-        INTEGER, EXTERNAL :: INDEX1
 
 C...........   LOCAL VARIABLES and their descriptions:
 

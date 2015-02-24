@@ -4,14 +4,16 @@
      &                               MAXMET, NMET  , IMET  , RMET )
 
 C***********************************************************************
-C Version "$Id: readsmet.f 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: readsmet.f 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C (C) 2003-2013 Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and
+C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C    function body starts at line 120
+C    function body starts at line 118
 C
 C  FUNCTION:
 C
@@ -35,7 +37,11 @@ C       Adapted 12/95 by CJC from ROM-descended UAM-BEIS2 RDSMET()
 C       for EDSS/Models-3 date and time conventions
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
+
+        USE M3UTILIO
 
         IMPLICIT NONE
 
@@ -67,14 +73,6 @@ C                   RMET ( 13, * )  --  wind speed
 C                   RMET ( 14, * )  --  temperature
 C                   RMET ( 15, * )  --  dew point
 C                   RMET ( 16, * )  --  station pressure
-
-
-C...........   EXTERNAL FUNCTIONS
-
-        LOGICAL, EXTERNAL :: ENVYN           !  evaluates environment variable
-        INTEGER, EXTERNAL :: INDEX1          !  search for name in a list
-        INTEGER, EXTERNAL :: JULIAN          !  Julian day for Gregorian
-
 
 C...........   PARAMETERS:
         

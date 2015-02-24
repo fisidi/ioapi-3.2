@@ -1,27 +1,27 @@
 
-        LOGICAL FUNCTION  WRATT3( FNAME, VNAME, 
+        LOGICAL FUNCTION  WRATT3( FNAME, VNAME,
      &                            ANAME, ATYPE, AMAX, AVAL )
         IMPLICIT NONE
         LOGICAL WRATTC
 
 C***********************************************************************
-C Version "$Id: wratt3.f 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: wratt3.f 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems and 
+C (C) 2003-2010 by Baron Advanced Meteorological Systems and
 C (C) 2014 UNC Institute for the Environment
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  subroutine body starts at line   93
-C   Entry  WRATTC  starts at line  110
+C  subroutine body starts at line   95
+C   Entry  WRATTC  starts at line  114
 C
 C  FUNCTION:
 C       Puts the attribute named ANAME with value AVAL( AMAX ) to the
 C       variable VNAME in file FNAME (or to the global file attributes
 C       if VNAME == ALLVAR3).  ATYPE should be one of M3REAL, M3INT, or
 C       M3DBLE.
-C       CHARACTER-string attributes use 
+C       CHARACTER-string attributes use
 C               ENTRY   WRATTC( FNAME, VNAME, ANAME, CVAL )
 C
 C  PRECONDITIONS REQUIRED:
@@ -39,12 +39,14 @@ C
 C       Modified 7/2003 by CJC:  bugfix -- clean up critical sections
 C       associated with INIT3()
 C
-C       Modified 12/2004 by CJC:  bugfix for character attribute length; 
+C       Modified 12/2004 by CJC:  bugfix for character attribute length;
 C       improved error messages; restructure NF_ENDDEF call.
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
 C
 C       Modified 12/2014 by CJC: logic cleanup; use NAME2FID()
+C
+C       Modified 02/2015 by CJC for I/O API 3.2:  support for M3INT8 attributes
 C***********************************************************************
 
 C...........   INCLUDES:
@@ -59,7 +61,7 @@ C...........   ARGUMENTS and their descriptions:
         CHARACTER*(*), INTENT(IN   ) :: FNAME         !  logical file name
         CHARACTER*(*), INTENT(IN   ) :: VNAME         !  variable name, or ALLVARS3
         CHARACTER*(*), INTENT(IN   ) :: ANAME         !  attribute name
-        INTEGER      , INTENT(IN   ) :: ATYPE         !  attribute type (M3REAL, M3INT, M3DBLE)
+        INTEGER      , INTENT(IN   ) :: ATYPE         !  attribute type (M3REAL, M3INT, M3INT8, M3DBLE)
         INTEGER      , INTENT(IN   ) :: AMAX          !  attribute dimensionality/size
         REAL         , INTENT(IN   ) :: AVAL( AMAX )  !  attribute value (numeric)
         CHARACTER*(*), INTENT(IN   ) :: CVAL          !  attribute value (character-string)
@@ -89,14 +91,15 @@ C***********************************************************************
 C   begin body of subroutine  WRATT3
 
 C...........   Check attribute type
-            
-        IF ( ( ATYPE .NE. NF_CHAR   ) .AND. 
-     &       ( ATYPE .NE. NF_INT    ) .AND. 
-     &       ( ATYPE .NE. NF_FLOAT  ) .AND. 
+
+        IF ( ( ATYPE .NE. NF_CHAR   ) .AND.
+     &       ( ATYPE .NE. NF_INT    ) .AND.
+     &       ( ATYPE .NE. NF_FLOAT  ) .AND.
+     &       ( ATYPE .NE. NF_INT64  ) .AND.
      &       ( ATYPE .NE. NF_DOUBLE ) ) THEN
 
-            WRITE( MESG , '( 3 A, I10 )' ) 
-     &           'WRATT3:  Attribute "'  , ANAME, 
+            WRITE( MESG , '( 3 A, I10 )' )
+     &           'WRATT3:  Attribute "'  , ANAME,
      &           '" has unsupported type', ATYPE
             CALL M3WARN( 'WRATT3', 0, 0, MESG )
             WRATT3 = .FALSE.
@@ -106,7 +109,8 @@ C...........   Check attribute type
 
         ITYPE = ATYPE
         GO TO 111
-        
+
+
         ENTRY WRATTC( FNAME, VNAME, ANAME, CVAL )
         ITYPE = NF_CHAR
         !! fall through to  111
@@ -153,7 +157,7 @@ C.......   Preliminary checks:
 C...........   Get ID for variable(s) to be written.
 
         VAR16 = VNAME   !  fixed-length-16 scratch copy of name
-            
+
         IF ( VAR16 .EQ. ALLVAR3 ) THEN
 
             VID = NCGLOBAL
@@ -171,7 +175,7 @@ C...........   Get ID for variable(s) to be written.
             END IF
 
         END IF          !  if VAR16 is 'ALL', or not.
-        
+
         IF ( EFLAG ) THEN
             MESG = 'Invalid variable or file name arguments'
             CALL M3MESG( MESG )
@@ -183,7 +187,7 @@ C...........   Put file into define mode; write the attribute; and
 C...........   restore the file to data mode:
 C...........   Somewhat tortured logic-structure due to the fact that
 C...........   one can't execute a RETURN within a critical section.
-            
+
 !$OMP   CRITICAL( S_NC )
 
         IERR = NF_REDEF( FID )
@@ -231,13 +235,13 @@ C...........   one can't execute a RETURN within a critical section.
             END IF
 
         END IF
-        
+
 !$OMP   END CRITICAL( S_NC )
-        
+
         IF ( IERR .NE. NF_NOERR ) THEN
             EFLAG = .TRUE.
         END IF
-        
+
 999     CONTINUE
 
         IF ( EFLAG ) THEN

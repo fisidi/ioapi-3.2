@@ -2,14 +2,16 @@
         LOGICAL FUNCTION  OPEN3( FNAME, FSTATUS, PGNAME )
 
 C***********************************************************************
-C Version "$Id: open3.F 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: open3.F 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C (C) 2003-2013 Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and
+C (C) 2015 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  130
+C  function body starts at line  131
 C
 C  FUNCTION:
 C       open Models-3 file with logical name FNAME, with file status
@@ -65,13 +67,15 @@ C       Modified 10/2003 by CJC for I/O API version 3:  support for
 C       native-binary BINFIL3 file type; uses INTEGER NAME2FID
 C       Modified 12/2004 by CJC: implement NVARS range-checks
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO.
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
-        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'NETCDF.EXT'
 #ifdef IOAPICPL
@@ -90,10 +94,8 @@ C...........   EXTERNAL FUNCTIONS and their descriptions:
 
         LOGICAL, EXTERNAL :: CKDESC3  !  does header validity checks
         LOGICAL, EXTERNAL :: CHKFIL3  !  does work of checking file def consistency
-        LOGICAL, EXTERNAL :: CLOSE3   !  closes files (if FSCREA3)
         LOGICAL, EXTERNAL :: CRTBUF3  !  create "buffered" virtual files
         LOGICAL, EXTERNAL :: CRTFIL3  !  does work of creating new files
-        INTEGER, EXTERNAL :: INDEX1   !  look up names in tables
         INTEGER, EXTERNAL :: NAME2FID !  fname~~> fid lookup
         LOGICAL, EXTERNAL :: OPNFIL3  !  does work of opening "old" files
         LOGICAL, EXTERNAL :: OPNLIST3 !   " multi-file FILE-LIST data sets
@@ -117,8 +119,7 @@ C...........   SCRATCH LOCAL VARIABLES and their descriptions:
         CHARACTER*512   MESG    !  for m3msg2, m3warn
 
 #ifdef IOAPICPL
-        LOGICAL  OPEN3V, UPDTVIR3
-        EXTERNAL OPEN3V, UPDTVIR3
+        LOGICAL, EXTERNAL :: OPEN3V, UPDTVIR3
         CHARACTER *256 PGMNAME
 #endif
 

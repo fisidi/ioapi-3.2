@@ -3,14 +3,16 @@
      &                            NATTS, ANAMES, ATYPES, ASIZES )
 
 C***********************************************************************
-C Version "$Id: inqatt3.f 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: inqatt3.f 164 2015-02-24 06:50:01Z coats $"
 C BAMS/MCNC/EDSS/Models-3 I/O API.
-C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
-C (C) 2003-2012 Baron Advanced Meteorological Systems
+C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
+C (C) 2004-2007 Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and
+C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  subroutine body starts at line  133
+C  subroutine body starts at line  126
 C
 C  FUNCTION:
 C       returns list of attributes, their types, and sizes for the
@@ -31,14 +33,19 @@ C       associated with INIT3()
 C
 C       Modified 7/2012 by CJC:  bugfix associated with attribute-table
 C       overflow.  Exclude standard attributes
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: Support for M3INT8
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
       INCLUDE 'NETCDF.EXT'      ! netCDF  constants
-      INCLUDE 'PARMS3.EXT'      ! I/O API constants
       INCLUDE 'STATE3.EXT'      ! I/O API internal state
 
 
@@ -49,12 +56,12 @@ C...........   ARGUMENTS and their descriptions:
         INTEGER      , INTENT(IN   ) :: MXATTS            !  max number of attributes
         INTEGER      , INTENT(  OUT) :: NATTS             !  number of actual attributes
         CHARACTER*(*), INTENT(  OUT) :: ANAMES( MXATTS )  !  attribute names
-        INTEGER      , INTENT(  OUT) :: ATYPES( MXATTS )  !  " types (M3REAL, M3INT, M3DBLE)
+        INTEGER      , INTENT(  OUT) :: ATYPES( MXATTS )  !  " types (M3CHAR, M3REAL, M3INT, M3DBLE, M3INT8)
         INTEGER      , INTENT(  OUT) :: ASIZES( MXATTS )  !  " size/length
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
-        INTEGER, EXTERNAL :: INIT3, INDEX1, NAME2FID
+        INTEGER, EXTERNAL :: NAME2FID
 
 
 C...........   PARAMETERs:  "standard-M3IO-attributes" table

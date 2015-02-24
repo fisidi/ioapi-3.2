@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML> 
 <HEAD>
-<!-- "$Id: NEWSTUFF.html 159 2015-02-16 19:51:39Z coats $" -->
+<!-- "$Id: NEWSTUFF.html 165 2015-02-24 06:51:40Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> 
     What's New with the I/O&nbsp;API
@@ -16,7 +16,7 @@
       MARGINWIDTH="15">
 
     <EM>
-    $Id: NEWSTUFF.html 159 2015-02-16 19:51:39Z coats $
+    $Id: NEWSTUFF.html 165 2015-02-24 06:51:40Z coats $
     </EM>
     <HR>
 
@@ -50,6 +50,10 @@
 </A></H2>
 
     <UL>
+         <LI>  <A HREF = "#feb232015">
+               Standards-violation fixes in <VAR>getyn(), getstr(),
+               getreal(), getnum(), getmenu(), getdble(), promptmfile(),
+               promptffile(), year4(), skipl()</VAR> </A>
          <LI>  <A HREF = "#ver32">
                <STRONG>I/O API Version 3.2-<VAR>beta</VAR></STRONG></A>
          <LI>  <A HREF = "#jan222015">
@@ -474,6 +478,35 @@
     <P>
     Go to the <STRONG><EM><A HREF = "AVAIL.html">I/O&nbsp;API
     Availability/Download/Installation page</A></EM></STRONG>
+    <P>
+   
+
+<HR> <!----------------------------------------------------------------->
+    
+<H2> <A NAME = "feb232015">
+    Standards-violation fixes in <VAR>getyn(), getstr(),
+               getreal(), getnum(), getmenu(), getdble(), promptmfile(),
+               promptffile(), year4(), skipl()</VAR> </A>
+</A></H2>
+   
+    Feb&nbsp;23, 2015:
+    <P>
+    Models-3 coding standards state:
+    <OL>
+        <LI> You <STRONG>will check status of systems-calls</STRONG>
+             and codes that make system calls and return that status;
+             and
+        <LI> You <STRONG>will write meaningful log messages</STRONG>
+             for the above, in cases of failures.
+    </OL>
+    In <STRONG>all</STRONG> of the above I/O&nbsp;API routines, Marc
+    Houyoux made changes which were in complete violation of those
+    coding standards.
+    <P>
+    Now corrected.
+    <P>
+
+    Back to <STRONG><EM><A HREF = "#contents">Contents</A></EM></STRONG>
     <P>
    
 
@@ -5247,7 +5280,7 @@ Send comments to
 
 
     <PRE>
-    $Id: NEWSTUFF.html 159 2015-02-16 19:51:39Z coats $
+    $Id: NEWSTUFF.html 165 2015-02-24 06:51:40Z coats $
     </PRE>
 </BODY>      <!--end body  -->
 </HTML>      <!--end html  -->

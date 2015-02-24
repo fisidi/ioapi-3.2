@@ -3,10 +3,12 @@
      &                         SDATE, STIME, TSTEP, NRECS, BUFFER )
 
 C***********************************************************************
-C Version "$Id: read4d.F 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: read4d.F 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C (C) 2003-2013 Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and
+C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
@@ -51,13 +53,17 @@ C       Bug-fix 2/2005 by Alex Zubrow (U. Chicago):  need to return
 C       READ4D = .TRUE. for success.
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO;
+C       support for M3INT8 variables
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
-        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'NETCDF.EXT'
 #ifdef IOAPICPL
@@ -79,8 +85,6 @@ C...........   ARGUMENTS and their descriptions:
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
-        INTEGER, EXTERNAL :: INIT3      !  initialize I/O API
-        INTEGER, EXTERNAL :: INDEX1     !  look up names in name tables
         INTEGER, EXTERNAL :: NAME2FID   !  fname~~> fid lookup
         LOGICAL, EXTERNAL :: RDTFLAG    !  compute time step availability
         LOGICAL, EXTERNAL :: RDVARS     !  read time step records
@@ -123,10 +127,12 @@ C...........   PARAMETERs:
      &        'UNKNOWN' /)      !   7:    "
 
 #if _CRAY || REAL8
-        INTEGER, PARAMETER :: TYPSIZE( 6 ) = (/ 1, 1, 1, 1, 1, 1 /)
+        INTEGER, PARAMETER :: TYPSIZE( 10 ) =
+     &        (/ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 /)
 #endif
 #if ! ( _CRAY || REAL8 )
-        INTEGER, PARAMETER :: TYPSIZE( 6 ) = (/ 1, 1, 1, 1, 1, 2 /)
+        INTEGER, PARAMETER :: TYPSIZE( 10 ) =
+     &        (/ 1, 1, 1, 1, 1, 2, 1, 1, 1, 2 /)
 #endif
 
 C***********************************************************************
@@ -363,13 +369,7 @@ C******************  FORMAT  STATEMENTS   ******************************
 
 C...........   Error and warning message formats..... 91xxx
 
-91000   FORMAT ( 5A )
-
 91010   FORMAT ( 3 ( A , :, I5, :, 2X ) )
-
-91020   FORMAT ( A , I9, ':' , I6.6, :, A )
-
-91030   FORMAT ( A , I6.6 )
 
 91040   FORMAT ( 3 ( '"', A16, '"', :, 4X ) )
 

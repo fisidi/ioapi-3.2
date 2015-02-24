@@ -2,7 +2,7 @@
         LOGICAL FUNCTION FLUSH3 ( FNAME )
 
 C***********************************************************************
-C Version "$Id: flush3.f 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: flush3.f 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2011 by Baron Advanced Meteorological Systems.
@@ -55,7 +55,6 @@ C...........   ARGUMENTS and their descriptions:
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
-        INTEGER, EXTERNAL :: INDEX1          !  look up names in tables
         INTEGER, EXTERNAL :: NAME2FID        !  fname~~> fid lookup
         LOGICAL, EXTERNAL :: SYNCFID
 

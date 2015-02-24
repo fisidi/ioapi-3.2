@@ -1,5 +1,5 @@
 #.........................................................................
-# VERSION "$Id: Makefile 157 2015-02-16 19:50:30Z coats $"
+# VERSION "$Id: Makefile 164 2015-02-24 06:50:01Z coats $"
 #    EDSS/Models-3 I/O API Version 3.1
 #.........................................................................
 # COPYRIGHT
@@ -210,7 +210,7 @@ nametest: ${LIB} ${OBJDIR}/libnetcdff.a
 	${SRCDIR}/nm_test.csh ${OBJDIR}/${LIB} ${OBJDIR}/libnetcdff.a nf_open
 
 
-#  ---------------------------  Dependencies:  --------------------------
+#  ---------------------------  RULES:  --------------------------
 
 %.o : %.mod        #  Disable "gmake"s obnoxious implicit Modula-2 rule !!
 %.f : %.F          #  Hack for some versions of  "gmake" + "gfortran"
@@ -245,6 +245,8 @@ nametest: ${LIB} ${OBJDIR}/libnetcdff.a
 	cd ${OBJDIR}; $(FC) $(FPPFLAGS) $(FFLAGS) -c ${IODIR}/$<
 
 
+#  ---------------------------  Dependencies:  --------------------------
+
 # init3() needs the library-version:
 #  gctp requires "SAVE all variables" flag;
 #  crtfil3, modatts3 and modgctp USE M3UTILIO
@@ -253,14 +255,68 @@ init3.o:  ${EXTS} ${IODIR}/Makeinclude.${BIN}
 	echo $(VFLAG)
 	cd ${OBJDIR}; $(FC) -c $(FPPFLAGS) $(FFLAGS) $(VFLAG) ${IODIR}/init3.F -o $@
 
+modatts3.o modatts3.mod :  m3utilio.mod
+modgctp.o  modgctp.mod  :  m3utilio.mod
+
 gctp.o: ${IODIR}/gctp.f ${IODIR}/Makeinclude.${BIN}
 	cd ${OBJDIR}; $(FC) -c $(FSFLAGS) $(FFLAGS) ${IODIR}/gctp.f
 
 
-crtfil3.o:  m3utilio.mod modatts3.mod
-
-modatts3.o modatts3.mod :  m3utilio.mod
-modgctp.o  modgctp.mod  :  m3utilio.mod
+check3.o      :  m3utilio.mod
+chkfil3.o     :  m3utilio.mod
+ckdesc.o      :  m3utilio.mod
+ckfile3.o     :  m3utilio.mod
+ckgeom.o      :  m3utilio.mod
+cktflag3.o    :  m3utilio.mod
+crtbuf3.o     :  m3utilio.mod
+crtfil3.o     :  m3utilio.mod modatts3.mod
+crtkf.o       :  m3utilio.mod
+currec.o      :  m3utilio.mod
+curstep.o     :  m3utilio.mod
+ddtvar3.o     :  m3utilio.mod
+ddtvar3v.o    :  m3utilio.mod
+desc3.o       :  m3utilio.mod
+dt2str.o      :  m3utilio.mod
+filchk3.o     :  m3utilio.mod
+getdate.o     :  m3utilio.mod
+getdfile.o    :  m3utilio.mod
+getefile.o    :  m3utilio.mod
+getmenu.o     :  m3utilio.mod
+getstr.o      :  m3utilio.mod
+getyn.o       :  m3utilio.mod
+getdate.o     :  m3utilio.mod
+gridops.o     :  m3utilio.mod
+inqatt3.o     :  m3utilio.mod
+intppqv.o     :  m3utilio.mod
+jstep3.o      :  m3utilio.mod
+kfindx.o      :  m3utilio.mod
+kfopen.o      :  m3utilio.mod
+kfwrite.o     :  m3utilio.mod
+open3.o       :  m3utilio.mod
+opnlist3.o    :  m3utilio.mod
+opnlog3.o     :  m3utilio.mod
+promptdfile.o :  m3utilio.mod
+promptffile.o :  m3utilio.mod
+promptgrid.o  :  m3utilio.mod
+promptmfile.o :  m3utilio.mod
+rddict3.o     :  m3utilio.mod
+rdvars.o      :  m3utilio.mod
+rdtflag.o     :  m3utilio.mod
+read3.o       :  m3utilio.mod
+read4d.o      :  m3utilio.mod
+readsmet.o    :  m3utilio.mod
+sync3.o       :  m3utilio.mod
+synchtao.o    :  m3utilio.mod
+updtvir3.o    :  m3utilio.mod
+utm2ll.o      :  m3utilio.mod
+wrdict3.o     :  m3utilio.mod
+write3.o      :  m3utilio.mod
+write4d.o     :  m3utilio.mod
+wrpatch.o     :  m3utilio.mod
+wrvars.o      :  m3utilio.mod
+xtbuf3.o      :  m3utilio.mod
+xtract3.o     :  m3utilio.mod
+year4.o       :  m3utilio.mod
 
 
 ${LIB}: ${OBJ}

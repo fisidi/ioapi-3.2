@@ -3,14 +3,16 @@
      &                           DIMS, DELS, DELTA, BUFFER )
 
 C***********************************************************************
-C Version "$Id: wrvars.F 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: wrvars.F 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
-C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
+C (C) 2003-2010 Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and 
+C (C) 2015 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  99
+C  function body starts at line  106
 C
 C  FUNCTION:  writes "variables" part of time step records from Models-3
 C             files with index FID, for all layers and variables for
@@ -46,13 +48,16 @@ C       Structure in terms of LOGICAL SYNCFID
 C       support for native-binary BINFILE3 and LISTFIL3 file types
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: Support for M3INT8, USE M3UTILIO
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
-        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'NETCDF.EXT'
 
@@ -84,10 +89,12 @@ C...........   SCRATCH LOCAL VARIABLES and their descriptions:
         CHARACTER*256 MESG
 
 #if _CRAY || REAL8
-        INTEGER, PARAMETER :: TYPSIZE( 6 ) = (/ 1, 1, 1, 1, 1, 1 /)
+        INTEGER, PARAMETER :: TYPSIZE( 10 ) =
+     &        (/ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 /)
 #endif
 #if ! ( _CRAY || REAL8 )
-        INTEGER, PARAMETER :: TYPSIZE( 6 ) = (/ 1, 1, 1, 1, 1, 2 /)
+        INTEGER, PARAMETER :: TYPSIZE( 10 ) =
+     &        (/ 1, 1, 1, 1, 1, 2, 1, 1, 1, 2 /)
 #endif
 
 

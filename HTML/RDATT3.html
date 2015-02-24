@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: RDATT3.html 159 2015-02-16 19:51:39Z coats $" -->
+<!-- "$Id: RDATT3.html 165 2015-02-24 06:51:40Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> RDATT3() and RDATTC() </TITLE>
 </HEAD>
@@ -23,7 +23,7 @@
         CHARACTER*(*), INTENT(IN   ) :: FNAME         !  logical file name
         CHARACTER*(*), INTENT(IN   ) :: VNAME         !  variable name, or ALLVARS3
         CHARACTER*(*), INTENT(IN   ) :: ANAME         !  attribute name
-        INTEGER      , INTENT(IN   ) :: ATYPE         !  attribute type (M3REAL, M3INT, M3DBLE)
+        INTEGER      , INTENT(IN   ) :: ATYPE         !  attribute type (M3CHAR, M3REAL, M3INT, M3INT8, M3DBLE)
         INTEGER      , INTENT(IN   ) :: AMAX          !  attribute dimensionality
         INTEGER      , INTENT(  OUT) :: ASIZE         !  attribute actual size
         REAL         , INTENT(  OUT) :: AVAL( AMAX )  !  attribute value (numeric)

@@ -2,14 +2,16 @@
         LOGICAL FUNCTION OPNLIST3( FID, PGNAME )
 
 C***********************************************************************
-C Version "$Id: opnlist3.f 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: opnlist3.f 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C (C) 2003-2013 Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and
+C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  94
+C  function body starts at line  83
 C
 C  FUNCTION:
 C       Open a FILE-LIST multi-file data set for status FSREAD3
@@ -23,14 +25,16 @@ C  PRECONDITIONS REQUIRED:
 C       All files in the logical-name list already exist.
 C
 C  REVISION  HISTORY:
-C       Prototype   3/2002 by CJC for I/O API V2.2
+C       Prototype  03/2002 by CJC for I/O API V2.2
+C       Modified   02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
-        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'NETCDF.EXT'
 
@@ -43,11 +47,7 @@ C...........   ARGUMENTS and their descriptions:
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
-        INTEGER, EXTERNAL :: INDEX1   !  look up names in tables
-        INTEGER, EXTERNAL :: JSTEP3   !  timestep record-number
         LOGICAL, EXTERNAL :: OPNFIL3  !  does work of opening "old" files
-        INTEGER, EXTERNAL :: SECSDIFF !  date&time difference (seconds)
-        LOGICAL, EXTERNAL :: STRLIST  !  parse comma-delimited lists of strings
 
 
 C...........   SCRATCH LOCAL VARIABLES and their descriptions:

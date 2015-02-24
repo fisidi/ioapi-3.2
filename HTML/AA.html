@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: AA.html 155 2015-02-12 17:40:21Z coats $" -->
+<!-- "$Id: AA.html 165 2015-02-24 06:51:40Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE">
 <TITLE>  The BAMS/EDSS/Models-3 I/O&nbsp;API </TITLE>
 </HEAD>
@@ -50,7 +50,8 @@ Contents
         <LI>  <A HREF = "LIBS.html">         Object Libraries and
                                              Executables</A>
         <LI>  <A HREF = "INCLUDE.html"      ><CODE>MODULE</CODE>s and 
-                                             Public INCLUDE FILES </A>
+                                             Public <CODE>INCLUDE</CODE>
+                                             Files </A>
         <LI>  <A HREF = "#ioapi"            >Public I/O Routines </A>
         <LI>  <A HREF = "#coordstuff"       >Coordinate and Grid
                                              Related Routines </A>
@@ -265,8 +266,8 @@ Contents
              parameters, data structures, <VAR>INTERFACE</VAR>
              blocks, and declarations.  Replaces use of the
              (now-deprecated) INCLUDE-files below.
-        <DT> <A HREF = "MATXATTS.html">
-             <STRONG><VAR>MODULE MATXATTS</VAR></STRONG></A>:
+        <DT> <A HREF = "MODATTS3.html">
+             <STRONG><VAR>MODULE MODATTS3</VAR></STRONG></A>:
              parameters and routines for map-transform metadata.
         <DT> <A HREF = "MODGCTP.html">
              <STRONG><VAR>MODULE MODGCTP</VAR></STRONG></A>:
@@ -417,14 +418,14 @@ Contents
              Numeric attributes use <CODE>WRATT3()</CODE> and
              character-string attributes use <CODE>WRATTC()</CODE>
              <P>
-        <DT> <STRONG><A HREF="MATXATTS.html#getmtxatt">GETMTXATT()</A></STRONG>:
+        <DT> <STRONG><A HREF="MODATTS3.html#getmtxatt">GETMTXATT()</A></STRONG>:
              get input or output grid description attributes for
              matrix files and return them as arguments.
-        <DT> <STRONG><A HREF="MATXATTS.html#setmtxatt">SETMTXATT()</A></STRONG>:
+        <DT> <STRONG><A HREF="MODATTS3.html#setmtxatt">SETMTXATT()</A></STRONG>:
              set or check input and output grid description attributes
              from arguments for matrix-files:  if file is <CODE>NEW</CODE>,
              set the attributes; else check them.
-        <DT> <STRONG><A HREF="MATXATTS.html#chkmtxatt">CHKMTXATT()</A></STRONG>:
+        <DT> <STRONG><A HREF="MODATTS3.html#chkmtxatt">CHKMTXATT()</A></STRONG>:
              check input or output grid description attributes for
              matrix-files against attributes from  the argument list.
              Return <CODE>.TRUE.</CODE> if they match,
@@ -1383,7 +1384,7 @@ Send comments to
 
 <!--#include virtual="/INCLUDES/footer.html" -->
     <PRE>
-    $Id: AA.html 155 2015-02-12 17:40:21Z coats $
+    $Id: AA.html 165 2015-02-24 06:51:40Z coats $
     </PRE>
 
 </BODY>

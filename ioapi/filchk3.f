@@ -3,14 +3,16 @@
      &                          FTYPE, NCOLS, NROWS, NLAYS, NTHIK ) 
 
 C***********************************************************************
-C Version "$Id: filchk3.f 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: filchk3.f 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C (C) 2003-2010 by Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and 
+C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  76
+C  function body starts at line  79
 C
 C  FUNCTION:
 C       Checks to see whether file FNAME has the indicated type FTYPE
@@ -33,13 +35,16 @@ C       Modified 12/2003 by CJC for I/O API version 3:  uses new
 C       INTEGER NAME2FID for file-lookup
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
-        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'NETCDF.EXT'
 
@@ -56,9 +61,7 @@ C...........   ARGUMENTS and their descriptions:
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
-        INTEGER, EXTERNAL :: INDEX1     !  look up names in name tables
         INTEGER, EXTERNAL :: NAME2FID   !  fname~~> fid lookup
-
         EXTERNAL :: INITBLK3            !  block data: initialize I/O state
 
 

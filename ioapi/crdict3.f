@@ -2,14 +2,15 @@
         LOGICAL FUNCTION CRDICT3( FID )
 
 C***********************************************************************
-C Version "$Id: crdict3.f 100 2015-01-16 16:52:16Z coats $"
-C EDSS/Models-3 I/O API.
-C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
-C (C) 2003-2010 Baron Advanced Meteorological Systems
+C Version "$Id: crdict3.f 164 2015-02-24 06:50:01Z coats $"
+C BAMS/MCNC/EDSS/Models-3 I/O API.
+C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
+C (C) 2003-2011 Baron Advanced Meteorological Systems, and 
+C (C) 2015 UNC Institute for the Environment
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  66
+C  function body starts at line  69
 C
 C  FUNCTION:  Perform "Models-3 variables" part of netCDF file creation
 C             for CREATE3 for the dictionary file with index FID.
@@ -26,6 +27,8 @@ C  REVISION  HISTORY:
 C       prototype 3/92 by CJC
 C
 C       Modified 03/20010 by CJC: F9x changes for I/O API v3.1
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: Support for M3INT8
 C***********************************************************************
 
       IMPLICIT NONE
@@ -283,8 +286,8 @@ C...............   Variable list:
 
         VLIST3( 26,FID ) = 'VTYPE'	!  type:  integer
         VUNIT ( 26 )     = 'basic datatype'
-        VDESC ( 26 )     = 'M3INT, M3REAL, or M3DBLE for '//
-     &          'INTEGER, REAL, or DOUBLE PRECISION types'
+        VDESC ( 26 )     = 'M3INT, M3REAL, M3DBLE, or M3INT8 for '//
+     &          'INTEGER, REAL, DOUBLE PRECISION, or INTEGER*8 types'
 
 
 C.......   Put header attributes:  number of variables and

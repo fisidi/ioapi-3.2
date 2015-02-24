@@ -5,7 +5,7 @@
         LOGICAL            RDATTC
 
 C***********************************************************************
-C Version "$Id: rdatt3.f 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: rdatt3.f 164 2015-02-24 06:50:01Z coats $"
 C BAMS/MCNC/EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2011 Baron Advanced Meteorological Systems, and 
@@ -13,15 +13,15 @@ C (C) 2014 UNC Institute for the Environment
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  subroutine body starts at line   90
-C   Entry  RDATTC  starts at line  109
+C  subroutine body starts at line   94
+C   Entry  RDATTC  starts at line  111
 C
 C  FUNCTION:
 C       Reads the attribute named ANAME for the variable VNAME in the
 C       file FNAME into AVAL( AMAX ).  If VNAME == ALLVAR3, reads
 C       global attribute ANAME.
-C       AVAL must have type ATYPE, which should be one of M3REAL, M3INT, or
-C       M3DBLE.
+C       AVAL must have type ATYPE, which should be one of M3REAL, M3INT,
+C       M3DBLE, or M3INT8.
 C
 C       CHARACTER-string attributes use
 C               ENTRY   RDATTC( FNAME, VNAME, ANAME, CVAL )
@@ -41,6 +41,8 @@ C
 C       Modified 9/2013 by CJC:  Fortran-90 stuff; use NAME2FID()
 C
 C       Modified 12/2014 by CJC: logic cleanup
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: Support for M3INT8 atts
 C***********************************************************************
 
 C...........   INCLUDES:
@@ -89,8 +91,9 @@ C   begin body of subroutine  RDATT3
 
 C...........   Check attribute type
 
-        IF ( ( ATYPE .NE. NF_INT   ) .AND.
-     &       ( ATYPE .NE. NF_FLOAT ) .AND.
+        IF ( ( ATYPE .NE. NF_INT     ) .AND.
+     &       ( ATYPE .NE. NF_FLOAT   ) .AND.
+     &       ( ATYPE .NE. NF_INT64   ).AND.
      &       ( ATYPE .NE. NF_DOUBLE  ) ) THEN
 
             WRITE( MESG , '( 3 A, I10 )' )

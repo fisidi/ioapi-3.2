@@ -2,7 +2,7 @@
         SUBROUTINE M3MSG2( MESSAGE )
 
 C***********************************************************************
-C Version "$Id: m3msg2.F 154 2015-02-12 17:32:28Z coats $"
+C Version "$Id: m3msg2.F 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010  Baron Advanced Meteorological Systems
@@ -216,7 +216,6 @@ C...........   ARGUMENTS and their descriptions:
                  
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
-        LOGICAL, EXTERNAL :: ENVYN   !  get YES/NO environment variable
         INTEGER, EXTERNAL :: INITLOG3
         EXTERNAL          :: INITBLK3        !!  BLOCK DATA to initialize STATE3 commons
 
@@ -280,7 +279,6 @@ C...........   ARGUMENTS and their descriptions:
                  
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
-        LOGICAL, EXTERNAL :: ENVYN   !  get YES/NO environment variable
         INTEGER, EXTERNAL :: INITLOG3
         EXTERNAL          :: INITBLK3        !!  BLOCK DATA to initialize STATE3 commons
 

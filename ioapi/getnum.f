@@ -2,7 +2,7 @@
         INTEGER FUNCTION GETNUM ( LO , HI , DEFAULT , PROMPT )
 
 C********************************************************************
-C Version "$Id: getnum.f 154 2015-02-12 17:32:28Z coats $"
+C Version "$Id: getnum.f 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (c) 2004-2007 Baron Advanced Meteorological Systems,
@@ -11,7 +11,8 @@ C for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C       function body starts at line  83
+C       function getnum()   body starts at line  92
+C       entry    getnum1()  body starts at line 180
 C
 C       CALLS:      TRIMLEN, ENVYN, M3EXIT
 C
@@ -36,6 +37,7 @@ C       Revised 6/2003 by CJC:  factor through M3PROMPT to ensure flush()
 C       of PROMPT for IRIX F90v7.4  
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
 C       Modified 02/2014 by CJC: ENTRY GETNUM1() does not have bounds LO, HI;
+C       Fix MH violation of coding-standards:  check status IOS from  ENVYN()!!
 C
 C  ARGUMENT LIST DESCRIPTION:
 C
@@ -82,6 +84,8 @@ C.......   LOCAL VARIABLES:
         LOGICAL, SAVE :: PROMPTON
         LOGICAL, SAVE :: FIRSTIME = .TRUE.
 
+        CHARACTER*16, PARAMETER :: PNAME = 'GETNUM'
+
 C......................................................................
 C       begin GETNUM
 
@@ -93,6 +97,9 @@ C       begin GETNUM
 
             PROMPTON = ENVYN( 'PROMPTFLAG', 'Prompt for input flag',
      &                      .TRUE., IOS )
+            IF ( IOS .GT. 0 ) THEN
+                CALL M3EXIT( PNAME,0,0,'Bad env vble "PROMPTFLAG"', 2 )
+            END IF
             FIRSTIME = .FALSE.
  
         END IF

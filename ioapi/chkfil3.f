@@ -36,15 +36,17 @@ C       variables-lists.
 C       Modified 11/2007 by CJC:  Revert from 8/2007:  same-set/different-order
 C       is bogus
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
-        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
-        INCLUDE 'FDESC3.EXT'
         INCLUDE 'NETCDF.EXT'
 
 
@@ -56,8 +58,6 @@ C...........   ARGUMENTS and their descriptions:
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
         LOGICAL, EXTERNAL :: CKNAME
-        INTEGER, EXTERNAL :: INDEX1  !  name-table lookup
-        INTEGER, EXTERNAL :: JSTEP3  !  record number within a timestep sequence.
 
 
 C...........   SCRATCH LOCAL VARIABLES and their descriptions:

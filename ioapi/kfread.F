@@ -3,14 +3,14 @@
      &                         COL, ROW, JDATE, JTIME, KFLEN, VBLE )
 
 C***********************************************************************
-C Version "$Id: kfread.F 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: kfread.F 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2010 by Baron Advanced Meteorological Systems.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  98
+C  function body starts at line  97
 C
 C  FUNCTION:  reads the indicated event from the KF-Cloud-Event file
 C 	with logical name FNAME for variable with name VNAME.
@@ -32,13 +32,17 @@ C       Modified 7/2003 by CJC:  bugfix -- clean up critical sections
 C       associated with INIT3()
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO;
+C       support for M3INT8 variables
 C***********************************************************************
 
-      IMPLICIT NONE
+        USE M3UTILIO
+
+        IMPLICIT NONE
 
 C...........   INCLUDES:
 
-        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'NETCDF.EXT'
 
@@ -59,18 +63,13 @@ C...........   ARGUMENTS and their descriptions:
 C...........   MACHINE DEPENDENCY !!
 
 #if _CRAY || REAL8
-        INTEGER, PARAMETER :: TYPSIZE( 6 ) = (/ 1, 1, 1, 1, 1, 1 /)
+        INTEGER, PARAMETER :: TYPSIZE( 10 ) =
+     &        (/ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 /)
 #endif
 #if ! ( _CRAY || REAL8 )
-        INTEGER, PARAMETER :: TYPSIZE( 6 ) = (/ 1, 1, 1, 1, 1, 2 /)
+        INTEGER, PARAMETER :: TYPSIZE( 10 ) =
+     &        (/ 1, 1, 1, 1, 1, 2, 1, 1, 1, 2 /)
 #endif
-
-
-C...........   EXTERNAL FUNCTIONS and their descriptions:
-
-        INTEGER, EXTERNAL :: INIT3      !  initialize I/O API
-        INTEGER, EXTERNAL :: INDEX1     !  look up names in name tables
-
 
 C...........   SCRATCH LOCAL VARIABLES and their descriptions:
 

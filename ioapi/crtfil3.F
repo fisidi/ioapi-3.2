@@ -2,7 +2,7 @@
         LOGICAL FUNCTION CRTFIL3( EQNAME, FID, PGNAME )
 
 C***********************************************************************
-C Version "$Id: crtfil3.F 154 2015-02-12 17:32:28Z coats $"
+C Version "$Id: crtfil3.F 164 2015-02-24 06:50:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2011 Baron Advanced Meteorological Systems,
@@ -11,7 +11,7 @@ C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  subroutine body starts at line 130
+C  subroutine body starts at line 131
 C
 C  FUNCTION:  Create netCDF file FNAME using info stored in the FDESC3
 C             common.  Record history,   Leave file open for update.
@@ -54,12 +54,12 @@ C       Martin Otte, US EPA -- remove NF_WRITE.
 C       Modified 03/20010 by CJC: F9x changes for I/O API v3.1
 C       Revised 4/2011 by David Wong, US EPA, and by CJC, to add state for
 C       full buffered-file file descriptions.
-C       Revised 12.2014 by CJC:  USE M3UTILIO; USE M3ATTS extra-attribute
-C       calls 
+C       Revised 12/2014 by CJC:  USE M3UTILIO; USE MODATTS3 extra-attributes
+C       Modified 02/2015 by CJC for I/O API 3.2: Support for M3INT8
 C***********************************************************************
 
         USE M3UTILIO
-        USE M3ATTS
+        USE MODATTS3
 
         IMPLICIT NONE
 
@@ -1231,9 +1231,7 @@ C.......   Define all the Models-3 variables for this file:
 
             ISCR = VTYPE3D( VAR )
 
-            IF ( ISCR .NE. M3INT   .AND.
-     &           ISCR .NE. M3REAL  .AND.
-     &           ISCR .NE. M3DBLE ) THEN
+            IF ( INDEXINT1( ISCR, NM3TYPES, M3TYPES ) .LE. 0 ) THEN
                 WRITE( LOGDEV,91010 )
      &          'Error creating netCDF variable ' // VNAME3D( VAR ) //
      &          'for file ' // FLIST3( FID ),
