@@ -1,9 +1,10 @@
 
         CHARACTER*16 FUNCTION PROMPTMFILE( PROMPT, FMODE, 
      &                                     DEFAULT, CALLER )
+     &                             RESULT( PFILE )
 
 C***********************************************************************
-C Version "$Id: promptmfile.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: promptmfile.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -138,7 +139,7 @@ C.......   Construct actual prompt; Loop:  get file name until file opens
                 END IF
 
                 IF ( NFLAG .AND. ( LNAME .EQ. NONE16 ) ) THEN
-                    PROMPTMFILE = NONE16
+                    PFILE = NONE16
                     RETURN
                 END IF
 
@@ -164,7 +165,7 @@ C.......   Construct actual prompt; Loop:  get file name until file opens
             IF ( NFLAG )  THEN
  
                 IF( LNAME .EQ. NONE16      ) THEN
-                    PROMPTMFILE = NONE16
+                    PFILE = NONE16
                     RETURN
                 END IF
 
@@ -175,7 +176,7 @@ C           ..  Study Planner to skip file without having to input "NONE"
      &                       BUFFER, IOS )
  
                 IF( IOS .LT. 0 ) THEN   ! either not set (-2) or empty (-1)
-                    PROMPTMFILE = NONE16
+                    PFILE = NONE16
                     RETURN
                 END IF
 
@@ -191,7 +192,7 @@ C           ..  Study Planner to skip file without having to input "NONE"
 
         ENDIF
 
-        PROMPTMFILE = LNAME
+        PFILE = LNAME
         RETURN
 
         END FUNCTION PROMPTMFILE

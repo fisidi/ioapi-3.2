@@ -1,31 +1,32 @@
 
-        INTEGER FUNCTION CURREC ( JDATE, JTIME, 
-     &                            SDATE, STIME, TSTEP, 
-     &                            CDATE, CTIME )
+        INTEGER FUNCTION CURREC( JDATE, JTIME,
+     &                           SDATE, STIME, TSTEP,
+     &                           CDATE, CTIME )
+     &                   RESULT( RECNUM )
 
 C***********************************************************************
-C Version "$Id: currec.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: currec.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,
-C (C) 2007-2013 Carlie J. Coats, Jr., and 
+C (C) 2007-2013 Carlie J. Coats, Jr., and
 C (C) 2015 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
 C  subroutine body starts at line  73
 C
-C  FUNCTION:  Return the record number the time step in the time step 
-C             sequence starting at SDATE:STIME and having time step TSTEP 
+C  FUNCTION:  Return the record number the time step in the time step
+C             sequence starting at SDATE:STIME and having time step TSTEP
 C             and compute its  date&time  CDATE:CTIME
-C             In particular, this is the largest time step in the sequence 
+C             In particular, this is the largest time step in the sequence
 C             having the property:
 C
 C                 CDATE:CTIME <= JDATE:JTIME
 C
 C             If JDATE:JTIME is out-of-range, return -1
 C
-C  PRECONDITIONS REQUIRED:  Dates represented YYYYDDD, 
+C  PRECONDITIONS REQUIRED:  Dates represented YYYYDDD,
 C                           times represented HHMMSS.
 C
 C  SUBROUTINES AND FUNCTIONS CALLED:  NEXTIME, SEC2TIME, SECSDIFF, TIME2SEC
@@ -33,10 +34,10 @@ C
 C  REVISION  HISTORY:
 C       Adapted 2/99 by CJC from I/O API routine CURREC()
 C
-C       Version 1/2007 by CJC:  simplification; handle negative 
+C       Version 1/2007 by CJC:  simplification; handle negative
 C       *DATE arguments correctly
 C
-C       Version 1/2008 by CJC:  Problem reported by Christian Hogrefe, 
+C       Version 1/2008 by CJC:  Problem reported by Christian Hogrefe,
 C       NY Division of Environmental Conservation:  be careful to avoid
 C       integer overflow, for climate modeling applications, etc.
 C
@@ -72,7 +73,7 @@ C   begin body of subroutine  CURREC
 
         IF ( TSTEP .EQ. 0 ) THEN   !  time-independent case:
 
-            CURREC = 1
+            RECNUM = 1
             CDATE  = SDATE
             CTIME  = STIME
             RETURN
@@ -80,34 +81,34 @@ C   begin body of subroutine  CURREC
         END  IF
 
         IF ( JDATE .LT. -10000000  .OR.         !  out-of-range
-     &       JDATE .GT.  10000000  ) THEN       !  probable-error cases 
+     &       JDATE .GT.  10000000  ) THEN       !  probable-error cases
 
-                CURREC = -1
+                RECNUM = -1
                 RETURN
 
         END  IF
 
 
         !!  Normalized copies of the arguments:
-        
+
         CDATE = SDATE
         CTIME = STIME
-        CALL NEXTIME( CDATE, CTIME, 0 ) 
-        
+        CALL NEXTIME( CDATE, CTIME, 0 )
+
         KDATE = JDATE
         KTIME = JTIME
         CALL NEXTIME( KDATE, KTIME, 0 )
-        
+
         STEP = ABS( TSTEP )
 
         IF ( KDATE .LT. CDATE  .OR.
      &       KDATE .EQ. CDATE .AND. KTIME .LT. CTIME ) THEN
 
-            CURREC = -1
+            RECNUM = -1
 
         ELSE IF ( KDATE .EQ. CDATE .AND. KTIME .EQ. CTIME ) THEN
 
-            CURREC = 1
+            RECNUM = 1
             RETURN
 
         ELSE IF ( KDATE .LE. CDATE+5000 ) THEN  !  no overflow happens
@@ -116,9 +117,9 @@ C   begin body of subroutine  CURREC
 
             STEP = TIME2SEC( STEP )
             IREC = SECS / STEP
-            CALL NEXTIME( CDATE, CTIME, 
+            CALL NEXTIME( CDATE, CTIME,
      &                    SEC2TIME( IREC * STEP ) )
-            CURREC = 1 + IREC
+            RECNUM = 1 + IREC
 
         ELSE IF ( STEP .GT. YSTEP4 ) THEN       !  iterate by STEP (> 4 years)
 
@@ -134,7 +135,7 @@ C   begin body of subroutine  CURREC
                 END IF
 
             CALL NEXTIME( CDATE, CTIME, -STEP )
-            CURREC = IREC
+            RECNUM = IREC
 
         ELSE    !  step < ysecs4:  iterate by approx 4 years
 
@@ -153,14 +154,14 @@ C   begin body of subroutine  CURREC
 
             STEP = SECSDIFF( CDATE, CTIME, KDATE, KTIME )
             JREC = STEP / SECS
-            CALL NEXTIME( CDATE, CTIME, 
+            CALL NEXTIME( CDATE, CTIME,
      &                    SEC2TIME( JREC * SECS ) )
 
-            CURREC = 1 + IREC + JREC
+            RECNUM = 1 + IREC + JREC
 
         END IF
 
         RETURN
 
-        END FUNCTION CURREC 
+        END FUNCTION CURREC
 

@@ -1,8 +1,9 @@
 
         LOGICAL FUNCTION  KFOPEN( FNAME, FSTATUS, PGNAME, KFCOUNT )
+     &                    RESULT( KFFLAG )
 
 C***********************************************************************
-C Version "$Id: kfopen.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: kfopen.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -80,7 +81,7 @@ C   begin body of subroutine  KFOPEN
      &          'File name length bad for "', FNAME, '"',
      &          'Max file name length 16; actual:', LEN( FNAME )
             CALL M3WARN( 'KFOPEN', 0, 0, MESG )
-            KFOPEN = .FALSE.
+            KFFLAG = .FALSE.
             RETURN
         END IF
 
@@ -122,7 +123,7 @@ C.......   Read KFCOUNT from FNAME:
                     IF ( IERR .NE. 0 ) THEN
                         CALL M3ABORT( FLIST3( FID ), FNUM, IERR,
      &                  'Error with input disk synchronization' )
-                        KFOPEN = .FALSE.
+                        KFFLAG = .FALSE.
                         GO TO 999       !  to return
                     END IF              !  if synch failed
                 END IF          !  if file is volatile
@@ -130,11 +131,11 @@ C.......   Read KFCOUNT from FNAME:
                 CALL NCVGT( FNUM, NINDX3( FID ), DIMS, DELS,
      &                      KFCOUNT, IERR )
                 IF ( IERR .EQ. 0 ) THEN
-                    KFOPEN = .TRUE.
+                    KFFLAG = .TRUE.
                 ELSE
                     CALL M3ABORT( FLIST3( FID ), FNUM, IERR,
      &              'Error reading variable KFCOUNT' )
-                    KFOPEN = .FALSE.
+                    KFFLAG = .FALSE.
                 END IF          !  ierr nonzero:  NCVGTC() failed, or succeeded
 
             ELSE
@@ -148,22 +149,22 @@ C.......   Initialize KFCOUNT and write it to FNAME:
                 CALL NCVPT( FNUM, NINDX3( FID ), DIMS, DELS,
      &                      KFCOUNT, IERR )
                 IF ( IERR .EQ. 0 ) THEN
-                    KFOPEN = .TRUE.
+                    KFFLAG = .TRUE.
                 ELSE
                     CALL M3ABORT( FLIST3( FID ), FNUM, IERR,
      &              'Error initializing KFCOUNT' )
-                    KFOPEN = .FALSE.
+                    KFFLAG = .FALSE.
                     GO TO 999   !  to return
                 END IF          !  ierr nonzero:  NCENDF() failed
 
                 IF ( VOLAT3( FID ) ) THEN     !  volatile file:  synch with disk
                     CALL NCSNC( FNUM, IERR )
                     IF ( IERR .EQ. 0 ) THEN
-                        KFOPEN = .TRUE.
+                        KFFLAG = .TRUE.
                     ELSE
                         CALL M3ABORT( FLIST3( FID ), FNUM, IERR,
      &                  'Error with output disk synchronization' )
-                        KFOPEN = .FALSE.
+                        KFFLAG = .FALSE.
                     END IF              !  if synch failed
                 END IF          !  if file is volatile
 
@@ -171,7 +172,7 @@ C.......   Initialize KFCOUNT and write it to FNAME:
 
         ELSE
 
-            KFOPEN = .FALSE.    !  open3() failed
+            KFFLAG = .FALSE.    !  open3() failed
 
         END IF          !  if open3() succeeded or not
 

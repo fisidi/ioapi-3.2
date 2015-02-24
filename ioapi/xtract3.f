@@ -2,9 +2,10 @@
         LOGICAL FUNCTION  XTRACT3 ( FNAME, VNAME, LAY0, LAY1,
      &                              ROW0, ROW1, COL0, COL1,
      &                              JDATE, JTIME, BUFFER )
+     &                    RESULT( XTFLAG )
 
 C***********************************************************************
-C Version "$Id: xtract3.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: xtract3.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,
@@ -133,7 +134,7 @@ C.......   Check that Models-3 I/O API has been initialized:
         IF ( EFLAG ) THEN
             MESG = 'Invalid file name "' // FNAME // '"'
             CALL M3WARN( 'XTRACT3', JDATE, JTIME, MESG )
-	    XTRACT3 = .FALSE.
+            XTFLAG = .FALSE.
             RETURN
         END IF          !  if len( fname ) > 16, or if len( vname ) > 1
 
@@ -143,7 +144,7 @@ C.......   Check that Models-3 I/O API has been initialized:
             WRITE( MESG, '( A, I10 )'  )
      &          'Max vble name length 16; actual:', VLEN
             CALL M3WARN( 'XTRACT3', JDATE, JTIME, MESG )
-	    XTRACT3 = .FALSE.
+            XTFLAG = .FALSE.
             RETURN
         END IF          !  if len( vname ) > 16
         
@@ -153,7 +154,7 @@ C.......   Check that Models-3 I/O API has been initialized:
      &          FNAME( 1:FLEN ), ' must be GRDDED3 = 1 ',
      &          'Actual file type' , FTYPE3( FID )
             CALL M3WARN( 'XTRACT3', JDATE, JTIME, MESG )
-	    XTRACT3 = .FALSE.
+            XTFLAG = .FALSE.
             RETURN
         END IF          !  if file type nongridded, or file volatile
 
@@ -176,7 +177,7 @@ C.......   Perform range checks on variable, layer, row, col:
                 DO  VAR = 1, NVARS3( FID )
                      CALL M3MSG2( VLIST3( VAR,FID ) )
                 END DO
-                XTRACT3 = .FALSE.
+                XTFLAG = .FALSE.
                 RETURN
             END IF
  
@@ -198,7 +199,7 @@ C.......   Perform range checks on variable, layer, row, col:
             MESG = 'Error in layer-bounds specification for file ' //
      &          FNAME // ' variable ' // VNAME
             CALL M3WARN( 'XTRACT3', JDATE, JTIME, MESG )
-            XTRACT3 = .FALSE.
+            XTFLAG = .FALSE.
             RETURN
      
         ELSE IF ( ROW0 .LT. 1     .OR.  
@@ -217,7 +218,7 @@ C.......   Perform range checks on variable, layer, row, col:
             MESG = 'Error in row-bounds VNAME for file ' //
      &          FNAME // ' variable ' // VNAME
             CALL M3WARN( 'XTRACT3', JDATE, JTIME, MESG )
-            XTRACT3 = .FALSE.
+            XTFLAG = .FALSE.
             RETURN
      
         ELSE IF ( COL0 .LT. 1     .OR.  
@@ -236,7 +237,7 @@ C.......   Perform range checks on variable, layer, row, col:
             MESG = 'Error in col-bounds specification for file ' //
      &          FNAME // ' variable ' // VNAME
             CALL M3WARN( 'XTRACT3', JDATE, JTIME, MESG )
-            XTRACT3 = .FALSE.
+            XTFLAG = .FALSE.
             RETURN
 
         END IF          !  end range checks on col, row, layer
@@ -244,7 +245,7 @@ C.......   Perform range checks on variable, layer, row, col:
      
         IF ( CDFID3( FID ) .EQ. BUFFIL3 ) THEN     !  BUFFERED "file"
 
-            XTRACT3 = XTBUF3( FID,  VID,  LAY0, LAY1, 
+            XTFLAG = XTBUF3( FID,  VID,  LAY0, LAY1, 
      &                        ROW0, ROW1, COL0, COL1,
      &                        JDATE, JTIME, BUFFER )
             RETURN
@@ -254,7 +255,7 @@ C.......   Perform range checks on variable, layer, row, col:
             MESG = 'Virtual file XTRACT3 not supported for "' //
      &             FNAME // '" variable "' // VNAME // '"'
             CALL M3WARN( 'XTRACT3', JDATE, JTIME, MESG )
-            XTRACT3 = .FALSE.
+            XTFLAG = .FALSE.
             RETURN
 
         END IF !  if file buffered
@@ -266,7 +267,7 @@ C.......   Perform range checks on variable, layer, row, col:
 
             MESG = 'Time step not available for file:  ' // FNAME
             CALL M3WARN( 'XTRACT3', JDATE, JTIME, MESG )
-            XTRACT3 = .FALSE.
+            XTFLAG = .FALSE.
             RETURN
 
         END IF
@@ -276,7 +277,7 @@ C.......   Perform range checks on variable, layer, row, col:
             IERR = XTRBIN3( FID,  VID,  LAY0, LAY1, 
      &                      ROW0, ROW1, COL0, COL1,
      &                      STEP, BUFFER )
-            XTRACT3 = ( IERR .NE. 0 )
+            XTFLAG = ( IERR .NE. 0 )
             RETURN
         
         END IF
@@ -303,7 +304,7 @@ C...........   Read data from netCDF file into BUFFER()
 
         DELTA = DCOLS * DROWS * DLAYS
 
-        XTRACT3 = RDVARS( FID, VID, DIMS, DELS, DELTA, BUFFER )
+        XTFLAG = RDVARS( FID, VID, DIMS, DELS, DELTA, BUFFER )
 
         RETURN
 

@@ -3,9 +3,10 @@
      &                            LAY0, LAY1, ROW0, ROW1, COL0, COL1,
      &                            JDATE, JTIME,
      &                            BUFFER )
+     &                    RESULT( XTFLAG )
 
 C***********************************************************************
-C Version "$Id: xtbuf3.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: xtbuf3.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,
@@ -69,6 +70,7 @@ C...........   ARGUMENTS and their descriptions:
         INTEGER, INTENT(IN   ) :: JTIME           !  time, formatted HHMMSS
         REAL   , INTENT(  OUT) :: BUFFER(*)       !  output buffer array
 
+        LOGICAL XTFLAG
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
@@ -91,7 +93,7 @@ C   begin body of function  XTBUF3
                 IF( LDATE3( VID,FID ) .EQ. 0 ) THEN
                     STEP = ILAST3( VID,FID )
                 ELSE
-                    XTBUF3 = .FALSE.
+                    XTFLAG = .FALSE.
                     RETURN
                 END IF
                 
@@ -112,28 +114,28 @@ C   begin body of function  XTBUF3
      &              VLIST3( VID,FID ), ' in ', FLIST3( FID )
                 CALL M3WARN( 'XTRACT3/XTBUF3', JDATE, JTIME, MESG )
                 
-                XTBUF3 = .FALSE.
+                XTFLAG = .FALSE.
                 RETURN
                 
             END IF
                 
             IF ( VTYPE3( VID,FID ) .EQ. M3REAL ) THEN
-                XTBUF3 = ( 0 .NE. BUFXTR3( FID, VID, 
+                XTFLAG = ( 0 .NE. BUFXTR3( FID, VID, 
      &                   LAY0, LAY1, ROW0, ROW1, COL0, COL1,
      &                   NLAYS3( FID ), NROWS3( FID ), NCOLS3( FID ),
      &                   STEP, BUFFER ) )
             ELSE IF ( VTYPE3( VID,FID ) .EQ. M3INT ) THEN
-                XTBUF3 = ( 0 .NE. BUFXTR3I( FID, VID, 
+                XTFLAG = ( 0 .NE. BUFXTR3I( FID, VID, 
      &                   LAY0, LAY1, ROW0, ROW1, COL0, COL1,
      &                   NLAYS3( FID ), NROWS3( FID ), NCOLS3( FID ),
      &                   STEP, BUFFER ) )
             ELSE IF ( VTYPE3( VID,FID ) .EQ. M3DBLE ) THEN
-                XTBUF3 = ( 0 .NE. BUFXTR3D( FID, VID, 
+                XTFLAG = ( 0 .NE. BUFXTR3D( FID, VID, 
      &                   LAY0, LAY1, ROW0, ROW1, COL0, COL1,
      &                   NLAYS3( FID ), NROWS3( FID ), NCOLS3( FID ),
      &                   STEP, BUFFER ) )
             ELSE IF ( VTYPE3( VID,FID ) .EQ. M3INT8 ) THEN
-                XTBUF3 = ( 0 .NE. BUFXTR3D( FID, VID, 
+                XTFLAG = ( 0 .NE. BUFXTR3D( FID, VID, 
      &                   LAY0, LAY1, ROW0, ROW1, COL0, COL1,
      &                   NLAYS3( FID ), NROWS3( FID ), NCOLS3( FID ),
      &                   STEP, BUFFER ) )
@@ -147,7 +149,7 @@ C   begin body of function  XTBUF3
                     
                     MESG = 'ALLVAR3 nonREAL types not supported'
                     CALL M3WARN( 'XTRACT3/XTBUF3', JDATE, JTIME, MESG )
-                    XTBUF3 = .FALSE.
+                    XTFLAG = .FALSE.
                     RETURN
                     
                 ELSE IF ( TSTEP3( FID ) .EQ. 0 ) THEN
@@ -155,7 +157,7 @@ C   begin body of function  XTBUF3
                     IF( LDATE3( VAR,FID ) .EQ. 0 ) THEN
                         STEP = ILAST3( VAR,FID )
                     ELSE
-                        XTBUF3 = .FALSE.
+                        XTFLAG = .FALSE.
                         RETURN
                     END IF
                     
@@ -175,7 +177,7 @@ C   begin body of function  XTBUF3
      &                  'Date and time not available for ',
      &                   VLIST3( VAR,FID ), ' in ', FLIST3( FID )
                     CALL M3WARN( 'XTRACT3/XTBUF3', JDATE, JTIME, MESG )
-                    XTBUF3 = .FALSE.
+                    XTFLAG = .FALSE.
                     RETURN
                     
                 END IF
@@ -185,7 +187,7 @@ C   begin body of function  XTBUF3
      &                               COL0, COL1, NLAYS3( FID ), 
      &                               NROWS3( FID ), NCOLS3( FID ), 
      &                               STEP, BUFFER ) ) THEN
-                        XTBUF3 = .FALSE.
+                        XTFLAG = .FALSE.
                         RETURN
                 END IF		!  if bufxtr3() failed.
 

@@ -1,8 +1,8 @@
 
-        LOGICAL FUNCTION CKDESC3( FNAME )
+        LOGICAL FUNCTION CKDESC3( FNAME )  RESULT( CKFLAG )
 
 C***********************************************************************
-C Version "$Id: ckdesc3.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: ckdesc3.f 167 2015-02-24 07:48:49Z coats $"
 C BAMS/MCNC/EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2011 Baron Advanced Meteorological Systems, and 
@@ -151,7 +151,7 @@ C...........   Checks for duplicates in the variable-list
 C.......   If not chkhdr, just return TRUE:
 
         IF ( .NOT. CHKHDR ) THEN
-            CKDESC3 = .TRUE.
+            CKFLAG = .TRUE.
             RETURN
         END IF          !  if not chkhdr
 
@@ -162,12 +162,12 @@ C...........   First:  file type and type-specific dimension checks:
         EFLAG = .FALSE.
         IF ( FTYPE3D .EQ. DGRAPH3 ) THEN
 
-            CKDESC3 = .TRUE.
+            CKFLAG = .TRUE.
             RETURN
 
         ELSE IF ( FTYPE3D .EQ. DCTNRY3 ) THEN
 
-            CKDESC3 = .TRUE.
+            CKFLAG = .TRUE.
             RETURN
 
         ELSE IF ( FTYPE3D .EQ. CUSTOM3 ) THEN
@@ -360,7 +360,7 @@ C...........   First:  file type and type-specific dimension checks:
      &          'Illegal file type:', FTYPE3D,
      &          'for file "' // TRIM( FNAME ) // '"'
             CALL M3WARN( 'CKDESC3', 0, 0, MESG )
-            CKDESC3 = .FALSE.
+            CKFLAG = .FALSE.
             RETURN
 
         END IF
@@ -878,9 +878,9 @@ C...........   Set function value and return:
 
         IF ( EFLAG ) THEN
             CALL M3WARN( 'CKDESC', 0, 0, 'Bad file description found' )
-            CKDESC3 = .FALSE.
+            CKFLAG = .FALSE.
         ELSE
-            CKDESC3 = .TRUE.
+            CKFLAG = .TRUE.
         END IF
 
         RETURN

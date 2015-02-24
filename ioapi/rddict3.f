@@ -1,8 +1,8 @@
 
-        LOGICAL FUNCTION RDDICT3 ( FID, FNAME )
+        LOGICAL FUNCTION RDDICT3( FID, FNAME ) RESULT( RDFLAG )
 
 C***********************************************************************
-C Version "$Id: rddict3.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: rddict3.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -70,7 +70,7 @@ C.......   Get dictionary ID
         FNUM = CDFID3( FID )
 
         IF ( FTYPE3( FID ) .NE. DCTNRY3 ) THEN
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF
         
@@ -92,7 +92,7 @@ C.......   Look up the "variable" requested from the FNAMES table:
      &              'Dictionary file:  ' // FLIST3( FID ) //
      &              '; entry requested:', VINDX3( 1,FID ),
      &              'Error reading netCDF dictionary variable VDESC.'
-                RDDICT3 = .FALSE.
+                RDFLAG = .FALSE.
                 RETURN
             END IF          !  ierr nonzero:  NCVGTC() failed
             
@@ -104,7 +104,7 @@ C.......   Look up the "variable" requested from the FNAMES table:
 
         CALL NCVGT1( FNUM, TINDX3( FID ), VID, FLAG, IERR )
         IF ( IERR .EQ. 8 ) THEN
-            RDDICT3 = .FALSE.   !  FLAG not yet set.
+            RDFLAG = .FALSE.   !  FLAG not yet set.
             RETURN
         ELSE IF ( IERR .NE. 0 ) THEN
             WRITE( LOGDEV,91010 )
@@ -112,7 +112,7 @@ C.......   Look up the "variable" requested from the FNAMES table:
      &          'Dictionary entry requested:', VID,
      &          'Error reading netCDF file record flag in ' //
      &          'dictionary file ' // FLIST3( FID )
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -121,7 +121,7 @@ C.......   Look up the "variable" requested from the FNAMES table:
      &          'Dictionary entry requested:', FNAME,
      &          'Record not available in dictionary file ' 
      &          // FLIST3( FID )
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF
 
@@ -136,7 +136,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable FTYPE.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -147,7 +147,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable TSTEP.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -158,7 +158,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable NVARS.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -169,7 +169,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable NLAYS.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -180,7 +180,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable NROWS.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -191,7 +191,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable NCOLS.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -202,7 +202,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable NTHIK.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -213,7 +213,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable GDTYP.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -224,7 +224,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable VGTYP.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
         
@@ -238,7 +238,7 @@ C.......   Read characteristics from this record:
             WRITE( LOGDEV,91010 )
      &      'netCDF error number', IERR,
      &      'Error reading variable VGLVS from file ' // FLIST3( FID )
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGTC() failed, or succeeded
            
@@ -252,7 +252,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable P_ALP.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -263,7 +263,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable P_BET.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -274,7 +274,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable P_GAM.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -285,7 +285,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable XCENT.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -296,7 +296,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable YCENT.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -307,7 +307,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable XORIG.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -318,7 +318,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable YORIG.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -329,7 +329,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable XCELL.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -340,7 +340,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable YCELL.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGT1() failed
 
@@ -356,7 +356,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable GDNAM.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGTC() failed
 
@@ -374,7 +374,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable FILEDESC.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGTC() failed
 
@@ -392,7 +392,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable VNAME.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGTC() failed
 
@@ -410,7 +410,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable UNITS.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGTC() failed
 
@@ -429,7 +429,7 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable VDESC.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGTC() failed
 
@@ -445,12 +445,12 @@ C.......   Read characteristics from this record:
      &          'Dictionary file:  ' // FLIST3( FID ) //
      &          '; entry requested:', VID,
      &          'Error reading netCDF dictionary variable VDESC.'
-            RDDICT3 = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
         END IF          !  ierr nonzero:  NCVGTC() failed
 
 
-        RDDICT3 = .TRUE.
+        RDFLAG = .TRUE.
         RETURN
 
 C******************  FORMAT  STATEMENTS   ******************************

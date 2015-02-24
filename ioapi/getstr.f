@@ -1,8 +1,8 @@
 
-        SUBROUTINE GETSTR ( PROMPT, DEFAULT, RESPONSE )
+        SUBROUTINE GETSTR( PROMPT, DEFAULT, RESPONSE )
 
 C******************************************************************
-C Version "$Id: getstr.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: getstr.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,

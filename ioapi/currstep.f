@@ -1,10 +1,11 @@
 
         LOGICAL   FUNCTION CURRSTEP ( JDATE, JTIME, 
      &                                SDATE, STIME, TSTEP, 
-     &                                CDATE, CTIME )
+     &                                CDATE, CTIME ) 
+     &                                RESULT( STEPFLAG )
 
 C***********************************************************************
-C Version "$Id: currstep.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: currstep.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,
@@ -54,8 +55,7 @@ C...........   ARGUMENTS and their descriptions:
 
 C...........   SCRATCH LOCAL VARIABLES and their descriptions:
 
-        INTEGER       IREC
-
+        INTEGER     IREC
 
 C***********************************************************************
 C   begin body of subroutine  CURRSTEP
@@ -64,7 +64,7 @@ C   begin body of subroutine  CURRSTEP
      &                 SDATE, STIME, TSTEP, 
      &                 CDATE, CTIME )
 
-        CURRSTEP = ( IREC .GT. 0 )
+        STEPFLAG = ( IREC .GT. 0 )
         RETURN
 
         END FUNCTION CURRSTEP

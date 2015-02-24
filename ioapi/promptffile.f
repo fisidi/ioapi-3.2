@@ -1,9 +1,10 @@
  
         INTEGER FUNCTION PROMPTFFILE( PROMPT, 
      &                                RDONLY, FMTTED, DEFAULT, CALLER )
+     &                        RESULT( PFILE )
 
 C***********************************************************************
-C Version "$Id: promptffile.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: promptffile.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -12,7 +13,7 @@ C (C) 2015 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line 86
+C  function body starts at line 87
 C
 C       Prompts user for logical file name, then opens the Fortran file
 C       associated with it, for read-only or not, and formatted or not,
@@ -149,10 +150,10 @@ C.......   Get file name; open input control definition file
                 END IF
 
                 IF ( AFLAG .AND. ( LNAME .EQ. ALL16 ) )  THEN
-                    PROMPTFFILE = -3
+                    PFILE = -3
                     RETURN
                 ELSE IF ( NFLAG .AND. LNAME .EQ. NONE16 )  THEN
-                    PROMPTFFILE = -2
+                    PFILE = -2
                     RETURN
                 END IF
     
@@ -177,13 +178,13 @@ C.......   Get file name; open input control definition file
             LNAME = DEFAULT 
 
             IF ( AFLAG .AND. ( LNAME .EQ. ALL16 ) )  THEN
-                 PROMPTFFILE = -3
+                 PFILE = -3
                  RETURN
 
             ELSE IF ( NFLAG )  THEN
 
                 IF ( LNAME .EQ. NONE16 )  THEN
-                    PROMPTFFILE = -2
+                    PFILE = -2
                     RETURN
                 END IF
 
@@ -194,7 +195,7 @@ C           ..  Study Planner to skip file without having to input "NONE"
      &                       BUF, IOS )
 
                 IF( IOS .LT. 0 ) THEN
-                    PROMPTFFILE = -2
+                    PFILE = -2
                     RETURN
                 END IF
 
@@ -212,7 +213,7 @@ C           ..  Study Planner to skip file without having to input "NONE"
 
         END IF
 
-        PROMPTFFILE = IDEV
+        PFILE = IDEV
         RETURN
 
         END FUNCTION PROMPTFFILE

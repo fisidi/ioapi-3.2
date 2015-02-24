@@ -1,8 +1,8 @@
 
-        LOGICAL FUNCTION OPNLIST3( FID, PGNAME )
+        LOGICAL FUNCTION OPNLIST3( FID, PGNAME ) RESULT( OFLAG )
 
 C***********************************************************************
-C Version "$Id: opnlist3.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: opnlist3.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -87,7 +87,7 @@ C   begin body of subroutine  OPNFIL3
             CALL M3MSG2( MESG )
             CALL M3WARN( 'OPEN3', 0, 0, 'Bad FILE_LIST.' )
             FLIST3( FID ) = CMISS3
-            OPNLIST3 = .FALSE.
+            OFLAG         = .FALSE.
             RETURN
 
         END IF
@@ -349,7 +349,7 @@ C   begin body of subroutine  OPNFIL3
 
             FLIST3( FID ) = CMISS3
             CDFID3( FID ) = IMISS3
-            OPNLIST3      = .FALSE.
+            OFLAG         = .FALSE.
             RETURN
 
         ELSE                    !  process success
@@ -365,7 +365,7 @@ C   begin body of subroutine  OPNFIL3
             NLIST3( FID ) = LISTCNT
             IFRST3( FID ) = ILCNT3 + 1
             ILCNT3        = ILCNT3 + LISTCNT
-            OPNLIST3      = .TRUE.
+            OFLAG         = .TRUE.
 
         END IF                  !  if error, or not
 

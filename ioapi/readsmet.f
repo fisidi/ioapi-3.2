@@ -1,10 +1,11 @@
 
-        LOGICAL FUNCTION READSMET (  FDEV  , JDATE , JTIME ,
-     &                               NBORD , SBORD , EBORD , WBORD ,
-     &                               MAXMET, NMET  , IMET  , RMET )
+        LOGICAL FUNCTION READSMET(FDEV  , JDATE , JTIME ,
+     &                            NBORD , SBORD , EBORD , WBORD ,
+     &                            MAXMET, NMET  , IMET  , RMET )
+     &                    RESULT( RDFLAG )
 
 C***********************************************************************
-C Version "$Id: readsmet.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: readsmet.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -140,7 +141,7 @@ C.......   KTIME is Julian-hour YYDDDHH format
 
         ELSE IF  ( KTIME .GT. ETIME( FDEV ) )  THEN   ! file's ending date&hour
                                                       ! before request
-            READSMET  =  .FALSE.
+            RDFLAG =  .FALSE.
             RETURN
 
         END IF
@@ -166,7 +167,7 @@ C.............   Read time step header
      &          'at record', RECCNT( FDEV ),
      &          'in file', FDEV
             CALL M3WARN( 'READSMET', JDATE, JTIME, MESG )
-            READSMET  =  .FALSE.
+            RDFLAG  =  .FALSE.
             RETURN
 
         ELSE IF ( IOST .EQ. -1 )  THEN    !  end-of-file for file IF
@@ -176,7 +177,7 @@ C.............   Read time step header
                 REWIND( FDEV )
                 RECCNT( FDEV )  =  0
                 ETIME ( FDEV )  =  ITIME + 1
-                READSMET  =  .FALSE.
+                RDFLAG  =  .FALSE.
 
                 RETURN
 
@@ -201,7 +202,7 @@ C....... Convert time representations:
 
             JDATE    =  DATE
             JTIME    =  10000 * INHR
-            READSMET =  .TRUE.
+            RDFLAG =  .TRUE.
 
             REWIND( FDEV )
             RECCNT( FDEV ) = 0
@@ -224,7 +225,7 @@ C...........   Case of dates & hours in file before requested date & hour
      &                  'at record', RECCNT( FDEV ),
      &                  'in file', FDEV
                     CALL M3WARN( 'READSMET', JDATE, JTIME, MESG )
-                    READSMET  =  .FALSE.
+                    RDFLAG  =  .FALSE.
                     RETURN
 
                 ELSE IF ( IOST .EQ. -1 )  THEN
@@ -236,7 +237,7 @@ C...........   Case of dates & hours in file before requested date & hour
                     ETIME ( FDEV )  =  ITIME + 1
                     RECCNT( FDEV )  =  0
                     REWIND( FDEV )
-                    READSMET  =  .FALSE.
+                    RDFLAG  =  .FALSE.
                     RETURN
 
                 END IF           !  ...if nonzero I/O status
@@ -252,7 +253,7 @@ C...........   Case of dates & hours in file before requested date & hour
 
                 REWIND( FDEV )
                 RECCNT( FDEV )  =  0
-                READSMET  =  .FALSE.
+                RDFLAG  =  .FALSE.
                 RETURN
 
             ELSE                        !  first pass thru file:
@@ -355,7 +356,7 @@ C...........   Case of dates & hours in file before requested date & hour
 900     NMET   =  ISTAT
 
 
-        READSMET = ( ISTAT .GT. 0 )
+        RDFLAG = ( ISTAT .GT. 0 )
 
         RETURN
 

@@ -1,9 +1,10 @@
 
         LOGICAL FUNCTION INQATT3( FNAME, VNAME, MXATTS, 
      &                            NATTS, ANAMES, ATYPES, ASIZES )
+     &                    RESULT( ATTFLAG )
 
 C***********************************************************************
-C Version "$Id: inqatt3.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: inqatt3.f 167 2015-02-24 07:48:49Z coats $"
 C BAMS/MCNC/EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2004-2007 Baron Advanced Meteorological Systems,
@@ -132,7 +133,7 @@ C.......   Check that Models-3 I/O has been initialized:
 !$OMP   END CRITICAL( S_INIT )
         IF ( EFLAG ) THEN
             CALL M3MSG2(  'INQATT3:  I/O API not yet initialized.' )
-            INQATT3 = .FALSE.
+            ATTFLAG = .FALSE.
             RETURN
         END IF
         
@@ -153,7 +154,7 @@ C.......   Check that Models-3 I/O has been initialized:
         IF ( EFLAG ) THEN
             MESG = 'Invalid variable or file name arguments'
             CALL M3WARN( 'INQATT3', 0, 0, MESG )
-            INQATT3 = .FALSE.
+            ATTFLAG = .FALSE.
             RETURN
         END IF
 
@@ -164,14 +165,14 @@ C.......   Check that Models-3 I/O has been initialized:
 
             MESG = 'File "'// FIL16 // '" not yet opened.'
             CALL M3WARN( 'INQATT3', 0, 0, MESG )
-            INQATT3 = .FALSE.
+            ATTFLAG = .FALSE.
             RETURN
 
         ELSE IF ( CDFID3( F ) .LT. 0 ) THEN
 
             MESG = 'File:  "' // FIL16 // '" is NOT A NetCDF file.'
             CALL M3WARN( 'INQATT3', 0, 0, MESG )
-            INQATT3 = .FALSE.
+            ATTFLAG = .FALSE.
             RETURN
 
         ELSE
@@ -193,7 +194,7 @@ C...........   Get ID for variable(s) to be inquired.
                 MESG = 'Variable "'      // VAR16 //
      &                 '" not in file "' // FIL16 // '"'
                 CALL M3WARN( 'INQATT3', 0, 0, MESG )
-                INQATT3 = .FALSE.
+                ATTFLAG = .FALSE.
                 RETURN
             ELSE
                 VID = VINDX3( V, F )
@@ -278,12 +279,12 @@ C...........   one can't execute a RETURN within a critical section.
 !$OMP   END CRITICAL( S_NC )
 
         IF ( EFLAG ) THEN
-            INQATT3 = .FALSE.
+            ATTFLAG = .FALSE.
             MESG = 'INQATT3:  Error inquiring attributes for file "' //
      &             FNAME // '" and vble "' // VNAME // '"'
             CALL M3WARN( 'INQATT3', 0, 0, MESG )
         ELSE
-            INQATT3 = .TRUE.
+            ATTFLAG = .TRUE.
         END IF          !  ierr nonzero:  NCAPTC) failed, ro not
 
         RETURN

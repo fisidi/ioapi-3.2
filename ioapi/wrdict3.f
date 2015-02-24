@@ -1,8 +1,8 @@
 
-        LOGICAL FUNCTION WRDICT3 ( FID, FNAME )
+        LOGICAL FUNCTION WRDICT3 ( FID, FNAME ) RESULT( WFLAG )
 
 C***********************************************************************
-C Version "$Id: wrdict3.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: wrdict3.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -508,13 +508,13 @@ C.......   Write record-flag value:
 !$OMP END CRITICAL( S_LOGOUT )
 
         IF  ( EFLAG ) THEN
-            WRDICT3 = .FALSE.
+            WFLAG = .FALSE.
             RETURN
 	END IF
 
         MXREC3( FID ) = MAX( MXREC3( FID ), VID )
         
-        WRDICT3 = .TRUE.
+        WFLAG = .TRUE.
         RETURN
 
 C******************  FORMAT  STATEMENTS   ******************************

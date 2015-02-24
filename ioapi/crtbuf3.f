@@ -1,8 +1,8 @@
 
-        LOGICAL FUNCTION CRTBUF3 ( FID )
+        LOGICAL FUNCTION CRTBUF3( FID ) RESULT( CRTFLAG )
 
 C***********************************************************************
-C Version "$Id: crtbuf3.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: crtbuf3.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2011 Baron Advanced Meteorological Systems, and
@@ -87,7 +87,7 @@ C.......   "file" types, or error return:
             WRITE( LOGDEV,91010 )
      &      'BUFFERED-file creation error for file ' // FLIST3( FID ),
      &      'ILLEGAL FILE TYPE.', FTYPE3D
-            CRTBUF3 = .FALSE.
+            CRTFLAG = .FALSE.
 
 !$OMP END CRITICAL( S_LOGOUT )
 
@@ -150,7 +150,7 @@ C.......   Define all the Models-3 variables for this file:
                 CALL M3WARN( 'OPEN3/CRTBUF3', 0, 0,
      &            'DOUBLE PRECISION BUFFERRED not supported for '//
      &            VNAME3D( VAR ) )
-                CRTBUF3 = .FALSE.
+                CRTFLAG = .FALSE.
                 RETURN
             END IF
 111     CONTINUE
@@ -158,7 +158,7 @@ C.......   Define all the Models-3 variables for this file:
 C.......   Call BUFCRE3() to allocate buffers for each variable
 C.......   in this "file"
 
-        CRTBUF3 = ( 0 .NE. BUFCRE3( FID, NVARS3D, NLAYS3D,
+        CRTFLAG = ( 0 .NE. BUFCRE3( FID, NVARS3D, NLAYS3D,
      &                              VSIZE, VTYPE3D, TSTEP3D ) )
 
         RETURN

@@ -1,14 +1,15 @@
 
-        LOGICAL FUNCTION CHKFIL3( FID )
+        LOGICAL FUNCTION CHKFIL3( FID )  RESULT( CHKFLAG )
 
 C***********************************************************************
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C (C) 2003-2011 Baron Advanced Meteorological Systems, and 
+C (C) 2015 UNC Institute for the Environment
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  95
+C  function body starts at line  96
 C
 C  FUNCTION:  Check consistency between file description in FDESC3
 C             structures and STATE3 tables for new version of OPEN3()
@@ -418,7 +419,7 @@ C.......   Variables-list for the file:
            
 999     CONTINUE
            
-        CHKFIL3 = OKFLAG
+        CHKFLAG = OKFLAG
 
 !$OMP END CRITICAL( S_LOGOUT )
 

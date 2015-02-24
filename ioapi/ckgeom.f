@@ -1,8 +1,8 @@
 
-        LOGICAL FUNCTION CKGEOM( FILE, GRID )
+        LOGICAL FUNCTION CKGEOM( FILE, GRID ) RESULT( CKFLAG )
 
 C***********************************************************************
-C Version "$Id: ckgeom.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: ckgeom.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2011 Baron Advanced Meteorological Systems,
@@ -96,7 +96,7 @@ C.......   Check that Models-3 I/O has been initialized:
 !$OMP   END CRITICAL( S_INIT )
         IF ( EFLAG ) THEN
             CALL M3MSG2(  'CKGEOM:  I/O API not yet initialized.' )
-            CKGEOM = .FALSE.
+            CKFLAG = .FALSE.
             RETURN
         END IF
 
@@ -125,7 +125,7 @@ C.......   Check that Models-3 I/O has been initialized:
         END IF          
 
         IF ( EFLAG ) THEN
-            CKGEOM = .FALSE.
+            CKFLAG = .FALSE.
             RETURN
         END IF
 
@@ -136,7 +136,7 @@ C.......   Check that Models-3 I/O has been initialized:
             MESG = 'CKGEOM:  Grid "' // GRID // 
      &             '" not in GRIDDESC'
             CALL M3MSG2( MESG )
-            CKGEOM = .FALSE.
+            CKFLAG = .FALSE.
             RETURN
         END IF                  ! if dscgrid() failed
 
@@ -217,7 +217,7 @@ C.......   Check that Models-3 I/O has been initialized:
             EFLAG = .TRUE.
         END IF
 
-        CKGEOM = ( .NOT. EFLAG )
+        CKFLAG = ( .NOT. EFLAG )
 
         END FUNCTION CKGEOM
 

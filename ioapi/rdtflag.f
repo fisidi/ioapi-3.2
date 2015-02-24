@@ -1,5 +1,6 @@
 
         LOGICAL FUNCTION RDTFLAG( FID,VID, JDATE,JTIME, STEP, VERBOSE )
+     &                    RESULT( RDFLAG )
 
 C***********************************************************************
 C EDSS/Models-3 I/O API.
@@ -123,7 +124,7 @@ C.......   If list file-set, find which actual file contains this time step:
             MESG = 'Variable ' // VLIST3( VID,FID ) //
      &             ' not available in file-set ' // FLIST3( FID )
             CALL M3WARN( 'RDTFLAG', JDATE, JTIME, MESG )
-            RDTFLAG = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
 
 11          CONTINUE
@@ -160,7 +161,7 @@ C...........   Compute record number, and check availability:
                     MESG = 'Time step error for file:  '//FLIST3(FID)
                     CALL M3WARN( 'RDTFLAG', JDATE, JTIME, MESG )
                 END IF          !  if verbose
-                RDTFLAG = .FALSE.
+                RDFLAG = .FALSE.
                 RETURN
 
             END IF          !  check on step number
@@ -188,7 +189,7 @@ C...........   Compute record number, and check availability:
                 MESG = 'Error with disk synchronization for file:  '
      &                 // FLIST3( FID )
                 CALL M3WARN( 'RDTFLAG', JDATE, JTIME, MESG )
-                RDTFLAG = .FALSE.
+                RDFLAG = .FALSE.
                 RETURN
 
             END IF              !  if synch failed
@@ -260,7 +261,7 @@ C.......   Deal with netCDF, native-binary-layer BINFIL3 files:
                 CALL M3WARN( 'RDTFLAG', JDATE, JTIME, MESG )
             END IF              !  if verbose
 
-            RDTFLAG = .FALSE.
+            RDFLAG = .FALSE.
             RETURN
 
         END IF                  !  if eflag
@@ -300,7 +301,7 @@ C...........   Check time step flags for all variables:
 
         END IF          !  if vid > 0, or not
 
-        RDTFLAG = ( .NOT.EFLAG )
+        RDFLAG = ( .NOT.EFLAG )
 
         RETURN
 

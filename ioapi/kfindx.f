@@ -1,9 +1,10 @@
 
        LOGICAL FUNCTION KFINDX( FNAME, COL, ROW,
      &                          ECOUNT, SDATES, STIMES, KFLENS, EVENTS )
+     &                  RESULT( KFFLAG )
 
 C***********************************************************************
-C Version "$Id: kfindx.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: kfindx.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -84,7 +85,7 @@ C.......   Check that Models-3 I/O has been initialized:
 !$OMP   END CRITICAL( S_INIT )
         IF ( EFLAG ) THEN
             CALL M3MSG2(  'KFINDX:  I/O API not yet initialized.' )
-            KFINDX = .FALSE.
+            KFFLAG = .FALSE.
             RETURN
         END IF
 
@@ -94,7 +95,7 @@ C.......   Check that Models-3 I/O has been initialized:
             WRITE( MESG, '( A, I10 )' )
      &          'Max file name length 16; actual:', LEN_TRIM( FNAME )
             CALL M3WARN( 'KFINDX', 0,0, MESG )
-            KFINDX = .FALSE.
+            KFFLAG = .FALSE.
             RETURN
         END IF          !  if len( fname ) > 16, or if len( vname ) > 16
 
@@ -110,7 +111,7 @@ C.......   Find netCDF index for the file, and check time step availability:
 
             MESG = 'File:  '//FIL16// ' not yet opened.'
             CALL M3WARN( 'KFINDX', 0,0, MESG )
-            KFINDX = .FALSE.
+            KFFLAG = .FALSE.
             GO TO  999        !  return from kfindx()
 
         ELSE IF ( VOLAT3( FID ) ) THEN     !  volatile file:  synch with disk
@@ -123,7 +124,7 @@ C.......   Find netCDF index for the file, and check time step availability:
      &              'Error with disk synchronization for file:  '
      &              // FIL16
                 CALL M3WARN( 'KFINDX', 0,0, MESG )
-                KFINDX = .FALSE.
+                KFFLAG = .FALSE.
                 GO TO  999        !  return from kfindx()
 
             END IF      !  if ncsnc() failed
@@ -140,14 +141,14 @@ C.......   Read number of events for this cell:
      &              'Column requested:    ', COL,
      &              'out of range; max is ', NCOLS3( FID )
             CALL M3WARN( 'KFINDX', 0,0, MESG )
-            KFINDX = .FALSE.
+            KFFLAG = .FALSE.
             GO TO  999        !  return from kfindx()
         ELSE IF ( ROW .LT. 1 .OR. ROW .GT. NROWS3( FID ) ) THEN
             WRITE( MESG,91010 )
      &              'Row requested:       ', ROW,
      &              'out of range; max is ', NROWS3( FID )
             CALL M3WARN( 'KFINDX', 0,0, MESG )
-            KFINDX = .FALSE.
+            KFFLAG = .FALSE.
             GO TO  999        !  return from kfindx()
         END IF
 
@@ -166,7 +167,7 @@ C.......   Read number of events for this cell:
             CALL M3MESG( MESG )
             MESG = 'Error reading KFCOUNT from ' // FIL16
             CALL M3WARN( 'KFINDX', 0,0, MESG )
-            KFINDX = .FALSE.
+            KFFLAG = .FALSE.
             GO TO  999        !  return from kfindx()
 
         END IF
@@ -194,7 +195,7 @@ C.......   Read the event-specification parameters for ths cell:
             CALL M3MESG( MESG )
             MESG = 'Error reading KFEVENT from ' // FIL16
             CALL M3WARN( 'KFINDX', 0,0, MESG )
-            KFINDX = .FALSE.
+            KFFLAG = .FALSE.
             GO TO  999        !  return from kfindx()
 
         END IF          !  if ierr bad or if timestep flags bad
@@ -212,7 +213,7 @@ C.......   Read the event-specification parameters for ths cell:
             CALL M3MESG( MESG )
             MESG = 'Error reading KFSDATE from ' // FIL16
             CALL M3WARN( 'KFINDX', 0,0, MESG )
-            KFINDX = .FALSE.
+            KFFLAG = .FALSE.
             GO TO  999        !  return from kfindx()
 
         END IF          !  if ierr bad or if timestep flags bad
@@ -230,7 +231,7 @@ C.......   Read the event-specification parameters for ths cell:
             CALL M3MESG( MESG )
             MESG = 'Error reading KFSTIME from ' // FIL16
             CALL M3WARN( 'KFINDX', 0,0, MESG )
-            KFINDX = .FALSE.
+            KFFLAG = .FALSE.
             GO TO  999        !  return from kfindx()
 
         END IF          !  if ierr bad or if timestep flags bad
@@ -248,12 +249,12 @@ C.......   Read the event-specification parameters for ths cell:
             CALL M3MESG( MESG )
             MESG = 'Error reading KFLNGTH from ' // FIL16
             CALL M3WARN( 'KFINDX', 0,0, MESG )
-            KFINDX = .FALSE.
+            KFFLAG = .FALSE.
             GO TO  999        !  return from kfindx()
 
         END IF          !  if ierr bad or if timestep flags bad
 
-        KFINDX = .TRUE.
+        KFFLAG = .TRUE.
 
 999     CONTINUE        !  target of "exit from routine"
 

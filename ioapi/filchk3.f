@@ -1,9 +1,10 @@
 
       LOGICAL FUNCTION FILCHK3( FNAME, 
      &                          FTYPE, NCOLS, NROWS, NLAYS, NTHIK ) 
+     &                  RESULT( CHKFLAG )
 
 C***********************************************************************
-C Version "$Id: filchk3.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: filchk3.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2010 by Baron Advanced Meteorological Systems,
@@ -441,7 +442,7 @@ C.......   else perform checking according to file type:
 
         END IF          !  if file type is ...
 
-        FILCHK3 = ( .NOT. EFLAG )
+        CHKFLAG = ( .NOT. EFLAG )
         RETURN
 
 C******************  FORMAT  STATEMENTS   ******************************

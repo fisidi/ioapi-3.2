@@ -1,8 +1,9 @@
 
         INTEGER FUNCTION GETMENU( ITEMCNT, DEFAULT, PROMPT, CHOICES )
+     &                    RESULT( MENITEM )
 
 C...............................................................
-C Version "$Id: getmenu.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: getmenu.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -94,7 +95,7 @@ C   begin body of GETMENU
         END IF
 
         IF( .NOT. PROMPTON ) THEN
-            GETMENU = DEFAULT
+            MENITEM = DEFAULT
             MESG = 'Using default response "' //
      &          TRIM( CHOICES( DEFAULT ) ) // '" for query:'
             CALL M3MSG2( MESG )
@@ -156,7 +157,7 @@ C   begin body of GETMENU
         IF ( IOS .NE. 0 )  THEN
             GO TO 900
         ELSE IF ( BUFFER ( 1:1 )  .EQ. ' ' )  THEN
-            GETMENU  =  DEFAULT
+            MENITEM  =  DEFAULT
             MESG = 'Using default "' // TRIM( CHOICES( DEFAULT ) )//'"'
         ELSE
             WRITE( FMTSTR, 94010 ) LEN_TRIM( BUFFER )
@@ -174,7 +175,7 @@ C   begin body of GETMENU
 
             END IF
 
-            GETMENU  =  ANSWER
+            MENITEM  =  ANSWER
             MESG = 'Using response "'// TRIM( CHOICES( ANSWER ) )// '"'
         END IF
         CALL M3MSG2( MESG )

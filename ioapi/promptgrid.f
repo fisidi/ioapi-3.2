@@ -1,8 +1,8 @@
 
-        LOGICAL FUNCTION PROMPTGRID()
+        LOGICAL FUNCTION PROMPTGRID() RESULT( PFLAG )
 
 C***********************************************************************
-C Version "$Id: promptgrid.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: promptgrid.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -60,7 +60,7 @@ C   begin body of function  PROMPTGRID
                 NROWS3D = IMISS3
                 NTHIK3D = IMISS3
 
-                PROMPTGRID = .TRUE.
+                PFLAG = .TRUE.
 
             ELSE IF ( DSCGRID( GDNAM3D, ANAME, GDTYP3D,     !  retry with dscgrid()
      &                         P_ALP3D, P_BET3D, P_GAM3D, 
@@ -68,7 +68,7 @@ C   begin body of function  PROMPTGRID
      &                         XCELL3D, YCELL3D, 
      &                         NCOLS3D, NROWS3D, NTHIK3D ) ) THEN
 
-                PROMPTGRID = .TRUE.
+                PFLAG = .TRUE.
 
             ELSE
 

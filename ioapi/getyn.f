@@ -1,8 +1,8 @@
 
-        LOGICAL FUNCTION GETYN ( PROMPT , DEFAULT )
+        LOGICAL FUNCTION GETYN( PROMPT , DEFAULT ) RESULT( YNFLAG )
 
 C******************************************************************
-C Version "$Id: getyn.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: getyn.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -41,12 +41,12 @@ C
 C       Modified 5/1990 for ROM 2.2:  now uses EXWST for error abort.
 C       Modified 8/1990 for ROM 2.2:  TEMP.LET; treats CONTROL-Z as exit signal
 C       Modified 2/1993 by CJC for CRAY.
-C       Modified 8/1996 by CJC:  "!" treated as terminator for input 
+C       Modified 8/1996 by CJC:  "!" treated as terminator for input
 C       Modified 1/1997 by CJC:  logs result
 C       Modified 8/1997 by MH:   environment variable PROMPTFLAG
 C       Modified 4/2002 by CJC:  now accepts T, t, F, f, .TRUE., .FALSE., etc.
 C       Revised  6/2003 by CJC:  factor through M3PROMPT to ensure flush()
-C       of PROMPT for IRIX F90v7.4  
+C       of PROMPT for IRIX F90v7.4
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
 C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO.
 C       Fix MH violation of coding-standards:  check status IOS from  ENVYN!!
@@ -87,11 +87,11 @@ C*********************   begin  GETYN   *******************************
                 CALL M3EXIT( PNAME,0,0,'Bad env vble "PROMPTFLAG"', 2 )
             END IF
             FIRSTIME = .FALSE.
- 
+
         END IF
 
         IF( .NOT. PROMPTON ) THEN
-            GETYN = DEFAULT
+            YNFLAG = DEFAULT
             IF ( DEFAULT ) THEN
                CALL M3MSG2( 'Returning default value TRUE for query:')
             ELSE
@@ -128,7 +128,7 @@ C.....  Continue only if PROMPTON is true
      &          .OR.  ( ANSWER ( 1:2 ) .EQ.'.T' )
      &          .OR.  ( ANSWER ( 1:2 ) .EQ.'.t' ) )  THEN
 
-            GETYN  =  .TRUE.
+            YNFLAG  =  .TRUE.
             CALL M3MSG2( 'Returning value TRUE for query:')
 
         ELSE IF (     ( ANSWER ( 1:1 ) .EQ. 'N' )
@@ -138,13 +138,13 @@ C.....  Continue only if PROMPTON is true
      &          .OR.  ( ANSWER ( 1:2 ) .EQ.'.F' )
      &          .OR.  ( ANSWER ( 1:2 ) .EQ.'.f' ) )  THEN
 
-            GETYN  =  .FALSE.
+            YNFLAG  =  .FALSE.
             CALL M3MSG2( 'Returning value FALSE for query:')
 
         ELSE IF  (    ( ANSWER ( 1:1 ) .EQ. ' ' )
      &           .OR. ( ANSWER ( 1:1 ) .EQ. '!' ) )  THEN
 
-            GETYN = DEFAULT
+            YNFLAG = DEFAULT
             IF ( DEFAULT ) THEN
                CALL M3MSG2( 'Returning default value TRUE for query:')
             ELSE
@@ -155,12 +155,12 @@ C.....  Continue only if PROMPTON is true
 
             COUNT  =  COUNT + 1
             IF ( COUNT .GE. MAX )  THEN
-                CALL M3EXIT( 'GETYN', 0, 0, 
+                CALL M3EXIT( 'GETYN', 0, 0,
      &                   'Maximum number of attempts exceeded', 2 )
             END IF
             MESG='Did not understand your response; Please try again.'
             CALL M3MSG2( MESG )
-            WRITE ( MESG, '( A, I3, 2X, A )' ) 
+            WRITE ( MESG, '( A, I3, 2X, A )' )
      &          '(You are allowed', MAX - COUNT, 'more attempts.)'
             CALL M3MSG2( MESG )
             GO TO  11
@@ -179,7 +179,7 @@ C.....  Continue only if PROMPTON is true
      &                        'Maximum error-count exceeded', IOS )
             END IF
             WRITE ( MESG, '( A, I9, 2X, A )' )
-     &          'I/O ERROR:  I/O status = ' , IOS , 
+     &          'I/O ERROR:  I/O status = ' , IOS ,
      &          'Please try again.'
             CALL M3MSG2( MESG )
             WRITE ( MESG, '( A, I3, 2X, A )' )
@@ -187,5 +187,5 @@ C.....  Continue only if PROMPTON is true
             CALL M3MSG2( MESG )
             GO TO  11
 
-        END FUNCTION GETYN 
+        END FUNCTION GETYN
 

@@ -2,9 +2,10 @@
       LOGICAL FUNCTION CKTFLAG3( FID, VID,
      &                           JDATE, JTIME, TSTEP, NSTEPS,
      &                           JSTEP, DELTA )
+     &                   RESULT( CKFLAG )
 
 C***********************************************************************
-C Version "$Id: cktflag3.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: cktflag3.f 167 2015-02-24 07:48:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -294,7 +295,7 @@ C...........   Check time step flags for all variables:
 
 !$OMP   END CRITICAL( S_NC )
 
-        CKTFLAG3 = ( .NOT. EFLAG )
+        CKFLAG = ( .NOT. EFLAG )
         RETURN
 
 C******************  FORMAT  STATEMENTS   ******************************
