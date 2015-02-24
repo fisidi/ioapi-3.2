@@ -6,7 +6,7 @@
      &                    RESULT( XTFLAG )
 
 C***********************************************************************
-C Version "$Id: xtbuf3.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: xtbuf3.f 169 2015-02-24 07:53:49Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,
@@ -69,8 +69,6 @@ C...........   ARGUMENTS and their descriptions:
         INTEGER, INTENT(IN   ) :: JDATE           !  date, formatted YYYYDDD
         INTEGER, INTENT(IN   ) :: JTIME           !  time, formatted HHMMSS
         REAL   , INTENT(  OUT) :: BUFFER(*)       !  output buffer array
-
-        LOGICAL XTFLAG
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
