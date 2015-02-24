@@ -1,8 +1,8 @@
 
-        INTEGER FUNCTION GETDATE ( DEFAULT , PROMPT )
+        INTEGER FUNCTION GETDATE ( DEFAULT , PROMPT )  RESULT( GDATE )
 
 C********************************************************************
-C Version "$Id: getdate.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: getdate.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,
@@ -88,7 +88,7 @@ C.........  Check range
 
         WRITE( MESG, '( A, I9.7 )' ) 'Using date', JDATE
         CALL M3MSG2( MESG )
-        GETDATE = JDATE
+        GDATE = JDATE
 
         RETURN
 

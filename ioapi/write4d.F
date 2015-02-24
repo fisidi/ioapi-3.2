@@ -2,9 +2,10 @@
         LOGICAL FUNCTION WRITE4D( FNAME, VNAME,
      &                            JDATE, JTIME, TSTEP, NRECS,
      &                            BUFFER )
+     &                    RESULT( WFLAG )
 
 C***********************************************************************
-C Version "$Id: write4d.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: write4d.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -136,7 +137,7 @@ C.......   Check that Models-3 I/O has been initialized:
             LOGDEV = INIT3()
             WRITE( LOGDEV, '( 5X, A )' )
      &       'WARNING in WRITE4D: I/O API not yet initialized.'
-            WRITE4D = .FALSE.
+            WFLAG = .FALSE.
             EFLAG  = .TRUE.
         END IF          !  if not FINIT3
 !$OMP   END CRITICAL( S_INIT )
@@ -167,7 +168,7 @@ C.......   Find netCDF index for the file, and check time step availability:
         IF ( EFLAG ) THEN
             MESG = 'Invalid variable or file name arguments'
             CALL M3WARN( 'WRITE4D', JDATE, JTIME, MESG )
-            WRITE4D = .FALSE.
+            WFLAG = .FALSE.
             RETURN
         END IF
 
@@ -179,42 +180,42 @@ C.......   Find netCDF index for the file, and check time step availability:
 
             MESG = 'File:  '//FIL16// ' not yet opened.'
             CALL M3WARN( 'WRITE4D', JDATE, JTIME, MESG )
-            WRITE4D = .FALSE.
+            WFLAG = .FALSE.
             RETURN
 
         ELSE IF ( RONLY3( FID ) ) THEN
 
             MESG = 'File:  '//FIL16// ' IS READ-ONLY.'
             CALL M3WARN( 'WRITE4D', JDATE, JTIME, MESG )
-            WRITE4D = .FALSE.
+            WFLAG = .FALSE.
             RETURN
 
         ELSE IF ( CDFID3( FID ) .EQ. BUFFIL3 ) THEN     !  BUFFERED "file"
 
             MESG = 'File:  '//FIL16// ' is BUFFERED.'
             CALL M3WARN( 'WRITE4D', JDATE, JTIME, MESG )
-            WRITE4D = .FALSE.
+            WFLAG = .FALSE.
             RETURN
 
         ELSE IF ( CDFID3( FID ) .EQ. VIRFIL3 ) THEN
 
             MESG = 'File:  '//FIL16// ' is VIRTUAL.'
             CALL M3WARN( 'WRITE4D', JDATE, JTIME, MESG )
-            WRITE4D = .FALSE.
+            WFLAG = .FALSE.
             RETURN
 
         ELSE IF ( TSTEP3( FID ) .EQ. 0 ) THEN
 
             MESG = 'File:  '//FIL16// ' is time-independent.'
             CALL M3WARN( 'WRITE4D', JDATE, JTIME, MESG )
-            WRITE4D = .FALSE.
+            WFLAG = .FALSE.
             RETURN
 
         ELSE IF ( TSTEP3( FID ) .LT. 0 ) THEN
 
             MESG = 'File:  '//FIL16// ' is RESTART, not time-stepped.'
             CALL M3WARN( 'WRITE4D', JDATE, JTIME, MESG )
-            WRITE4D = .FALSE.
+            WFLAG = .FALSE.
             RETURN
 
         ELSE IF ( VOLAT3( FID ) ) THEN     !  volatile file:  synch with disk
@@ -229,7 +230,7 @@ C.......   Find netCDF index for the file, and check time step availability:
      &              'with disk synchronization for file:  '// FIL16
      &
                 CALL M3WARN( 'WRITE4D', JDATE, JTIME, MESG )
-                WRITE4D = .FALSE.
+                WFLAG = .FALSE.
                 RETURN
 
             END IF      !  if NCSNC() error
@@ -307,7 +308,7 @@ C.......   Find netCDF index for the file, and check time step availability:
             MESG = 'Filetype not CUSTOM3, GRDDED3, BNDARY3, or TSRIES3'
             CALL M3WARN( 'WRITE4D', JDATE, JTIME, MESG )
 
-            WRITE4D = .FALSE.
+            WFLAG = .FALSE.
             RETURN
 
         END IF          !  if time step bad, or if file of type
@@ -321,7 +322,7 @@ C...........   Get ID for variable to be written.
 
             MESG = 'Variable ' // VAR16 //' not in file:  '//FIL16
             CALL M3WARN( 'WRITE4D', JDATE, JTIME, MESG )
-            WRITE4D = .FALSE.
+            WFLAG = .FALSE.
             RETURN
 
         END IF
@@ -348,7 +349,7 @@ C...........   from file into BUFFER(), selecting by file type:
      &      'File starting date & time:', SDATE3( FID ), STIME3( FID ),
      &      'time step:', TSTEP3( FID )
             CALL M3MSG2( MESG )
-            WRITE4D = .FALSE.
+            WFLAG = .FALSE.
             MESG = 'Time step error writing file:  ' // FIL16
             CALL M3WARN( 'WRITE4D', JDATE, JTIME, MESG )
             RETURN
@@ -371,7 +372,7 @@ C...........   from file into BUFFER(), selecting by file type:
      &              'Error writing "', VNAME, '" to "', FNAME,
      &              '" for date&time ', TFLAG(1), ':', TFLAG(2)
                 CALL M3WARN( 'WRITE4D', TFLAG(1), TFLAG(2), MESG )
-                WRITE4D = .FALSE.
+                WFLAG = .FALSE.
                 RETURN
 
             END IF              !  if WRVARS failed
@@ -391,7 +392,7 @@ C...........   from file into BUFFER(), selecting by file type:
      &          JDATE, ':', JTIME, ':', TSTEP, ':', NRECS
 	    CALL M3MSG2( MESG )
 
-        WRITE4D = .TRUE.
+        WFLAG = .TRUE.
 
         RETURN
 

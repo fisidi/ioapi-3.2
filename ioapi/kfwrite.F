@@ -1,9 +1,10 @@
 
         INTEGER FUNCTION KFWRITE( FNAME, COL, ROW, JDATE, JTIME, KFLEN,
      &                            BUFFER )
+     &                    RESULT( KFFLAG )
 
 C***********************************************************************
-C Version "$Id: kfwrite.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: kfwrite.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -118,7 +119,7 @@ C.......   Check that Models-3 I/O has been initialized:
 !$OMP   END CRITICAL( S_INIT )
         IF ( EFLAG ) THEN
             CALL M3MSG2( 'KFWRITE: I/O API not yet initialized.' )
-            KFWRITE = -1
+            KFFLAG = -1
             RETURN
         END IF
 
@@ -131,7 +132,7 @@ C.......   Find netCDF index for the file, and check time step availability:
             WRITE( MESG, '( 3( A , :, I5, :, 2X ) )' )
      &          'Max file name length 16; actual:', LEN_TRIM( FNAME )
             CALL M3WARN( 'KFWRITE', 0, 0, MESG )
-            KFWRITE = -1
+            KFFLAG = -1
             RETURN
         END IF
 
@@ -144,7 +145,7 @@ C.......   Find netCDF index for the file, and check time step availability:
 
             MESG = 'File:  '//FIL16// ' not yet opened.'
             CALL M3WARN( 'KFWRITE', 0, 0, MESG )
-            KFWRITE = -1
+            KFFLAG = -1
             GO TO  999        !  return from kfwrite()
 
         END IF
@@ -156,14 +157,14 @@ C.......   Find netCDF index for the file, and check time step availability:
      &          'File:  ' / /FIL16 // ' has type ', FTYPE3( FID ),
      &          'Not a KF-CLOUD-EVENT file'
             CALL M3WARN( 'KFWRITE', 0, 0, MESG )
-            KFWRITE = -1
+            KFFLAG = -1
             GO TO  999        !  return from kfwrite()
 
         ELSE IF ( RONLY3( FID ) ) THEN
 
             MESG = 'File:  '//FIL16// ' IS READ-ONLY.'
             CALL M3WARN( 'KFWRITE', 0, 0, MESG )
-            KFWRITE = -1
+            KFFLAG = -1
             GO TO  999        !  return from kfwrite()
 
        ELSE IF ( VOLAT3( FID ) ) THEN     !  volatile file:  synch with disk
@@ -177,7 +178,7 @@ C.......   Find netCDF index for the file, and check time step availability:
      &              // FIL16
 
                CALL M3WARN( 'KFWRITE', 0, 0, MESG )
-               KFWRITE = -1
+               KFFLAG = -1
                GO TO  999        !  return from kfwrite()
 
             END IF      !  if NCSNC() error
@@ -200,7 +201,7 @@ C.......   Find netCDF index for the file, and check time step availability:
      &          NCOLS3(FID), ',',NROWS3(FID), ')'
             CALL M3MSG2( MESG )
             CALL M3WARN( 'KFWRITE', 0, 0, 'Out-of-bounds request' )
-            KFWRITE = -1
+            KFFLAG = -1
             GO TO  999        !  return from kfwrite()
         END IF
 
@@ -213,7 +214,7 @@ C.......   Find netCDF index for the file, and check time step availability:
      &              'reading KFCOUNT from ' // FIL16
 
             CALL M3WARN( 'KFWRITE', 0, 0, MESG )
-            KFWRITE = -1
+            KFFLAG = -1
             GO TO  999        !  return from kfwrite()
 
         END IF
@@ -229,7 +230,7 @@ C.......   Find netCDF index for the file, and check time step availability:
      &              'date and time', JDATE, JTIME
 
             CALL M3WARN( 'KFWRITE', 0, 0, MESG )
-            KFWRITE = -1
+            KFFLAG = -1
             GO TO  999        !  return from kfwrite()
 
         END IF
@@ -268,7 +269,7 @@ C.......   Write the variables in the event-record:
                 WRITE( LOGDEV,* )
 !$OMP       END CRITICAL( S_LOGOUT )
 
-                KFWRITE = -1
+                KFFLAG = -1
                 GO TO  999        !  return from kfwrite()
 
             END IF                  !  ierr nonzero:  NCVPT() failed
@@ -298,7 +299,7 @@ C.......   Write TFLAG for the event-record:
             WRITE( MESG,91040 )
      &      'Error ', IERR, 'writing TFLAG to file ' // FLIST3( FID )
             CALL M3WARN( 'KFWRITE', 0, 0, MESG )
-            KFWRITE = -1
+            KFFLAG = -1
             GO TO  999        !  return from kfwrite()
        END IF
 
@@ -315,7 +316,7 @@ C.......   update KFCOUNT, KFEVENT, KFSDATE, KFSTIME, KFLNGTH:
      &      'Error ', IERR, 'writing KFEVENT to file ' //
      &      FLIST3( FID ) // ' at col ', COL, 'row', ROW, 'count', CREC
             CALL M3WARN( 'KFWRITE', 0, 0, MESG )
-            KFWRITE = -1
+            KFFLAG = -1
             GO TO  999        !  return from kfwrite()
        END IF
 
@@ -325,7 +326,7 @@ C.......   update KFCOUNT, KFEVENT, KFSDATE, KFSTIME, KFLNGTH:
      &      'Error ', IERR, 'writing KFSDATE to file ' //
      &      FLIST3( FID ) // ' at col ', COL, 'row', ROW, 'count', CREC
             CALL M3WARN( 'KFWRITE', 0, 0, MESG )
-            KFWRITE = -1
+            KFFLAG = -1
             GO TO  999        !  return from kfwrite()
        END IF
 
@@ -335,7 +336,7 @@ C.......   update KFCOUNT, KFEVENT, KFSDATE, KFSTIME, KFLNGTH:
      &      'Error ', IERR, 'writing KFSTIME to file ' //
      &      FLIST3( FID ) // ' at col ', COL, 'row', ROW, 'count', CREC
             CALL M3WARN( 'KFWRITE', 0, 0, MESG )
-            KFWRITE = -1
+            KFFLAG = -1
             GO TO  999        !  return from kfwrite()
        END IF
 
@@ -345,7 +346,7 @@ C.......   update KFCOUNT, KFEVENT, KFSDATE, KFSTIME, KFLNGTH:
      &      'Error ', IERR, 'writing KFLNGTH to file ' //
      &      FLIST3( FID ) // ' at col ', COL, 'row', ROW, 'count', CREC
             CALL M3WARN( 'KFWRITE', 0, 0, MESG )
-            KFWRITE = -1
+            KFFLAG = -1
             GO TO  999        !  return from kfwrite()
        END IF
 
@@ -361,12 +362,12 @@ C.......   Update KFCOUNT:
      &      'Error ', IERR, 'writing KFCOUNT to file ' //
      &      FLIST3( FID ) // ' at col ', COL, 'row', ROW, 'count', CREC
             CALL M3WARN( 'KFWRITE', 0, 0, MESG )
-            KFWRITE = -1
+            KFFLAG = -1
             GO TO  999        !  return from kfwrite()
         END IF
 
         MXREC3( FID ) = IREC
-        KFWRITE       = IREC
+        KFFLAG       = IREC
 
 999     CONTINUE        !  target of "exit from routine"
 
@@ -381,7 +382,7 @@ C.......   Update KFCOUNT:
      &              // FIL16
 
                CALL M3WARN( 'KFWRITE', 0, 0, MESG )
-               KFWRITE = -1
+               KFFLAG = -1
                GO TO  999        !  return from kfwrite()
 
             END IF      !  if NCSNC() error

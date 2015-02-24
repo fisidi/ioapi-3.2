@@ -1,9 +1,10 @@
 
         LOGICAL FUNCTION WRVARS( FID, VID, FLAGS, STEP2, 
      &                           DIMS, DELS, DELTA, BUFFER )
+     &                   RESULT( WRFLAG )
 
 C***********************************************************************
-C Version "$Id: wrvars.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: wrvars.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,
@@ -136,9 +137,9 @@ C...............   Process native-binary-layer files:
                 WRITE( LOGDEV,'( 5X, A, 5 I6 )' ) 'delts array ', DELS
                 WRITE( LOGDEV,* )
 !$OMP END CRITICAL( S_LOGOUT )
-                WRVARS = .FALSE.
+                WRFLAG = .FALSE.
             ELSE
-                WRVARS = .TRUE.
+                WRFLAG = .TRUE.
             END IF
 
             RETURN
@@ -169,19 +170,19 @@ C...............   Write contents of the buffer for this variable
                 WRITE( LOGDEV,* )
 !$OMP END CRITICAL( S_LOGOUT )
         
-                WRVARS = .FALSE.
+                WRFLAG = .FALSE.
                 RETURN
         
             END IF          !  ierr nonzero:  NCVPT() failed
 
 C...............   Write time step flag:
 
-            WRVARS = WRTFLAG( FID, VID, FLAGS, STEP2 )
+            WRFLAG = WRTFLAG( FID, VID, FLAGS, STEP2 )
             RETURN
 
         ELSE IF ( NVARS3( FID ) .EQ. 0 ) THEN	!  write all-vars timestep flag
 
-            WRVARS = WRTFLAG( FID, VID, FLAGS, STEP2 )
+            WRFLAG = WRTFLAG( FID, VID, FLAGS, STEP2 )
             RETURN
 
         ELSE                            !  write all variables:
@@ -214,7 +215,7 @@ C...............   Write contents of the buffer for each variable
                     WRITE( LOGDEV,* )
 !$OMP END CRITICAL( S_LOGOUT )
         
-                    WRVARS = .FALSE.
+                    WRFLAG = .FALSE.
                     RETURN
         
                 END IF                  !  ierr nonzero:  NCVPT() failed
@@ -227,7 +228,7 @@ C...............   Write time step flags:
                     MESG = 'Error writing time-flags for file '
      &                     // FLIST3( FID )
                     CALL M3MSG2( MESG )
-                    WRVARS = .FALSE.
+                    WRFLAG = .FALSE.
                     RETURN
                 END IF
 
@@ -242,14 +243,14 @@ C...............   Write time step flags:
                 MESG = 'Error with disk synchronization for file:  '
      &                 // FLIST3( FID )
                 CALL M3MSG2( MESG )
-                WRVARS = .FALSE.
+                WRFLAG = .FALSE.
                 RETURN
 
             END IF              !  if synch failed
 
         END IF                  !  if file volatile
 
-        WRVARS = .TRUE.         ! (if you get to here)
+        WRFLAG = .TRUE.         ! (if you get to here)
         RETURN
 
 C******************  FORMAT  STATEMENTS   ******************************

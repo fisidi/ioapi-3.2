@@ -1,8 +1,9 @@
 
         LOGICAL   FUNCTION CHECK3( FNAME, VNAME, JDATE, JTIME )
+     &                     RESULT( CFLAG )
 
 C***********************************************************************
-C Version "$Id: check3.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: check3.F 170 2015-02-24 07:56:35Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2011 Baron Advanced Meteorological Systems,
@@ -123,7 +124,7 @@ C   begin body of function  CHECK3
             MESG  = 'Invalid file "'// FNAME // 
      &             '" or variable "'// VNAME //'"'
             CALL M3WARN( 'CHECK3', JDATE, JTIME, MESG )
-	    CHECK3 = .FALSE.
+            CFLAG = .FALSE.
             RETURN
         END IF
         
@@ -142,7 +143,7 @@ C.......   Find netCDF index for the file, and check time step availability:
 
             VID = INDEX1( VNAME, NVARS3( FID ), VLIST3( 1,FID ) )
             IF ( VID .EQ. 0 ) THEN
-                CHECK3 = .FALSE.
+                CFLAG = .FALSE.
                 MESG = 'Variable "' // VNAME //
      &                 '" not in file "' // FNAME
                 CALL M3WARN( 'CHECK3', JDATE, JTIME, MESG )
@@ -172,21 +173,21 @@ C.......   Find netCDF index for the file, and check time step availability:
      &                              F1, F2, BUFFER )
                     EFLAG = ( EFLAG .AND. VFLAG )
                 END DO
-                CHECK3 = EFLAG
+                CFLAG = EFLAG
             ELSE
-                CHECK3 = READ3V( FID, VID, SKIP, COUNT,
+                CFLAG = READ3V( FID, VID, SKIP, COUNT,
      $                           F1, F2, BUFFER )
             END IF
 #endif
 #ifndef IOAPICPL
             CALL M3WARN( 'CHECK3', JDATE, JTIME, 
      &                   'Coupling mode not active' )
-            CHECK3 = .FALSE.
+            CFLAG = .FALSE.
 #endif
 
         ELSE
 
-            CHECK3 = RDTFLAG( FID, VID, JDATE, JTIME, STEP, .FALSE. )
+            CFLAG = RDTFLAG( FID, VID, JDATE, JTIME, STEP, .FALSE. )
 
         END IF  
 

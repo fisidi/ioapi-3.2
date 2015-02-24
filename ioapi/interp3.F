@@ -1,13 +1,14 @@
 
         LOGICAL FUNCTION INTERP3( FNAME, VNAME, CALLER,
      &                            JDATE, JTIME, RSIZE, BUFFER )
+     &                    RESULT( IFLAG3 )
 
         IMPLICIT NONE
 
         LOGICAL INTERPX
 
 C***********************************************************************
-C Version "$Id: interp3.F 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: interp3.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2010 by Baron Advanced Meteorological Systems.
@@ -246,7 +247,7 @@ C...........   Check length of name arguments; copy into length=16 buffers
             IF ( XFLAG ) THEN
                 INTERPX = .FALSE.
             ELSE
-                INTERP3 = .FALSE.
+                IFLAG3 = .FALSE.
             END IF
             RETURN
         END IF          !  if len( fname ) > 16, or if len( vname ) > 16
@@ -294,7 +295,7 @@ C.......   Find netCDF index for the file, and open it if necessary
             IF ( XFLAG ) THEN
                 INTERPX = .FALSE.
             ELSE
-                INTERP3 = .FALSE.
+                IFLAG3 = .FALSE.
             END IF
             RETURN
 	END IF
@@ -349,7 +350,7 @@ C.......   Find netCDF index for the file, and open it if necessary
             IF ( XFLAG ) THEN
                 INTERPX = .FALSE.
             ELSE
-                INTERP3 = .FALSE.
+                IFLAG3 = .FALSE.
             END IF
             RETURN
 
@@ -430,7 +431,7 @@ C.......   Find netCDF index for the file, and open it if necessary
 
                 CALL M3WARN( NAMBUF, JDATE, JTIME, MESG )
 
-                INTERP3 = .FALSE.
+                IFLAG3 = .FALSE.
                 RETURN
 
             END IF          !  requested record-size in error
@@ -451,7 +452,7 @@ C.......   buffers for interpolation, and initialize related data structures.
             IF ( XFLAG ) THEN
                 INTERPX = .FALSE.
             ELSE
-                INTERP3 = .FALSE.
+                IFLAG3 = .FALSE.
             END IF
             RETURN
 
@@ -464,7 +465,7 @@ C.......   buffers for interpolation, and initialize related data structures.
             IF ( XFLAG ) THEN
                 INTERPX = .FALSE.
             ELSE
-                INTERP3 = .FALSE.
+                IFLAG3 = .FALSE.
             END IF
             RETURN
 
@@ -807,7 +808,7 @@ C..........   If read will be necessary, check timestep flags first:
             IF ( XFLAG ) THEN
                 INTERPX = .FALSE.
             ELSE
-                INTERP3 = .FALSE.
+                IFLAG3 = .FALSE.
             END IF
             RETURN
         END IF
@@ -860,17 +861,17 @@ C...........   status and return accordingly:
 
         ELSE IF ( VTYPE3( VID,FID ) .EQ. M3REAL ) THEN
 
-            INTERP3 = ( BUFINT3( FID, VID, NLAYS3( FID )*BSIZE3( FID ),
+            IFLAG3 = ( BUFINT3( FID, VID, NLAYS3( FID )*BSIZE3( FID ),
      &                           ILAST3( VID,FID ), TSTEP3( FID ),
      &                           P, Q, BUFFER ) .NE. 0 )
-            EFLAG   = ( .NOT. INTERP3 )
+            EFLAG   = ( .NOT. IFLAG3 )
 
         ELSE IF ( VTYPE3( VID,FID ) .EQ. M3DBLE ) THEN
 
-            INTERP3 = ( BUFINT3D( FID, VID, NLAYS3( FID )*BSIZE3( FID ),
+            IFLAG3 = ( BUFINT3D( FID, VID, NLAYS3( FID )*BSIZE3( FID ),
      &                            ILAST3( VID,FID ), TSTEP3( FID ),
      &                            PP, QQ, BUFFER ) .NE. 0 )
-            EFLAG   = ( .NOT. INTERP3 )
+            EFLAG   = ( .NOT. IFLAG3 )
 
         END IF          !  if XFLAG or not
 

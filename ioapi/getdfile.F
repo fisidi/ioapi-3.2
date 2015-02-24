@@ -1,9 +1,10 @@
 
       INTEGER FUNCTION GETDFILE( LNAME, RDONLY, FMTFLAG, RECLEN,
      &                           CALLER )
+     &                   RESULT( GFILE )
 
 C***********************************************************************
-C Version "$Id: getdfile.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: getdfile.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -98,7 +99,7 @@ C.......   Check for existence of files ---
      &            'ERROR: input file not found: ',
      &            TRIM( LNAME ),
      &            TRIM( PNAME )
-              GETDFILE = -1
+              GFILE = -1
               RETURN
           END IF
 
@@ -140,7 +141,7 @@ C.......   Check for existence of files ---
      &        TRIM( LNAME ),
      &        TRIM( PNAME ),
      &        'I/O status:  ', ISTAT
-              GETDFILE = -1
+              GFILE = -1
               RETURN
           END IF
 
@@ -185,7 +186,7 @@ C.......   Check for existence of files ---
      &        TRIM( LNAME ),
      &        TRIM( PNAME ),
      &        'I/O status:  ', ISTAT
-              GETDFILE = -1
+              GFILE = -1
               RETURN
           END IF
 
@@ -197,7 +198,7 @@ C.......   Check for existence of files ---
 
       END IF
 
-      GETDFILE = IUNIT
+      GFILE = IUNIT
       RETURN
 
 C----------------------------------------------------------------------
@@ -209,7 +210,7 @@ C     handle messaging errors:
            CALL PERROR( 'ERROR writing log message.')
            WRITE( LOGDEV, 9200, IOSTAT=ISTAT )
      &         'I/O status:', JSTAT
-           GETDFILE = -1
+           GFILE = -1
            RETURN
       END IF
 

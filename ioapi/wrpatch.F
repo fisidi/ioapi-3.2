@@ -1,9 +1,10 @@
 
         LOGICAL FUNCTION WRPATCH( FID, VID, TSTAMP, STEP2, 
      &                            SIZE_MAP, GRID_MAP, BUFFER )
+     &                    RESULT( WRFLAG )
 
 C***********************************************************************
-C Version "$Id: wrpatch.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: wrpatch.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -129,7 +130,7 @@ C...........   Perform the writes, according to VID
                 WRITE( LOGDEV,* )
 !$OMP END CRITICAL( S_LOGOUT )
         
-                WRPATCH = .FALSE.
+                WRFLAG = .FALSE.
                 RETURN
         
             END IF              !  if ierr nonzero:  NCVPT() failed
@@ -162,7 +163,7 @@ C...........   Perform the writes, according to VID
                     WRITE( LOGDEV,* )
 !$OMP END CRITICAL( S_LOGOUT )
         
-                    WRPATCH = .FALSE.
+                    WRFLAG = .FALSE.
                     RETURN
         
                 END IF                  !  ierr nonzero:  NCVPT() failed
@@ -173,7 +174,7 @@ C...........   Perform the writes, according to VID
                    
         END IF                  !  if writing just one vble, or all vbles
 
-        WRPATCH = .TRUE.        ! (if you get to here)
+        WRFLAG = .TRUE.        ! (if you get to here)
         RETURN
 
         END FUNCTION WRPATCH

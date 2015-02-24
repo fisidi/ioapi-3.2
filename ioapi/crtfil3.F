@@ -1,8 +1,8 @@
 
-        LOGICAL FUNCTION CRTFIL3( EQNAME, FID, PGNAME )
+        LOGICAL FUNCTION CRTFIL3( EQNAME, FID, PGNAME ) RESULT( CFLAG3 )
 
 C***********************************************************************
-C Version "$Id: crtfil3.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: crtfil3.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2011 Baron Advanced Meteorological Systems,
@@ -179,7 +179,7 @@ C...........  Create the netCDF file, and put it into definition mode.
         IF ( NVARS3D .GT. MXVARS3 ) THEN
             CALL M3ABORT( FLIST3( FID ), FNUM, IERR,
      &                    'Max NVARS for this build exceeded' )
-            CRTFIL3 = .FALSE.
+            CFLAG3 = .FALSE.
             RETURN
         END IF
 
@@ -296,7 +296,7 @@ C...........   files only:
 
         IF ( FTYPE3D .EQ. DCTNRY3 ) THEN
 
-            CRTFIL3 = CRDICT3( FID )
+            CFLAG3 = CRDICT3( FID )
             GO TO 999
 
         END IF          !  ftype is dictionary
@@ -1414,7 +1414,7 @@ C.......   from this critical section.
 
 !$OMP END CRITICAL( S_NC )
 
-        CRTFIL3 = ( .NOT. EFLAG )
+        CFLAG3 = ( .NOT. EFLAG )
 
         RETURN
 

@@ -1,8 +1,9 @@
 
         LOGICAL FUNCTION RDVARS( FID, VID, DIMS, DELS, DELTA, BUFFER )
+     &                   RESULT( RDFLAG )
 
 C***********************************************************************
-C Version "$Id: rdvars.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: rdvars.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,
@@ -139,7 +140,7 @@ C...........   Perform the reads, according to VID
      &                 FLIST3( FID )
                 END IF
                 CALL M3MSG2( MESG )
-                RDVARS = .FALSE.
+                RDFLAG = .FALSE.
                 RETURN
             ELSE
                 STEP = DIMS( I )
@@ -182,9 +183,9 @@ C...........   Perform the reads, according to VID
      &                FLIST3( FID )
                 END IF
                 CALL M3MSG2( MESG )
-                RDVARS = .FALSE.
+                RDFLAG = .FALSE.
             ELSE
-                RDVARS = .TRUE.
+                RDFLAG = .TRUE.
             END IF
 
             RETURN
@@ -208,7 +209,7 @@ C...........   Perform the reads, according to VID
      &                   'Error reading variable "', VLIST3( VID,FID ), 
      &                   '" from file "', FLIST3( FID ), '"'
                     CALL M3MSG2( MESG )
-                    RDVARS = .FALSE.
+                    RDFLAG = .FALSE.
                     RETURN
                 END IF          !  ierr nonzero:  NCVGTC() failed
 
@@ -229,13 +230,13 @@ C...........   Perform the reads, according to VID
      &              'Error reading variable "', VLIST3( VID,FID ), 
      &              '" from file "', FLIST3( FID ), '"'
                     CALL M3MSG2( MESG )
-                RDVARS = .FALSE.
+                RDFLAG = .FALSE.
                 RETURN
             END IF          !  ierr nonzero:  NCVGTC() failed, or succeeded
 
         END IF  !  read all variables, or read a specific variable
 
-        RDVARS = .TRUE.
+        RDFLAG = .TRUE.
         RETURN
 
 C******************  FORMAT  STATEMENTS   ******************************

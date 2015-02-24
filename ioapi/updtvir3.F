@@ -1,9 +1,10 @@
 
 #ifdef IOAPICPL
-        LOGICAL FUNCTION UPDTVIR3 ( FID )
+        LOGICAL FUNCTION UPDTVIR3( FID )
+     &                     RESULT( UPDFLAG )
 
 C***********************************************************************
-C Version "$Id: updtvir3.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: updtvir3.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -73,7 +74,7 @@ C.......   "file" types, or error return:
      $            FLIST3( FID ) // CHAR(10) //
      $            '     ILLEGAL VALUE FOR FILE TYPE.'
             CALL M3WARN( 'UPDTVIR3', SDATE3D, STIME3D, MESG )
-            UPDTVIR3 = .FALSE.
+            UPDFLAG = .FALSE.
             RETURN
 
         END IF
@@ -124,7 +125,7 @@ C.......   Define all the Models-3 variables for this file:
             VLIST3( VAR,FID ) = VNAME3D( VAR )
 111     CONTINUE
 
-        UPDTVIR3 = .TRUE.
+        UPDFLAG = .TRUE.
 
         RETURN
 

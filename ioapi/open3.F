@@ -1,8 +1,9 @@
 
         LOGICAL FUNCTION  OPEN3( FNAME, FSTATUS, PGNAME )
+     &                   RESULT( OFLAG3 )
 
 C***********************************************************************
-C Version "$Id: open3.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: open3.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -138,7 +139,7 @@ C.......   Find STATE3 index for the file:
      &              'File ' // FNAME // ' already opened; ' //
      &              'cannot subsequently create it "NEW".'
                 CALL M3WARN( 'OPEN3', 0, 0, MESG )
-                OPEN3 = .FALSE.
+                OFLAG3 = .FALSE.
                 RETURN
 
             ELSE IF ( FSTATUS .EQ. FSUNKN3 ) THEN
@@ -149,12 +150,12 @@ C.......   Find STATE3 index for the file:
      &              'File ' // FNAME // ' already opened READONLY; ' //
      &              'Cannot subsequently open it "UNKNOWN".'
                     CALL M3WARN( 'OPEN3', 0, 0, MESG )
-                    OPEN3 = .FALSE.
+                    OFLAG3 = .FALSE.
                     RETURN
 
                 ELSE 
 
-                    OPEN3 = CHKFIL3( FID ) 
+                    OFLAG3 = CHKFIL3( FID ) 
                     RETURN
 
                 END IF
@@ -165,7 +166,7 @@ C.......   Find STATE3 index for the file:
      &              'File ' // FNAME // ' already opened READONLY; ' //
      &              'cannot subsequently open it for READ/WRITE.'
                 CALL M3WARN( 'OPEN3', 0, 0, MESG )
-                OPEN3 = .FALSE.
+                OFLAG3 = .FALSE.
                 RETURN
 
             ELSE IF ( FSTATUS .EQ. FSCREA3 ) THEN
@@ -175,7 +176,7 @@ C.......   Find STATE3 index for the file:
                     MESG = 'Error:  bad file description in FDESC'
                     CALL M3WARN( 'OPEN3', 0, 0, MESG )
                     FLIST3( FID ) = CMISS3
-                    OPEN3 = .FALSE.
+                    OFLAG3 = .FALSE.
                     RETURN
 
                 END IF  !  if CKDESC3() failed
@@ -191,14 +192,14 @@ C.......   Find STATE3 index for the file:
                     MESG = 'File ' // FNAME // ' already opened. ' //
      &                  'Could not close to reopen with status FSCREA3'
                     CALL M3WARN( 'OPEN3', 0, 0, MESG )
-                    OPEN3 = .FALSE.
+                    OFLAG3 = .FALSE.
                     RETURN
 
                 END IF
 
             ELSE
 
-                OPEN3 = .TRUE.
+                OFLAG3 = .TRUE.
                 RETURN
 
             END IF
@@ -213,7 +214,7 @@ C.......   Find STATE3 index for the file:
 
                     MESG = 'Error:   bad file description in FDESC'
                     CALL M3WARN( 'OPEN3', 0, 0, MESG )
-                    OPEN3 = .FALSE.
+                    OFLAG3 = .FALSE.
                     RETURN
 
                 END IF
@@ -228,7 +229,7 @@ C.......   Find STATE3 index for the file:
      &          'Could not open ' // FNAME //
      &          'Maximum number of files already have been opened.'
             CALL M3WARN( 'OPEN3', 0, 0, MESG )
-            OPEN3 = .FALSE.
+            OFLAG3 = .FALSE.
             RETURN
         END IF
 
@@ -262,12 +263,12 @@ C.......   of the file:
         IF ( BNAME .EQ. 'BUFFERED' ) THEN
 
             IF ( CRTBUF3( FID ) ) THEN  !  sets cdfid3( fid ) = buffil3
-                OPEN3  = .TRUE.
+                OFLAG3  = .TRUE.
                 CALL OPNLOG3 ( FID , EQNAME, FSTATUS )
                 COUNT3 = MAX( COUNT3, FID )
             ELSE
                 FLIST3( FID ) = CMISS3
-                OPEN3 = .FALSE.
+                OFLAG3 = .FALSE.
             END IF
 
             RETURN
@@ -278,14 +279,14 @@ C.......   of the file:
            PLIST3(FID) = EQNAME(9:256)
            CDFID3( FID ) = VIRFIL3
            CALL GETARG( 0, PGMNAME )
-           OPEN3 = OPEN3V( PLIST3(FID), FSTATUS, PGMNAME )
-           IF ( OPEN3 ) THEN
+           OFLAG3 = OPEN3V( PLIST3(FID), FSTATUS, PGMNAME )
+           IF ( OFLAG3 ) THEN
                IF ( UPDTVIR3( FID ) ) THEN
                    CALL OPNLOG3 ( FID , EQNAME, FSTATUS )
                    COUNT3 = MAX( COUNT3, FID )
                ELSE
                    FLIST3( FID ) = CMISS3
-                   OPEN3 = .FALSE.
+                   OFLAG3 = .FALSE.
                END IF
            ELSE
                FLIST3( FID ) = CMISS3
@@ -297,7 +298,7 @@ C.......   of the file:
             CALL M3WARN( 'OPEN3', 0, 0, 
      &      'VIRTUAL files not implemented in this I/O API version' )
             FLIST3( FID ) = CMISS3
-            OPEN3 = .FALSE.
+            OFLAG3 = .FALSE.
             RETURN
 #endif
 
@@ -320,7 +321,7 @@ C.......   of the file:
                 CALL M3MSG2( MESG )
                 CALL M3WARN( 'OPEN3', 0, 0, 'LIST-File not readonly.' )
                 FLIST3( FID ) = CMISS3
-                OPEN3 = .FALSE.
+                OFLAG3 = .FALSE.
                 RETURN
             END IF
 
@@ -339,20 +340,20 @@ C.......   of the file:
             IF ( AFLAG ) THEN           !  file exists:
 
                 IF ( OPNFIL3( EQNAME, FID, RWMODE, PRG16 ) ) THEN
-                    OPEN3 = .TRUE.
+                    OFLAG3 = .TRUE.
                 ELSE
                     FLIST3( FID ) = CMISS3
-                    OPEN3 = .FALSE.
+                    OFLAG3 = .FALSE.
                     RETURN
                 END IF
 
             ELSE IF ( LISTFLAG ) THEN
 
                 IF ( OPNLIST3( FID, PRG16 ) ) THEN
-                    OPEN3 = .TRUE.
+                    OFLAG3 = .TRUE.
                 ELSE
                     FLIST3( FID ) = CMISS3
-                    OPEN3 = .FALSE.
+                    OFLAG3 = .FALSE.
                     RETURN
                 END IF
 
@@ -362,7 +363,7 @@ C.......   of the file:
                 CALL M3MSG2( MESG )
                 CALL M3WARN( 'OPEN3', 0, 0, 'File not available.' )
                 FLIST3( FID ) = CMISS3
-                OPEN3 = .FALSE.
+                OFLAG3 = .FALSE.
                 RETURN
 
             END IF      !  if file exist or not (file status read-only)
@@ -373,10 +374,10 @@ C.......   of the file:
 
                 RWMODE = NF_WRITE
                 IF ( OPNFIL3( EQNAME, FID, RWMODE, PRG16 ) ) THEN
-                    OPEN3 = .TRUE.
+                    OFLAG3 = .TRUE.
                 ELSE
                     FLIST3( FID ) = CMISS3
-                    OPEN3 = .FALSE.
+                    OFLAG3 = .FALSE.
                     RETURN
                 END IF
 
@@ -386,7 +387,7 @@ C.......   of the file:
                 CALL M3MSG2( MESG )
                 CALL M3WARN( 'OPEN3', 0, 0, 'File not available.' )
                 FLIST3( FID ) = CMISS3
-                OPEN3 = .FALSE.
+                OFLAG3 = .FALSE.
                 RETURN
 
             END IF      !  if file exists or not (file status read-write)
@@ -396,17 +397,17 @@ C.......   of the file:
             IF ( AFLAG ) THEN           !  file exists (error)
 
                 FLIST3( FID ) = CMISS3
-                OPEN3 = .FALSE.
+                OFLAG3 = .FALSE.
                 RETURN
 
             ELSE IF ( CRTFIL3( EQNAME, FID, PRG16 ) ) THEN
 
-                OPEN3 = .TRUE.
+                OFLAG3 = .TRUE.
 
             ELSE
 
                 FLIST3( FID ) = CMISS3
-                OPEN3 = .FALSE.
+                OFLAG3 = .FALSE.
                 RETURN
 
             END IF     !  if file exists or not (file status create)
@@ -420,12 +421,12 @@ C.......   of the file:
 
                     IF ( CHKFIL3( FID ) ) THEN  !  consistency check
 
-                        OPEN3 = .TRUE.
+                        OFLAG3 = .TRUE.
 
                     ELSE
 
                         FLIST3( FID ) = CMISS3
-                        OPEN3 = .FALSE.
+                        OFLAG3 = .FALSE.
                         CALL NCCLOS( CDFID3( FID ), IERR )
                         RETURN 
 
@@ -435,19 +436,19 @@ C.......   of the file:
 
                     CALL NCCLOS( CDFID3( FID ), IERR )
                     FLIST3( FID ) = CMISS3
-                    OPEN3 = .FALSE.
+                    OFLAG3 = .FALSE.
                     RETURN
 
                 END IF          !  if OPNFIL3() succeeded or not
 
             ELSE IF ( CRTFIL3( EQNAME, FID, PRG16 ) ) THEN
 
-                OPEN3 = .TRUE.
+                OFLAG3 = .TRUE.
 
             ELSE    !  CRTFIL3() failed:
 
                 FLIST3( FID ) = CMISS3
-                OPEN3 = .FALSE.
+                OFLAG3 = .FALSE.
                 RETURN
 
             END IF      !  if file exists or can be created or not
@@ -463,7 +464,7 @@ C.......   of the file:
      &                  'removing ', FNAME, ' from pathname:'
                      CALL M3WARN( 'OPEN3', 0, 0, MESG )
                      CALL M3MSG2( EQNAME )
-                    OPEN3 = .FALSE.
+                    OFLAG3 = .FALSE.
                     RETURN
                 END IF	!  if RMFILE failed
 
@@ -471,12 +472,12 @@ C.......   of the file:
 
             IF ( CRTFIL3( EQNAME, FID, PRG16 ) ) THEN
 
-                OPEN3 = .TRUE.
+                OFLAG3 = .TRUE.
 
             ELSE    !  CRTFIL3() failed:
 
                 FLIST3( FID ) = CMISS3
-                OPEN3 = .FALSE.
+                OFLAG3 = .FALSE.
                 RETURN
 
             END IF  !  if CRTFIL3() succeeded or not
@@ -491,7 +492,7 @@ C.......   of the file:
             CALL M3MSG2( MESG )
 
             FLIST3( FID ) = CMISS3
-            OPEN3 = .FALSE.
+            OFLAG3 = .FALSE.
             RETURN
 
         END IF  !  read-only, read-write, new, unknown, create/trunc, or illegal
@@ -502,7 +503,7 @@ C.......   Update COUNT3 to account for new file, and log it:
         COUNT3 = MAX( COUNT3, FID )
         CALL OPNLOG3 ( FID , EQNAME, FSTATUS )
 
-        OPEN3 = .TRUE.
+        OFLAG3 = .TRUE.
 
         RETURN
 

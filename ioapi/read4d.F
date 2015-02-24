@@ -1,9 +1,10 @@
 
       LOGICAL FUNCTION READ4D( FNAME, VNAME, LAYER,
      &                         SDATE, STIME, TSTEP, NRECS, BUFFER )
+     &                 RESULT( RDFLAG3 )
 
 C***********************************************************************
-C Version "$Id: read4d.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: read4d.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -157,7 +158,7 @@ C.......   Check that Models-3 I/O has been initialized:
         IF ( EFLAG ) THEN
             MESG = 'Invalid variable or file name arguments'
             CALL M3WARN( 'READ3', JDATE, JTIME, MESG )
-	    READ4D = .FALSE.
+            RDFLAG3 = .FALSE.
             RETURN
         END IF          !  if len( fname ) > 16, or if len( vname ) > 16
 
@@ -167,28 +168,28 @@ C.......   Check availability of requested  layer, variable:
 
             MESG = 'File:  '//FNAME// ' is BUFFERED.'
             CALL M3WARN( 'READ4D', JDATE, JTIME, MESG )
-            READ4D = .FALSE.
+            RDFLAG3 = .FALSE.
             RETURN
 
         ELSE IF ( CDFID3( FID ) .EQ. VIRFIL3 ) THEN
 
             MESG = 'File:  '//FNAME// ' is VIRTUAL.'
             CALL M3WARN( 'READ4D', JDATE, JTIME, MESG )
-            READ4D = .FALSE.
+            RDFLAG3 = .FALSE.
             RETURN
 
         ELSE IF ( TSTEP3( FID ) .EQ. 0 ) THEN
 
             MESG = 'File:  '//FNAME// ' is time-independent.'
             CALL M3WARN( 'READ4D', JDATE, JTIME, MESG )
-            READ4D = .FALSE.
+            RDFLAG3 = .FALSE.
             RETURN
 
         ELSE IF ( TSTEP3( FID ) .LT. 0 ) THEN
 
             MESG = 'File:  '//FNAME// ' is RESTART, not time-stepped.'
             CALL M3WARN( 'READ4D', JDATE, JTIME, MESG )
-            READ4D = .FALSE.
+            RDFLAG3 = .FALSE.
             RETURN
 
         END IF          !  if file not available, or...
@@ -209,7 +210,7 @@ C.......   Check availability of requested  layer, variable:
              MESG = 'Requested variable "' //  VNAME //
      &              '" not available'
             CALL M3WARN( 'READ4D', JDATE, JTIME, MESG )
-            READ4D = .FALSE.
+            RDFLAG3 = .FALSE.
             RETURN
         END IF          !  end check on vid
 
@@ -226,12 +227,12 @@ C.......   Check availability of requested  layer, variable:
 
             WRITE( MESG,91010 ) 'Requested layer:', LAYER
             CALL M3MSG2( MESG )
-	    WRITE( MESG,91010 )
+            WRITE( MESG,91010 )
      &          'Layers in the file:  1 ...', NLAYS3( FID )
             CALL M3MSG2( MESG )
             MESG = 'LAYER not available in file ' // FNAME
             CALL M3WARN( 'READ4D', JDATE, JTIME, MESG )
-            READ4D = .FALSE.
+            RDFLAG3 = .FALSE.
             RETURN
 
         END IF          !  end check on layer-number
@@ -308,7 +309,7 @@ C.......   Set up DIMS, DELS for RDVARS():
             MESG = 'Filetype not CUSTOM3, GRDDED3, BNDARY3, or TSRIES3'
             CALL M3WARN( 'READ4D', JDATE, JTIME, MESG )
 
-            READ4D = .FALSE.
+            RDFLAG3 = .FALSE.
             RETURN
 
         END IF          !  if file type is ...
@@ -333,7 +334,7 @@ C...........   Process the requested time step sequence:
      &              '" not available in file "', FNAME,
      &              '" for date&time ', JDATE, ':', JTIME
                 CALL M3WARN( 'READ4D', JDATE, JTIME, MESG )
-                READ4D = .FALSE.
+                RDFLAG3 = .FALSE.
                 RETURN
 
             END IF              ! if rdvars(0 failed
@@ -348,7 +349,7 @@ C...........   Process the requested time step sequence:
      &              'Error reading "', VNAME, '" from "', FNAME,
      &              '" for date&time ', JDATE, ':', JTIME
                 CALL M3WARN( 'READ4D', JDATE, JTIME, MESG )
-                READ4D = .FALSE.
+                RDFLAG3 = .FALSE.
                 RETURN
 
             END IF              ! if rdvars(0 failed
@@ -361,7 +362,7 @@ C...........   Process the requested time step sequence:
 
         END DO          !  end loop on output records.
 
-        READ4D = .TRUE.
+        RDFLAG3 = .TRUE.
 
         RETURN
 

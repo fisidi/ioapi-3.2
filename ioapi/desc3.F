@@ -1,8 +1,8 @@
 
-        LOGICAL   FUNCTION DESC3 ( FNAME )
+        LOGICAL   FUNCTION DESC3( FNAME )  RESULT( DFLAG3 )
 
 C***********************************************************************
-C Version "$Id: desc3.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: desc3.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2011 Baron Advanced Meteorological Systems,
@@ -113,7 +113,7 @@ C.......   Find STATE3 index for the file:
         IF ( FID .EQ. 0 ) THEN
             MESG = 'Invalid file name argument "' // FNAME // '"'
             CALL M3WARN( 'DESC3', 0, 0, MESG )
-            DESC3 = .FALSE.
+            DFLAG3 = .FALSE.
             RETURN
         END IF
 
@@ -174,7 +174,7 @@ C.......   Characteristics stored in STATE3.EXT:
             FDESC3D = ' '
             UPDSC3D = ' '
 
-            DESC3 = .TRUE.
+            DFLAG3 = .TRUE.
             RETURN
 
         END IF		!  if "buffered" file
@@ -182,7 +182,7 @@ C.......   Characteristics stored in STATE3.EXT:
 #ifdef IOAPICPL
 
         IF ( CDFID3( FID ) .EQ. VIRFIL3 ) THEN     !  VIRTUAL "file"
-            DESC3  = DESC3V( PLIST3( FID ) )
+            DFLAG3  = DESC3V( PLIST3( FID ) )
             RETURN
         END IF		!  if "virtual" file
 
@@ -193,7 +193,7 @@ C.......   Characteristics stored in STATE3.EXT:
             IF ( .NOT. SYNCFID( FID ) ) THEN
                 MESG = 'Error with disk synch for file '//FLIST3( FID )
                 CALL M3WARN( 'DESC3', 0, 0, MESG )
-                DESC3 = .FALSE.
+                DFLAG3 = .FALSE.
                 RETURN
             END IF              !  if synch failed
 
@@ -204,7 +204,7 @@ C.......   Characteristics stored in STATE3.EXT:
             IF ( DSCBIN3( FID ) .EQ. 0 ) THEN
                 MESG = 'Error reading header for BINFIL3 file '// FNAME
                 CALL M3WARN( 'DESC3', 0, 0, MESG )
-                DESC3 = .FALSE.
+                DFLAG3 = .FALSE.
                 RETURN
             END IF
 
@@ -217,7 +217,7 @@ C.......   If not netcdf file:  already processed, so return
 
         IF ( CDF .LT. 0 ) THEN
 
-            DESC3 = .TRUE.
+            DFLAG3 = .TRUE.
             RETURN
 
         END IF		!  if "native-binary file; else if "buffered" file
@@ -402,7 +402,7 @@ C...............   attributes, lists of names and values for them:
             CALL M3WARN( 'DESC3', 0, 0, MESG )
         END IF
 
-        DESC3 = ( .NOT. EFLAG )
+        DFLAG3 = ( .NOT. EFLAG )
 
         RETURN
 

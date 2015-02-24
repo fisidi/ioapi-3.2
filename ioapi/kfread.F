@@ -1,9 +1,10 @@
 
       LOGICAL FUNCTION KFREAD( FNAME, VNAME, EVENT,
      &                         COL, ROW, JDATE, JTIME, KFLEN, VBLE )
+     &                 RESULT( KFFLAG )
 
 C***********************************************************************
-C Version "$Id: kfread.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: kfread.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2010 by Baron Advanced Meteorological Systems.
@@ -103,7 +104,7 @@ C.......   Check that Models-3 I/O has been initialized:
 !$OMP   END CRITICAL( S_INIT )
         IF ( EFLAG ) THEN
             CALL M3MSG2(  'KFREAD:  I/O API not yet initialized.' )
-            KFREAD = .FALSE.
+            KFFLAG = .FALSE.
             RETURN
         END IF
 
@@ -128,7 +129,7 @@ C.......   Check that Models-3 I/O has been initialized:
         IF ( EFLAG ) THEN
             MESG = 'Invalid variable or file name arguments'
             CALL M3WARN( 'KFREAD', 0, 0, MESG )
-            KFREAD = .FALSE.
+            KFFLAG = .FALSE.
             RETURN
         END IF          !  if len( fname ) > 16, or if len( vname ) > 16
 
@@ -144,7 +145,7 @@ C.......   Find netCDF index for the file, and check time step availability:
 
             MESG = 'File:  '//FIL16// ' not yet opened.'
             CALL M3WARN( 'KFREAD', 0, 0, MESG )
-            KFREAD = .FALSE.
+            KFFLAG = .FALSE.
             GO TO  999        !  return from kfread()
 
         ELSE IF ( VOLAT3( FID ) ) THEN
@@ -162,7 +163,7 @@ C.......   Find netCDF index for the file, and check time step availability:
      &              'Error with disk synchronization for file:  '
      &              // FIL16
                 CALL M3WARN( 'KFREAD', 0, 0, MESG )
-                KFREAD = .FALSE.
+                KFFLAG = .FALSE.
                 GO TO  999        !  return from kfread()
 
             END IF      !  if ncsnc() failed
@@ -176,7 +177,7 @@ C.......   Find netCDF index for the file, and check time step availability:
      &          'Error reading netCDF time-dimension ID for file '
      &              // FLIST3( FID )
                 CALL M3WARN( 'KFREAD', 0, 0, MESG )
-                KFREAD = .FALSE.
+                KFFLAG = .FALSE.
                 GO TO  999        !  return
             END IF              !  ierr nonzero:  NCVDEF() failed
 
@@ -194,7 +195,7 @@ C.......   Find netCDF index for the file, and check time step availability:
      &          'Error reading maximum timestep record number ' //
      &              'for file ' // FLIST3( FID )
                 CALL M3WARN( 'KFREAD', 0, 0, MESG )
-                KFREAD = .FALSE.
+                KFFLAG = .FALSE.
                 GO TO  999        !  return
             END IF              !  ierr nonzero:  NCVDEF() failed
 
@@ -210,7 +211,7 @@ C.......   Check availability of requested  layer, variable:
             WRITE( MESG,91010 )
      &      'File type', IERR, 'is not KFEVNT3=-3'
             CALL M3WARN( 'KFREAD', 0, 0, MESG )
-            KFREAD = .FALSE.
+            KFFLAG = .FALSE.
             GO TO  999        !  return from kfread()
 
         ELSE IF ( EVENT .GT. MXREC3( FID ) .OR.
@@ -219,7 +220,7 @@ C.......   Check availability of requested  layer, variable:
             WRITE( MESG,91010 )
      &      'Event number', EVENT, 'not available in file ' // FIL16
             CALL M3WARN( 'KFREAD', 0, 0, MESG )
-            KFREAD = .FALSE.
+            KFFLAG = .FALSE.
             GO TO  999        !  return from kfread()
 
         ELSE IF ( VAR16 .EQ. ALLVAR3 ) THEN
@@ -235,7 +236,7 @@ C.......   Check availability of requested  layer, variable:
      &              'Requested variable ' //  VAR16 //
      &              'not available in file ' // FLIST3( FID )
                 CALL M3WARN( 'KFREAD', 0, 0, MESG )
-                KFREAD = .FALSE.
+                KFFLAG = .FALSE.
                 GO TO  999        !  return from kfread()
             END IF
 
@@ -263,7 +264,7 @@ C.......   Read contents of the variable(s):
      &          'Error reading ' // VLIST3( VID,FID ) //
      &          ' from ' // FIL16
                 CALL M3WARN( 'KFREAD', 0, 0, MESG )
-                KFREAD = .FALSE.
+                KFFLAG = .FALSE.
                 GO TO  999        !  return from kfread()
 
             END IF          !  if ierr bad or if variable bad
@@ -283,7 +284,7 @@ C.......   Read contents of the variable(s):
      &                  'Error reading ' // VLIST3( VAR,FID ) //
      &                  ' from ' // FIL16
                     CALL M3WARN( 'KFREAD', 0, 0, MESG )
-                    KFREAD = .FALSE.
+                    KFFLAG = .FALSE.
                     GO TO  999        !  return from kfread()
 
                 END IF          !  if ierr bad or if variable bad
@@ -311,7 +312,7 @@ C.......   Read record header:
      &          'netCDF error number', IERR,
      &          'Error reading TFLAG from ' // FIL16
             CALL M3WARN( 'KFREAD', 0, 0, MESG )
-            KFREAD = .FALSE.
+            KFFLAG = .FALSE.
             GO TO  999        !  return from kfread()
 
         END IF          !  if ierr bad or if record header bad
@@ -322,7 +323,7 @@ C.......   Read record header:
         JTIME = FLAGS( 4 )
         KFLEN = FLAGS( 5 )
 
-        KFREAD = .TRUE.
+        KFFLAG = .TRUE.
 
 999     CONTINUE        !  target of "exit from routine"
 

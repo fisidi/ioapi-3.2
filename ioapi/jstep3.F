@@ -1,8 +1,9 @@
 
         INTEGER FUNCTION JSTEP3( JDATE, JTIME, SDATE, STIME, TSTEP )
+     &                   RESULT( JREC3 )
 
 C***********************************************************************
-C Version "$Id: jstep3.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: jstep3.F 171 2015-02-24 08:18:01Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -70,7 +71,7 @@ C***********************************************************************
 C   begin body of function  JSTEP3
 
         IF ( TSTEP .EQ. 0 ) THEN
-            JSTEP3 = 1
+            JREC3 = 1
             RETURN
         END IF
 
@@ -80,7 +81,7 @@ C   begin body of function  JSTEP3
 
 
         IF ( IREC .LT. 0 ) THEN
-            JSTEP3 = -1
+            JREC3 = -1
             RETURN
         END IF
 
@@ -94,9 +95,9 @@ C   begin body of function  JSTEP3
         !!  compare with CURREC() result:
         
         IF ( KDATE .EQ. CDATE .AND. KTIME .EQ. CTIME ) THEN
-            JSTEP3 = IREC
+            JREC3 = IREC
         ELSE
-            JSTEP3 = -1
+            JREC3 = -1
         END IF
 
         RETURN
