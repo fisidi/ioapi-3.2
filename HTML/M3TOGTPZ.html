@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: M3TOGTPZ.html 148 2015-02-03 20:28:20Z coats $" -->
+<!-- "$Id: M3TOGTPZ.html 175 2015-02-27 12:57:33Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> M3TOGTPZ </TITLE>
 </HEAD>
@@ -24,7 +24,8 @@
                                 TPA, ISYS, IZONE, IUNIT, ISPH )
 
         INTEGER, INTENT(IN   ) :: GDTYP                 !!  I/O API projection type LATGRD3, ...
-        INTEGER, INTENT(IN   ) :: IZONE1                !!  UTM zone, or projection-ID > 60
+        INTEGER, INTENT(IN   ) :: IZONE1                !!  UTM zone, or
+        projection-ID &gt; 60
         REAL*8 , INTENT(IN   ) :: P_ALP, P_BET, P_GAM   !!  defining angles
         REAL*8 , INTENT(IN   ) :: YCENT                 !!  central meridian
         REAL*8 , INTENT(IN   ) :: SPHER                 !!  sphere-radius
@@ -91,7 +92,7 @@
         EFLAG = .TRUE.
         MESG = 'Lat-Lon, LAM, UTM, TRM, POL, EQM, and ALB supported'
         CALL M3MSG2( MESG )
-        WRITE( MESG, '( A, I6, 2X, A )' ) '>>> Output grid type', GDTYP2, 'not supported'
+        WRITE( MESG, '( A, I6, 2X, A )' ) '&gt;&gt;&gt; Output grid type', GDTYP2, 'not supported'
         CALL M3MESG( MESG )
     END IF
 

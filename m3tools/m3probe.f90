@@ -2,7 +2,7 @@
 PROGRAM M3PROBE
 
     !!***************************************************************
-    !! Version "$Id: m3probe.f90 163 2015-02-24 06:48:57Z coats $"
+    !! Version "$Id: m3probe.f90 174 2015-02-26 21:23:12Z coats $"
     !! EDSS/Models-3 M3TOOLS.
     !! Copyright (C) 1992-2002 MCNC, 
     !! (C) 1995-2002, 2005-2013 Carlie J. Coats, Jr.,
@@ -28,7 +28,7 @@ PROGRAM M3PROBE
     !!      better error-checking, support for BNDARY3 files, INTEGER
     !!      and REAL*8 variables.
     !!      Version  02/2015 by CJC for I/O API v3.2:  F90 free-format source
-    !!      Support for M3INT8 variables.
+    !!      Support for M3INT8 variables; use generics for "GET*()"
     !!***************************************************************
 
     USE M3UTILIO
@@ -139,10 +139,10 @@ PROGRAM M3PROBE
 '    Chapel Hill, NC 27599-1105',                                           &
 '',                                                                         &
 'Program version: ',                                                        &
-'$Id: m3probe.f90 163 2015-02-24 06:48:57Z coats $',&
+'$Id: m3probe.f90 174 2015-02-26 21:23:12Z coats $',&
 ''
 
-    IF ( .NOT. GETYN( 'Continue with program?', .TRUE. ) ) THEN
+    IF ( .NOT. GETVAL( 'Continue with program?', .TRUE. ) ) THEN
         MESG = 'Program terminated at user request'
         CALL M3EXIT( PNAME, 0, 0, MESG, 2 )
     END IF
@@ -235,11 +235,11 @@ PROGRAM M3PROBE
     !!...............  Get date&time, probe-point specs:
 
     IF ( TSTEP2 .GT. 0 ) THEN
-        SDATE = GETNUM( SDATE2, EDATE2, SDATE2, 'Enter starting date  for ${REPORT}' )
-        STIME = GETNUM(      0, 999999, STIME2, 'Enter starting time  for ${REPORT}' )
-        EDATE = GETNUM( SDATE , EDATE2, EDATE2, 'Enter ending   date  for ${REPORT}' )
-        ETIME = GETNUM(      0, 999999, ETIME2, 'Enter ending   time  for ${REPORT}' )
-        TSTEP = GETNUM( TSTEP2, 999999, TSTEP2, 'Enter     time step  for ${REPORT}'     )
+        SDATE = GETVAL( SDATE2, EDATE2, SDATE2, 'Enter starting date  for ${REPORT}' )
+        STIME = GETVAL(      0, 999999, STIME2, 'Enter starting time  for ${REPORT}' )
+        EDATE = GETVAL( SDATE , EDATE2, EDATE2, 'Enter ending   date  for ${REPORT}' )
+        ETIME = GETVAL(      0, 999999, ETIME2, 'Enter ending   time  for ${REPORT}' )
+        TSTEP = GETVAL( TSTEP2, 999999, TSTEP2, 'Enter     time step  for ${REPORT}'     )
         NRECS = CURREC( EDATE, ETIME, SDATE, STIME, TSTEP, JDATE, JTIME )
     ELSE
         SDATE = 0
@@ -268,11 +268,11 @@ PROGRAM M3PROBE
 
         IF      ( FTYPE2 .EQ. GRDDED3 ) THEN
 
-            C = GETNUM( 0, NCOLS2, 1, 'Enter column for this point, or 0 to end list' )
+            C = GETVAL( 0, NCOLS2, 1, 'Enter column for this point, or 0 to end list' )
             IF ( C .LE. 0 )  EXIT
-            R = GETNUM( 1, NROWS2, 1, 'Enter row    for this point' )
+            R = GETVAL( 1, NROWS2, 1, 'Enter row    for this point' )
             IF ( NLAYS2 .GT. 1 ) THEN
-                L = GETNUM( 1, NLAYS2, 1, 'Enter layer  for this point' )
+                L = GETVAL( 1, NLAYS2, 1, 'Enter layer  for this point' )
             ELSE
                 L = 1
             END IF
@@ -281,11 +281,11 @@ PROGRAM M3PROBE
 
         ELSE IF ( FTYPE2 .EQ. BNDARY3 ) THEN
 
-            C = GETNUM( 1-NTHIK2, NCOLS2+NTHIK2, 1, 'Enter column for this point, or -9999 to end list' )
+            C = GETVAL( 1-NTHIK2, NCOLS2+NTHIK2, 1, 'Enter column for this point, or -9999 to end list' )
             IF ( C .LE. -NTHIK2 )  EXIT
-            R = GETNUM( 1-NTHIK2, NROWS2+NTHIK2, 1, 'Enter row    for this point' )
+            R = GETVAL( 1-NTHIK2, NROWS2+NTHIK2, 1, 'Enter row    for this point' )
             IF ( NLAYS2 .GT. 1 ) THEN
-                L = GETNUM( 1, NLAYS2, 1, 'Enter layer  for this point' )
+                L = GETVAL( 1, NLAYS2, 1, 'Enter layer  for this point' )
             ELSE
                 L = 1
             END IF
@@ -322,10 +322,10 @@ PROGRAM M3PROBE
 
         ELSE IF ( FTYPE2 .EQ. CUSTOM3 ) THEN
 
-            C = GETNUM( 0, NCOLS2, 1, 'Enter index for this point, or 0 to end list' )
+            C = GETVAL( 0, NCOLS2, 1, 'Enter index for this point, or 0 to end list' )
             IF ( C .LE. 0 )  EXIT
             IF ( NLAYS2 .GT. 1 ) THEN
-                L = GETNUM( 1, NLAYS2, 1, 'Enter layer  for this point' )
+                L = GETVAL( 1, NLAYS2, 1, 'Enter layer  for this point' )
             ELSE
                 L = 1
             END IF

@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: GETREAL.html 156 2015-02-12 22:04:24Z coats $" -->
+<!-- "$Id: GETREAL.html 175 2015-02-27 12:57:33Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> GETREAL() </TITLE>
 </HEAD>
@@ -29,6 +29,7 @@
 
 <H2> Summary: </H2>
 
+    <BLOCKQUOTE>
     Display the  <CODE>PROMPT</CODE> to standard output, get the user's
     response as a <CODE>REAL</CODE>, and for <CODE>GETREAL()</CODE>
     check that it is within  rangee <CODE>[LO,HI]</CODE>.  Return
@@ -45,20 +46,33 @@
     <P> 
 
     See also  
+    <A HREF = "GETVAL.html">GETVAL()</A>,
     <A HREF = "GETDATE.html">GETDATE()</A>,
     <A HREF = "GETDBLE.html">GETDBLE()</A>,
     <A HREF = "GETMENU.html">GETMENU()</A>,
     <A HREF = "GETNUM.html" >GETNUM()</A>,
     <A HREF = "GETSTR.html" >GETSTR()</A>, and
     <A HREF = "GETYN.html"  >GETYN()</A>.
-<P> 
+    <P> 
+    </BLOCKQUOTE>
 
         
-<H2> Preconditions: </H2>  none
-<P> 
+<H2> Preconditions: </H2>
+
+    <BLOCKQUOTE>
+    none
+    </BLOCKQUOTE>
 
     
 <H2> Fortran Usage: </H2>
+
+<BLOCKQUOTE>
+
+    <A HREF="GETVAL.html"><STRONG><CODE>GETVAL()</CODE></STRONG></A> is the
+    Fortran-90-generic <EM>(I/O&nbsp;API-3.2 or later only)</EM> that
+    calls these or various other similar routines, as determined
+    by the argument-list.
+    <P>
 
     For Fortran-90 declarations and interface checking:    
     <PRE>
@@ -72,19 +86,28 @@
     <A HREF = "LATLON.txt">LATLON</A> or
     <A HREF = "PRESZ.txt">PRESZ</A>
     for additional usage examples.)
+</BLOCKQUOTE>
 
 <PRE>
     ...
-    REAL           X
-    REAL           GETREAL
+    USE M3UTILIO    !! else:  REAL, EXTERNAL :: GETREAL, GETREAL1
     ...
-    X = GETREAL( 0.0, 10.0, 7.5, 'Give me a number between 0.0 and 10.0' )
+    REAL        X, Y, Z, W
+    INTEGER     N
+    ...
+    X = GETREAL( 0.0, 10.0, 7.5, 'Give me a (REAL) number between 0.0 and 10.0' )
+    Y = GETREAL1( 23.4, 'Give me a  (REAL)   number' )
+    Z = GETVAL(   12.3, 'Give me a  (REAL)   number' )  !!  only if USE M3UTILIO
+    N = GETVAL(   99,   'Give me a (INTEGER) number' )  !!  only if USE M3UTILIO
     ...
 </PRE><P> 
     
-<H2> C Usage: </H2>  don't
-<P>         
+<H2> C Usage: </H2>
 
+    <BLOCKQUOTE>
+    Don't, unless you're already comfortable with mixed-language programming.
+    </BLOCKQUOTE>
+    <P>
 
 <HR>
 

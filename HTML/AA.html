@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: AA.html 165 2015-02-24 06:51:40Z coats $" -->
+<!-- "$Id: AA.html 175 2015-02-27 12:57:33Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE">
 <TITLE>  The BAMS/EDSS/Models-3 I/O&nbsp;API </TITLE>
 </HEAD>
@@ -116,7 +116,8 @@ Contents
     MCNC, &copy; 1992-2013 Carlie J. Coats, Jr., &copy; 2003-2013
     Baron Advanced Meteorological Systems, LLC., &copy; 2014-2015
     UNC Institute for the Environment.  Distributed under the
-    GNU Library Public License (LGPL) Version&nbsp;2.1.
+    GNU Library Public License (LGPL) Version&nbsp;2.1. See the
+    <A HREF="NOTICES.html">Notices and Acknowledgements</A> page.
     <P>
 
     Both the original working prototype and this version are implemented
@@ -588,7 +589,7 @@ Contents
                        <CODE>LAM2LL,  LAM2UTM, LAM2POL, LAM2TRM, LAM2EQM, LAM2ALB</CODE><BR>
                        <CODE>POL2LL,  POL2LAM, POL2UTM, POL2TRM, POL2EQM, POL2ALB</CODE><BR>
                        <CODE>TRM2LL,  TRM2LAM, TRM2UTM, TRM2POL, TRM2EQM, TRM2ALB</CODE><BR>
-                       <CODE>EQM2LL,  EQM2LAM, EQM2UTM, EQM2POL, EQM2TRM, EQM2ALB></CODE><BR>
+                       <CODE>EQM2LL,  EQM2LAM, EQM2UTM, EQM2POL, EQM2TRM, EQM2ALB</CODE><BR>
                        <CODE>ALB2LL,  ALB2LAM, ALB2UTM, ALB2POL, ALB2TRM, ALB2EQM</CODE><BR>
                   <DD> Perform single-point coordinate transforms                       
                   <P>
@@ -1006,10 +1007,13 @@ Contents
 
     The following programs are designed to do simple interactive
     analysis and data manipulation tasks on I/O&nbsp;API files. The
-    source code for these programs is available <A HREF =
-    "gpl.txt">under the GNU GPL License, Version 2</A>, and can be
-    downloaded as part of the I/O API tar-ball from
-    <A HREF = "AVAIL.html">from this page</A>.
+    source code for these programs is available
+    <A HREF = "gpl.txt">under the GNU GPL License, Version 2</A>, and
+    can be downloaded as part of the I/O API tar-ball from
+    <A HREF="AVAIL.html">from this page</A>.  All of these are character
+    based applications (run in, e.g., an  <VAR>xterm</VAR>) rather than
+    being GUI X applications; consequently, they can be run either
+    interactively or from relatively simple scripts.
     <P>
 
     With the exception of programs designed specifically for
@@ -1222,7 +1226,8 @@ Contents
              <STRONG>latlon</STRONG>:
              </A>
              construct GRIDDED and/or BOUNDARY files with variables the
-             cell-center <CODE>LAT</CODE> and <CODE>LON</CODE>.
+             cell-center <CODE>LAT</CODE> and <CODE>LON</CODE>.for
+             Fortran, 
         <DT> <A HREF = "PROJTOOL.html" >
              <STRONG>projtool</STRONG>:
              </A>
@@ -1242,7 +1247,7 @@ Contents
              computations for Lat-Lon, Lambert, and UTM coordinate
              systems.
         <P>
-        <DT> <STRONG>Programs for date-manipulation </STRONG><P>
+        <DT> <STRONG><A NAME="datepgms">Programs</A> for date-manipulation</STRONG><P>
              Verbose, prompt based, <STRONG>for interactive use</STRONG>:
         <DT> <A HREF = "GREGDATE.html" >
              <STRONG>gregdate</STRONG>:
@@ -1384,7 +1389,7 @@ Send comments to
 
 <!--#include virtual="/INCLUDES/footer.html" -->
     <PRE>
-    $Id: AA.html 165 2015-02-24 06:51:40Z coats $
+    $Id: AA.html 175 2015-02-27 12:57:33Z coats $
     </PRE>
 
 </BODY>

@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: M3PROBE.html 151 2015-02-06 17:18:13Z coats $" -->
+<!-- "$Id: M3PROBE.html 175 2015-02-27 12:57:33Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> Program M3PROBE </TITLE>
 </HEAD>
@@ -41,13 +41,13 @@
     name </A>  of the input file, and <VAR>REPORT</VAR> is the logical
     name of the  report file to which the ASCII time series report is
     printed.  <VAR>INFILE</VAR> must be of type <CODE>GRDDED3</CODE>,
-    <CODE>CUSTOM<3</CODE>, or <CODE>BNDARY3</CODE>. <STRONG>The program
+    <CODE>CUSTOM3</CODE>, or <CODE>BNDARY3</CODE>. <STRONG>The program
     will prompt you</STRONG> for the starting and ending date and time and
     the time step for the report period, the variable to be reported,
     and (repeatedly) for the grid/vector coordinates for the selected
     set of points to be reported.  End the list of points with a zero
     (<CODE>0</CODE>) response to the relevant prompt for 
-    <CODE>GRDDED3</CODE> or <CODE>CUSTOM<3</CODE> files, or
+    <CODE>GRDDED3</CODE> or <CODE>CUSTOM3</CODE> files, or
     <CODE>-9999</CODE> for <CODE>BNDARY3</CODE> files.  Default values
     for the time period are computed from the metadata in the
     <VAR>INFILE</VAR> header, and may be accepted by hitting the
@@ -76,22 +76,22 @@
     setenv REPORT ${data}/SPEED.base.2013239.txt
     set    UI  = /tmp/speed.$$
 
-    echo "Yes           " >&amp;! ${UI}     #  Yes, continue with program
-    echo "              " >>  ${UI}     #  default starting date for run
-    echo "              " >>  ${UI}     #  default starting time
-    echo "              " >>  ${UI}     #  default time step
-    echo "              " >>  ${UI}     #  default ending date
-    echo "              " >>  ${UI}     #  default ending time
-    echo "TSFC          " >>  ${UI}     #  name of the variable to be reported
-    echo "1             " >>  ${UI}     #  col for first  point to be reported
-    echo "4000          " >>  ${UI}     #  row for first  point...
-    echo "1             " >>  ${UI}     #  col for second point...
-    echo "5000          " >>  ${UI}     #  row for second point...
-    echo "1             " >>  ${UI}     #  col for third  point...
-    echo "7000          " >>  ${UI}     #  row for third  point...
-    echo "0             " >>  ${UI}     #  no more points to process
+    echo "Yes           " &gt;&amp;! ${UI}     #  Yes, continue with program
+    echo "              " &gt;&gt;  ${UI}     #  default starting date for run
+    echo "              " &gt;&gt;  ${UI}     #  default starting time
+    echo "              " &gt;&gt;  ${UI}     #  default time step
+    echo "              " &gt;&gt;  ${UI}     #  default ending date
+    echo "              " &gt;&gt;  ${UI}     #  default ending time
+    echo "TSFC          " &gt;&gt;  ${UI}     #  name of the variable to be reported
+    echo "1             " &gt;&gt;  ${UI}     #  col for first  point to be reported
+    echo "4000          " &gt;&gt;  ${UI}     #  row for first  point...
+    echo "1             " &gt;&gt;  ${UI}     #  col for second point...
+    echo "5000          " &gt;&gt;  ${UI}     #  row for second point...
+    echo "1             " &gt;&gt;  ${UI}     #  col for third  point...
+    echo "7000          " &gt;&gt;  ${UI}     #  row for third  point...
+    echo "0             " &gt;&gt;  ${UI}     #  no more points to process
 
-    m3probe < ${UI}
+    m3probe &lt; ${UI}
     set foo = ${status}
     if ( ${foo} != 0 )  then
         rm ${UI}
