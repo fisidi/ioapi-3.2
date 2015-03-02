@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: TUTORIAL.html 175 2015-02-27 12:57:33Z coats $" -->
+<!-- "$Id: TUTORIAL.html 177 2015-03-02 16:20:58Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE">
 <TITLE> TUTORIAL:  Using the I/O&nbsp;API </TITLE>
 </HEAD>
@@ -42,7 +42,9 @@
 
         <DT> <A HREF = "#datetime"> Date and Time Conventions</A>
 
-        <DT> <A HREF = "#grids"> Grid Conventions</A>
+        <DT> <A HREF = "#typical"> outline for a typical modeling program</A>
+
+        <DT> <A HREF = "#datetime"> Date and Time Conventions</A>
         <P>
 
         <DT> <A HREF = "AA.html"> I/O&nbsp;API Programmers Manual</A>
@@ -401,6 +403,27 @@ There are three kinds of time-step structure supported:
     time step actually present -- or they will fail.
 </DL>
 </BLOCKQUOTE>
+<STRONG>NOTE&nbsp;1:</STRONG> this is designed to support very-long time step sequences:
+the author has performed 33-year runs with time steps as small as 30
+minutes (over 500,000 time steps), and the access methods are designed
+to support analysis and visualization of such large (&gt;3TB) data sets.
+<P>
+<STRONG>NOTE&nbsp;2:</STRONG> By convention, <STRONG>standard-year and
+standard-week data</STRONG> are represented by using
+<STRONG>year&nbsp;0</STRONG>:<BR>
+for example, if one has monthly standard year data, one may store the
+data in a file starting at Dec.&nbsp;16 of Year&nbsp;-1
+(<CODE>JDATE=-650=-1000+350</CODE>, where <CODE>YYYY=(-1000),
+DDD=350</CODE>), with time step 7300000 (15 days, 10 hours) and 14
+time-steps (for December of Year&nbsp;(-1) through January of
+Year&nbsp;1), to provide &quot;fenceposts&quot; for daily or hourly
+interpolation using <CODE>INTERP3()</CODE>.<BR>
+Similarly, a standard-week file might have starting date&amp;time
+0000001:000000, time step 240000 (one day), and 7 time steps; one
+would then use <CODE>CURRSTEP()</CODE> (described below) to determine
+dates and times for <CODE>READ3()</CODE>.
+<P>
+
 There are eight <A HREF = "DATATYPES.html#struct">structure-types</A>
 and four <A HREF = "DATATYPES.html#basic">basic types</A> of data
 supported by the I/O&nbsp;API.  The structure-types are associated with
@@ -1167,7 +1190,10 @@ routines for manipulating dates and times  are the following:
           utility subroutine which returns the month (1, ..., 12) and
           day of month (1, ..., 31) for the specified Julian date;
           <BR>
-          <EM>Non-standard usage dictated by the emissions-people</EM>
+          <EM><STRONG>NOTE:</STRONG> Non-standard week (beginning with
+          Monday instead of Sunday) dictated by the emissions
+          modelers.</EM>
+          <P>
 
     <DT>  <A HREF = "WKDAY.html"><STRONG><CODE>WKDAY( JDATE )</CODE></STRONG></A>
           is a utility  integer function which returns the day-of-week
@@ -1239,7 +1265,185 @@ Particularly notable are the following:
 </BLOCKQUOTE>
 <P>
 </BLOCKQUOTE>
+</BLOCKQUOTE>
 
+<HR>
+
+     <H2> <A NAME = "grids">
+     Typical Modeling Program Outline
+    </A> </H2>
+
+<BLOCKQUOTE>
+
+Here is an <A NAME="typical">example</A> of the typical outline for a
+program that processes time stepped data (i.e., most modeling programs,
+and most analysis programs), using the most-common I/O&nbsp;API routines:
+
+<PRE>
+PROGRAM MYPROGRAM
+    ...
+    USE M3UTILIO
+    IMPLICIT NONE
+    ...
+    CHARACTER*16, PARAMETER :: PNAME = 'MYPROGRAM'
+    CHARACTER*72, PARAMETER :: BAR   =  &
+'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+    ...
+    INTEGER     LUNIT           ! <I> unit number for log file</I>
+    INTEGER     ISTAT
+    INTEGER     SDATE, STIME, TSTEP, NRECS
+    INTEGER     JDATE, JTIME, N
+    
+    REAL        BARFAC      ! <I>used in computing BAR</I>
+
+    INTEGER     NCOLS       ! <I>number of grid columns</I>
+    INTEGER     NROWS       ! <I>number of grid rows</I>
+    INTEGER     NLAYS       ! <I>number of layers</I>
+    INTEGER     NTHIK       ! <I>bdy thickness</I>
+    INTEGER     NVARS       ! <I>number of variables</I>
+    INTEGER     GDTYP       ! <I>grid type:  1=LAT-LON, 2=Lambert, ...</I>
+    INTEGER     VGTYP       ! <I>vertical coord type</I>
+    REAL*8      P_ALP       ! <I>first, second, third map</I>
+    REAL*8      P_BET       ! <I>projection descriptive</I>
+    REAL*8      P_GAM       ! <I>parameters.</I>
+    REAL*8      XCENT       ! <I>lon for coord-system X=0</I>
+    REAL*8      YCENT       ! <I>lat for coord-system Y=0</I>
+    REAL*8      XORIG       ! <I>X-coordinate origin of grid (map units)</I>
+    REAL*8      YORIG       ! <I>Y-coordinate origin of grid</I>
+    REAL*8      XCELL       ! <I>X-coordinate cell dimension</I>
+    REAL*8      YCELL       ! <I>Y-coordinate cell dimension</I>
+    REAL        VGTOP       ! <I>vertical coord top (for sigma coords)</I>
+    REAL        VGLEV( MXLAYS3+1 )     ! <I> &quot;full&quot; levels</I>
+    ...
+    CHARACTER*256   MESG
+    ...
+    REAL, ALLOCATABLE ::  QV( :,:,: )
+    REAL, ALLOCATABLE :: TA2( :,: )
+    REAL, ALLOCATABLE :: BAR( :,: )
+    ...
+    !!.............  <I>begin body of program</I>  .......................
+
+    LUNIT = INIT3()
+    WRITE( LUNIT, '( 5X, A )' )  ' ',BAR, ' ',                              &amp;
+'Program MYPROGRAM to compute BAR using data from files METCRO2D and',      &amp;
+'METCRO3D, and write the result to file OUTCRO2D.',                         &amp;
+'',                                                                         &amp;
+'THE PROGRAM WILL PROMPT YOU for the starting and ending date&amp;time, and',   &amp;
+'time step to process, and the factor BARFAC to use in the computation.',   &amp;
+'',                                                                         &amp;
+'PRECONDITIONS REQUIRED:',                                                  &amp;
+'    setenv METCRO2D          &lt;path name&gt;',                                 &amp;
+'    setenv METCRO3D          &lt;path name&gt;',                                 &amp;
+'    setenv OUTCRO2D          &lt;path name for output file&gt;',                 &amp;
+BAR, ''
+    ...
+
+    !!........  <I>Open input files.  Perform consistency checks.</I>
+    
+    IF ( .NOT.OPEN3( 'METCRO3D', FSREAD3, PNAME ) ) THEN
+        CALL M3EXIT( PNAME, 0,0, 'Could not OPEN3(METCRO3D,...)', 2 )
+    ELSE IF ( .NOT.DESC3( 'METCRO3D' ) ) THEN
+        CALL M3EXIT( PNAME, 0,0, 'Could not DESC3(METCRO3D)', 2 )
+    ELSE
+        NCOLS = NCOLS3D
+        NROWS = NROWS3D
+        NLAYS = NLAYS3D
+        GDTYP = GDTYP3D
+        P_ALP = P_ALP3D
+        P_BET = P_BET3D
+        P_GAM = P_GAM3D
+        XCENT = XCENT3D
+        YCENT = YCENT3D
+        XORIG = XORIG3D
+        YORIG = YORIG3D
+        XCELL = XCELL3D
+        YCELL = YCELL3D
+        VGTYP = VGTYP3D
+        VGTOP = VGTOP3D
+        VGLEV( : )  = VGLVS3D( : )
+    END IF
+    
+    IF ( .NOT.OPEN3( 'METCRO2D', FSREAD3, PNAME ) ) THEN
+        CALL M3EXIT( PNAME, 0,0, 'Could not OPEN3(METCRO2D,...)', 2 )
+    ELSE IF ( .NOT.DESC3( 'METCRO2D' ) ) THEN
+        CALL M3EXIT( PNAME, 0,0, 'Could not DESC3(METCRO2D)', 2 )
+    ELSE IF ( .NOT.FILCHK3( 'METCRO2D',  GRDDED3,NCOLS, NROWS, 1, 1 ) ) THEN
+        CALL M3EXIT( PNAME, 0,0, 'Inconsistent dimensions  for "METCRO2D"', 2 )
+    ELSE IF ( .NOT.GRDCHK3( 'METCRO2D',                                &amp;
+                            P_ALP, P_BET, P_GAM, XCENT, YCENT,      &amp;
+                            XORIG, YORIG, XCELL, YCELL,             &amp;
+                            1, VGTYP, VGTOP, VGLEV ) ) THEN
+        CALL M3EXIT( PNAME, 0,0, 'Inconsistent map-projection or grid for "METCRO2D"', 2 )
+    END IF
+    ...
+
+    !!........  <I>Get SDATE, STIME, TSTEP, NRECS, BARFAC from the user:</I>
+    
+    CALL RUNSPEC( METFILE, .FALSE., SDATE, STIME, TSTEP, NRECS )
+    BARFAC = GETVAL( 0.0, 1.0, 0.7071, 'Enter BARFAC' )
+    ...
+
+    !!........  <I>Open output file(s).  First, fill in FDESC...</I>
+    ...
+    NVARS3D = ...
+    NLAYS3D = 1
+    SDATE3D = SDATE
+    STIME3D = STIME
+    TSTEP3D = TSTEP
+    ...
+    VNAME3D(1) = 'BAR'
+    VTYPE3D(1) = M3REAL
+    UNITS3D(1) = 'Somethings'
+    VDESC3D(1) = 'dingbat that plings the inghams'
+    ...
+    IF ( .NOT.OPEN3( 'OUTCRO2D', FSUNKN3, PNAME ) ) THEN
+        CALL M3EXIT( PNAME, 0,0, 'Could not OPEN3(OUTCRO2D,...)', 2 )
+    END IF
+    ...
+
+    !!........  <I>Allocate arrays</I>
+    
+    ALLOCATE ( TA2( NCOLS,NROWS ),      &amp;
+               BAR( NCOLS,NROWS ),      &amp;
+                QV( NCOLS,NROWS,NLAYS ), STAT = ISTAT
+    IF ( ISTAT .NE. 0 ) THEN
+        WRITE( MESG, '(A, I9)' ) 'Allocation failure:  STAT=', ISTAT
+        CALL M3EXIT( PNAME, 0,0, MESG, 2 )
+    END IF
+    ...
+
+    !!........  <I>Main processing loop</I>
+
+    JDATE = SDATE
+    JTIME = STIME
+    DO N = 1, NRECS     !!  <I>loop on timesteps</I>
+        ...
+        IF ( .NOT.READ3( 'METCRO2D', 'TA2', JDATE, JTIME, 1, TA2 ) ) THEN
+            MESG = 'ERROR reading "TA2" from "METCRO2D"'
+            CALL M3EXIT( PNAME, 0,0, MESG, 2 )
+        END IF
+        IF ( .NOT.READ3( 'METCRO3D', 'QV', JDATE, JTIME, ALLAYS3, QV ) ) THEN
+            MESG = 'ERROR reading "QV" from "METCRO3D"'
+            CALL M3EXIT( PNAME, 0,0, MESG, 2 )
+        END IF
+        ...
+        <I>[compute BAR from TA2,QV etc... using BARFAC, etc.]</I>
+        ...
+        IF ( .NOT.WRITE3( 'OUTCRO2D', 'BAR', JDATE, JTIME, BAR ) ) THEN
+            MESG = 'ERROR writing "BAR" to "OUTCRO2D"'
+            CALL M3EXIT( PNAME, 0,0, MESG, 2 )
+        END IF
+        ...
+        CALL NEXTIME( JDATE, JTIME, TSTEP )
+
+    END DO              !!  <I>end loop on timesteps</I>
+    ...
+    CALL M3EXIT( PNAME, 0, 0, 'Successful completion', 0 )
+
+END PROGRAM FOO
+</PRE>
+<P>
+</BLOCKQUOTE>
 
 
 <HR> <!----------------------------------------------------------------->

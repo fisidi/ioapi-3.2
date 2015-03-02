@@ -2,7 +2,7 @@
 PROGRAM  VERTINTEGRAL
 
     !!***********************************************************************
-    !! Version "$Id: vertintegral.f90 101 2015-01-16 16:52:50Z coats $"
+    !! Version "$Id: vertintegral.f90 176 2015-03-02 16:20:06Z coats $"
     !! EDSS/Models-3 M3TOOLS.
     !! Copyright (C) 2009 UNC Institute for the Environment and
     !! Baron Advanced Meteorological Systems, LLC, and (C) 2015 UNC IE.
@@ -91,7 +91,7 @@ PROGRAM  VERTINTEGRAL
     INTEGER         NLAYS      ! number of layers
     INTEGER         NTHIK      ! bdy thickness
     INTEGER         NVARS      ! number of variables
-    INTEGER         GDTYP      ! grid type:  1=LAT-LON, 2=UTM, ...
+    INTEGER         GDTYP      ! grid type:  1=LAT-LON, 2=Lambert, ...
     INTEGER         VGTYP      ! vertical coord type
     INTEGER         SDATE      ! starting date
     INTEGER         STIME      ! starting time
@@ -182,7 +182,7 @@ PROGRAM  VERTINTEGRAL
 '    Chapel Hill, NC 27599-1105',                                           &
 '',                                                                         &
 'Program version: ',                                                        &
-'$Id: vertintegral.f90 101 2015-01-16 16:52:50Z coats $',&
+'$Id: vertintegral.f90 176 2015-03-02 16:20:06Z coats $',&
 ''
 
     WRITE ( LUNIT,'( 5X , A )' )

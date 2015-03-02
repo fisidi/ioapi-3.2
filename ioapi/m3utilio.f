@@ -2,7 +2,7 @@
         MODULE M3UTILIO
 
         !!-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-        !! Version "$Id: m3utilio.f 154 2015-02-12 17:32:28Z coats $"
+        !! Version "$Id: m3utilio.f 176 2015-03-02 16:20:06Z coats $"
         !! Copyright (c) 2004-2013 Baron Advanced Meteorological Systems,
         !! (c) 2007-2013 Carlie J. Coats, Jr., and
         !! (C) 2014 UNC Institute for the Environment.
@@ -40,7 +40,7 @@
             INCLUDE 'IODECL3.EXT'       !  I/O API function declarations
 
             CHARACTER*72, PRIVATE, SAVE :: ID =
-     &'$Id:: m3utilio.f 154 2015-02-12 17:32:28Z coats                $'
+     &'$Id:: m3utilio.f 176 2015-03-02 16:20:06Z coats                $'
 
 
             !!........  PUBLIC Routines:
@@ -989,6 +989,18 @@
                 CHARACTER*(*), INTENT(IN   ) :: DEFAULT        !  default logical file name
                 CHARACTER*(*), INTENT(IN   ) :: CALLER         !  caller-name for logging messages
                 END FUNCTION  PROMPTMFILE
+            END INTERFACE
+
+            INTERFACE
+                SUBROUTINE RUNSPEC( FNAME, USEENV, 
+     &                              SDATE, STIME, TSTEP, NRECS )
+                CHARACTER(LEN=*), INTENT(IN   ) :: FNAME        !!  input file
+                LOGICAL,          INTENT(IN   ) :: USEENV       !!  input file
+                INTEGER,          INTENT(  OUT) :: SDATE        !!  starting date YYYYDDD
+                INTEGER,          INTENT(  OUT) :: STIME        !!  starting time  H*MMSS
+                INTEGER,          INTENT(  OUT) :: TSTEP        !!  time step      H*MMSS
+                INTEGER,          INTENT(  OUT) :: NRECS        !!  Number of records
+                END  SUBROUTINE RUNSPEC
             END INTERFACE
 
             INTERFACE

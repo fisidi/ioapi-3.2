@@ -2,7 +2,7 @@
 PROGRAM M3PROBE
 
     !!***************************************************************
-    !! Version "$Id: M3PROBE.txt 175 2015-02-27 12:57:33Z coats $"
+    !! Version "$Id: M3PROBE.txt 177 2015-03-02 16:20:58Z coats $"
     !! EDSS/Models-3 M3TOOLS.
     !! Copyright (C) 1992-2002 MCNC, 
     !! (C) 1995-2002, 2005-2013 Carlie J. Coats, Jr.,
@@ -11,7 +11,7 @@ PROGRAM M3PROBE
     !! Distributed under the GNU GENERAL PUBLIC LICENSE version 2
     !! See file "GPL.txt" for conditions of use.
     !!..............................................................
-    !!  program body starts at line  87
+    !!  program body starts at line  99
     !!
     !!  DESCRIPTION:
     !!      See splash screen
@@ -28,7 +28,8 @@ PROGRAM M3PROBE
     !!      better error-checking, support for BNDARY3 files, INTEGER
     !!      and REAL*8 variables.
     !!      Version  02/2015 by CJC for I/O API v3.2:  F90 free-format source
-    !!      Support for M3INT8 variables; use generics for "GET*()"
+    !!      Support for M3INT8 variables; use generics for "GET*()",
+    !!      call RUNSPEC() to get SDATE:STIME:TSTEP:NRECS
     !!***************************************************************
 
     USE M3UTILIO
@@ -86,11 +87,6 @@ PROGRAM M3PROBE
     REAL*8          YORIG2
     REAL*8          XCELL2
     REAL*8          YCELL2
-    INTEGER         SDATE2
-    INTEGER         STIME2
-    INTEGER         TSTEP2
-    INTEGER         EDATE2
-    INTEGER         ETIME2
 
     REAL     , ALLOCATABLE :: RBUF( : )
     INTEGER  , ALLOCATABLE :: IBUF( : )
@@ -115,9 +111,9 @@ PROGRAM M3PROBE
 '',                                                                         &
 '    at most 256 points in the set of points.',                             &
 '',                                                                         &
-'THE PROGRAM WILL PROMPT YOU for starting and ending date time for the',    &
-'report period, variable, and grid/vector coordinates for the selected',    &
-'set of points.',                                                           &
+'THE PROGRAM WILL PROMPT YOU for starting and ending date&time for the',    &
+'report period, time step, variable-name, and grid/vector coordinates',     &
+'for the selected set of points.',                                          &
 '',                                                                         &
 'See URL',                                                                  &
 '',                                                                         &
@@ -139,7 +135,7 @@ PROGRAM M3PROBE
 '    Chapel Hill, NC 27599-1105',                                           &
 '',                                                                         &
 'Program version: ',                                                        &
-'$Id: M3PROBE.txt 175 2015-02-27 12:57:33Z coats $',&
+'$Id: M3PROBE.txt 177 2015-03-02 16:20:58Z coats $',&
 ''
 
     IF ( .NOT. GETVAL( 'Continue with program?', .TRUE. ) ) THEN
@@ -178,12 +174,6 @@ PROGRAM M3PROBE
         YORIG2 = YORIG3D
         XCELL2 = XCELL3D
         YCELL2 = YCELL3D
-
-        SDATE2 = SDATE3D
-        STIME2 = STIME3D
-        TSTEP2 = TSTEP3D
-
-        CALL LASTTIME( SDATE2, STIME2, TSTEP2, MXREC3D, EDATE2, ETIME2 )
 
         IF      ( FTYPE2 .EQ. CUSTOM3 ) THEN
             NSIZE2 = NCOLS2 * NLAYS2
@@ -234,19 +224,7 @@ PROGRAM M3PROBE
 
     !!...............  Get date&time, probe-point specs:
 
-    IF ( TSTEP2 .GT. 0 ) THEN
-        SDATE = GETVAL( SDATE2, EDATE2, SDATE2, 'Enter starting date  for ${REPORT}' )
-        STIME = GETVAL(      0, 999999, STIME2, 'Enter starting time  for ${REPORT}' )
-        EDATE = GETVAL( SDATE , EDATE2, EDATE2, 'Enter ending   date  for ${REPORT}' )
-        ETIME = GETVAL(      0, 999999, ETIME2, 'Enter ending   time  for ${REPORT}' )
-        TSTEP = GETVAL( TSTEP2, 999999, TSTEP2, 'Enter     time step  for ${REPORT}'     )
-        NRECS = CURREC( EDATE, ETIME, SDATE, STIME, TSTEP, JDATE, JTIME )
-    ELSE
-        SDATE = 0
-        STIME = 0
-        TSTEP = 0
-        NRECS = 1
-    END IF
+    CALL RUNSPEC( 'INFILE', .FALSE., SDATE, STIME, TSTEP, NRECS )
 
     CALL M3MESG( BLANK )
     CALL M3MESG( 'Available variables are:' )

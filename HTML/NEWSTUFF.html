@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML> 
 <HEAD>
-<!-- "$Id: NEWSTUFF.html 175 2015-02-27 12:57:33Z coats $" -->
+<!-- "$Id: NEWSTUFF.html 177 2015-03-02 16:20:58Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> 
     What's New with the I/O&nbsp;API
@@ -16,7 +16,7 @@
       MARGINWIDTH="15">
 
     <EM>
-    $Id: NEWSTUFF.html 175 2015-02-27 12:57:33Z coats $
+    $Id: NEWSTUFF.html 177 2015-03-02 16:20:58Z coats $
     </EM>
     <HR>
 
@@ -54,6 +54,8 @@
                Standards-violation fixes in <VAR>getyn(), getstr(),
                getreal(), getnum(), getmenu(), getdble(), promptmfile(),
                promptffile(), year4(), skipl()</VAR> </A>
+         <LI>  <A HREF = "#mar0232015">
+               New routine RUNSPEC()</A>
          <LI>  <A HREF = "#ver32">
                <STRONG>I/O API Version 3.2-<VAR>beta</VAR></STRONG></A>
          <LI>  <A HREF = "#jan222015">
@@ -483,10 +485,41 @@
 
 <HR> <!----------------------------------------------------------------->
     
+<H2> <A NAME = "mar022015">
+    New routine RUNSPEC()</A>
+</A></H2>
+   
+    March&nbsp;2, 2015:
+    <P>
+    <A HREF="RUNSPEC.html"><CODE>SUBROUTINE&nbsp;RUNSPEC(
+    FNAME,&nbsp;USEENV,&nbsp;SDATE,&nbsp;STIME,&nbsp;TSTEP,&nbsp;NRECS&nbsp;)</CODE></A>
+    returns a time step sequence compatible with use of <CODE>FNAME</COE>
+    as an input file:
+    <BLOCKQUOTE>
+    If <CODE>FNAME</CODE> is blank, default <CODE>SDATE:STIME</CODE> are
+    from the wall-clock, and default <CODE>TSTEP</CODE> is 1 hour.
+    <P>
+    If <CODE>FNAME</CODE> is time independent, return <CODE>SDATE=STIME=TSTEP=0,
+    NRECS=1</CODE>.
+    <P>
+    Else if  <CODE>USEENV</CODE>, get <CODE>SDATE, STIME, TSTEP, EDATE,
+    ETIME</CODE> from the environment and use them to calculate NRECS.
+    <P>
+    Else prompt the user for <CODE>SDATE, STIME, TSTEP,
+    EDATE, ETIME</CODE> and use them to calculate NRECS.
+    </BLOCKQUOTE>
+    <P>
+
+    Back to <STRONG><EM><A HREF = "#contents">Contents</A></EM></STRONG>
+    <P>
+   
+
+<HR> <!----------------------------------------------------------------->
+    
 <H2> <A NAME = "feb232015">
-    Standards-violation fixes in <VAR>getyn(), getstr(),
-               getreal(), getnum(), getmenu(), getdble(), promptmfile(),
-               promptffile(), year4(), skipl()</VAR>
+    Standards-violation fixes in <VAR>getyn(), getstr(), getreal(),
+    getnum(), getmenu(), getdble(), promptmfile(), promptffile(),
+    year4(), skipl()</VAR>
 </A></H2>
    
     Feb&nbsp;23, 2015:
@@ -500,8 +533,8 @@
              for the above, in cases of failures.
     </OL>
     In <STRONG>all</STRONG> of the above I/O&nbsp;API routines, Marc
-    Houyoux made changes which were in complete violation of those
-    coding standards.
+    Houyoux made changes which were in violation of those coding
+    standards.
     <P>
     Now corrected.
     <P>
@@ -5280,7 +5313,7 @@ Send comments to
 
 
     <PRE>
-    $Id: NEWSTUFF.html 175 2015-02-27 12:57:33Z coats $
+    $Id: NEWSTUFF.html 177 2015-03-02 16:20:58Z coats $
     </PRE>
 </BODY>      <!--end body  -->
 </HTML>      <!--end html  -->
