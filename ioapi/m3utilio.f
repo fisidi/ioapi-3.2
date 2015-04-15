@@ -2,7 +2,7 @@
         MODULE M3UTILIO
 
         !!-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-        !! Version "$Id: m3utilio.f 176 2015-03-02 16:20:06Z coats $"
+        !! Version "$Id: m3utilio.f 182 2015-04-15 18:57:30Z coats $"
         !! Copyright (c) 2004-2013 Baron Advanced Meteorological Systems,
         !! (c) 2007-2013 Carlie J. Coats, Jr., and
         !! (C) 2014 UNC Institute for the Environment.
@@ -40,7 +40,7 @@
             INCLUDE 'IODECL3.EXT'       !  I/O API function declarations
 
             CHARACTER*72, PRIVATE, SAVE :: ID =
-     &'$Id:: m3utilio.f 176 2015-03-02 16:20:06Z coats                $'
+     &'$Id:: m3utilio.f 182 2015-04-15 18:57:30Z coats                $'
 
 
             !!........  PUBLIC Routines:
@@ -370,14 +370,6 @@
                 INTEGER      , INTENT(  OUT) :: STAT
                 END FUNCTION ENVREAL
 
-                SUBROUTINE ENVSTR( LNAME, DESC, DEFAULT, EQNAME, STAT )
-                CHARACTER*(*), INTENT(IN   ) :: LNAME
-                CHARACTER*(*), INTENT(IN   ) :: DESC
-                CHARACTER*(*), INTENT(IN   ) :: DEFAULT
-                CHARACTER*(*), INTENT(  OUT) :: EQNAME
-                INTEGER      , INTENT(  OUT) :: STAT
-                END SUBROUTINE ENVSTR
-
                 LOGICAL FUNCTION ENVYN( LNAME, DESC, DEFAULT, STAT )
                 CHARACTER*(*), INTENT(IN   ) :: LNAME
                 CHARACTER*(*), INTENT(IN   ) :: DESC
@@ -386,6 +378,20 @@
                 END FUNCTION ENVYN
 
             END INTERFACE           !! envget()
+
+
+            INTERFACE
+
+                SUBROUTINE ENVSTR( LNAME, DESC, DEFAULT, EQNAME, STAT )
+                CHARACTER*(*), INTENT(IN   ) :: LNAME
+                CHARACTER*(*), INTENT(IN   ) :: DESC
+                CHARACTER*(*), INTENT(IN   ) :: DEFAULT
+                CHARACTER*(*), INTENT(  OUT) :: EQNAME
+                INTEGER      , INTENT(  OUT) :: STAT
+                END SUBROUTINE ENVSTR
+
+            END INTERFACE           !! envstr()
+
 
             INTERFACE FINDKEY
 

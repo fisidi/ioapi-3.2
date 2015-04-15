@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML> 
 <HEAD>
-<!-- "$Id: NEWSTUFF.html 177 2015-03-02 16:20:58Z coats $" -->
+<!-- "$Id: NEWSTUFF.html 183 2015-04-15 19:04:15Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> 
     What's New with the I/O&nbsp;API
@@ -16,7 +16,7 @@
       MARGINWIDTH="15">
 
     <EM>
-    $Id: NEWSTUFF.html 177 2015-03-02 16:20:58Z coats $
+    $Id: NEWSTUFF.html 183 2015-04-15 19:04:15Z coats $
     </EM>
     <HR>
 
@@ -50,12 +50,12 @@
 </A></H2>
 
     <UL>
+         <LI>  <A HREF = "#mar0232015">
+               New routine RUNSPEC()</A>
          <LI>  <A HREF = "#feb232015">
                Standards-violation fixes in <VAR>getyn(), getstr(),
                getreal(), getnum(), getmenu(), getdble(), promptmfile(),
                promptffile(), year4(), skipl()</VAR> </A>
-         <LI>  <A HREF = "#mar0232015">
-               New routine RUNSPEC()</A>
          <LI>  <A HREF = "#ver32">
                <STRONG>I/O API Version 3.2-<VAR>beta</VAR></STRONG></A>
          <LI>  <A HREF = "#jan222015">
@@ -489,7 +489,8 @@
     New routine RUNSPEC()</A>
 </A></H2>
    
-    March&nbsp;2, 2015:
+    March&nbsp;2, 2015:<BR>
+    March&nbsp;4, 2015:
     <P>
     <A HREF="RUNSPEC.html"><CODE>SUBROUTINE&nbsp;RUNSPEC(
     FNAME,&nbsp;USEENV,&nbsp;SDATE,&nbsp;STIME,&nbsp;TSTEP,&nbsp;NRECS&nbsp;)</CODE></A>
@@ -508,6 +509,13 @@
     Else prompt the user for <CODE>SDATE, STIME, TSTEP,
     EDATE, ETIME</CODE> and use them to calculate NRECS.
     </BLOCKQUOTE>
+    <P>
+    
+    <STRONG>Added March&nbsp;4, 2015:</STRONG>  Abhishek Bhat, PhD, EPI,
+    of Trinity Consultants, points out a <VAR>Makefile</VAR>-bug:  there
+    needs to be a dependency line <VAR>runspec.o:&nbsp;m3utilio.mod</VAR>
+    in the  <VAR>Makefile</VAR>, similar to the already-present
+    <VAR>matxatts.o:&nbsp;m3utilio.mod</VAR> dependency line.
     <P>
 
     Back to <STRONG><EM><A HREF = "#contents">Contents</A></EM></STRONG>
@@ -591,8 +599,7 @@
                   <LI>  <A HREF="ENVGETS.html"><CODE>ENVGET()</CODE></A>
                         generic get-environment-variable routine
                         encapsulating <CODE>BENVINT(), BENVDBLE(),
-                        BENVREAL(),ENVINT(), ENVDBLE(), ENVREAL(), ENVSTR(),
-                        ENVYN() </CODE>
+                        BENVREAL(),ENVINT(), ENVDBLE(), ENVREAL(), ENVYN() </CODE>
                   <LI>  <A HREF="UNGRIDB.html"><CODE>UNGRIDB()</CODE></A>
                   <LI>  <A HREF="PMATVEC.html"><CODE>PMATVEC()</CODE></A>
                         Apply incidence matrices from <CODE>UNGRIDB()</CODE>,
@@ -5313,7 +5320,7 @@ Send comments to
 
 
     <PRE>
-    $Id: NEWSTUFF.html 177 2015-03-02 16:20:58Z coats $
+    $Id: NEWSTUFF.html 183 2015-04-15 19:04:15Z coats $
     </PRE>
 </BODY>      <!--end body  -->
 </HTML>      <!--end html  -->
