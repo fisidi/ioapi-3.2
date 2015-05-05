@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML> 
 <HEAD>
-<!-- "$Id: NEWSTUFF.html 183 2015-04-15 19:04:15Z coats $" -->
+<!-- "$Id: NEWSTUFF.html 188 2015-05-05 17:15:16Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> 
     What's New with the I/O&nbsp;API
@@ -16,7 +16,7 @@
       MARGINWIDTH="15">
 
     <EM>
-    $Id: NEWSTUFF.html 183 2015-04-15 19:04:15Z coats $
+    $Id: NEWSTUFF.html 188 2015-05-05 17:15:16Z coats $
     </EM>
     <HR>
 
@@ -50,6 +50,9 @@
 </A></H2>
 
     <UL>
+         <LI>  <A HREF = "#may052015">
+               More <VAR>gfortran</VAR> hacks; <CODE>SINUGRD3</CODE>
+               map projection</A>
          <LI>  <A HREF = "#mar0232015">
                New routine RUNSPEC()</A>
          <LI>  <A HREF = "#feb232015">
@@ -485,6 +488,29 @@
 
 <HR> <!----------------------------------------------------------------->
     
+<H2> <A NAME = "may052015">
+    More <VAR>gfortran</VAR> hacks; <CODE>SINUGRD3</CODE>
+               map projection
+</A></H2>
+   
+    May&nbsp;5, 2015:
+    <P>
+    Recent <VAR>gfortran</VAR> wasn't allowing certain <CODE>USE
+    M3UTILIO</CODE> statements internally.  Hacked the source to
+    get it to where it will still work.
+    <P>
+    
+    <STRONG>Added new parameter  <CODE>SINUGRD3</CODE> for
+    Sinusoidal Equal Area map projection to  <VAR>PARMS3.EXT</VAR>,
+    together with support for it in   <CODE>MODULE&nbsp;MODGCTP</CODE>
+    <P>
+
+    Back to <STRONG><EM><A HREF = "#contents">Contents</A></EM></STRONG>
+    <P>
+      
+
+<HR> <!----------------------------------------------------------------->
+    
 <H2> <A NAME = "mar022015">
     New routine RUNSPEC()</A>
 </A></H2>
@@ -520,7 +546,7 @@
 
     Back to <STRONG><EM><A HREF = "#contents">Contents</A></EM></STRONG>
     <P>
-   
+
 
 <HR> <!----------------------------------------------------------------->
     
@@ -5320,7 +5346,7 @@ Send comments to
 
 
     <PRE>
-    $Id: NEWSTUFF.html 183 2015-04-15 19:04:15Z coats $
+    $Id: NEWSTUFF.html 188 2015-05-05 17:15:16Z coats $
     </PRE>
 </BODY>      <!--end body  -->
 </HTML>      <!--end html  -->
