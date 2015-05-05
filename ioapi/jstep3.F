@@ -1,9 +1,8 @@
 
         INTEGER FUNCTION JSTEP3( JDATE, JTIME, SDATE, STIME, TSTEP )
-     &                   RESULT( JREC3 )
 
 C***********************************************************************
-C Version "$Id: jstep3.F 171 2015-02-24 08:18:01Z coats $"
+C Version "$Id: jstep3.F 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -12,7 +11,7 @@ C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  72
+C  function body starts at line  73
 C
 C  FUNCTION:
 C       returns the timestep-record number corresponding to JDATE:JTIME
@@ -46,10 +45,7 @@ C       Gross simplification:  use result from (new no-overflow version
 C       of) CURREC()
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO.
 C***********************************************************************
-
-        USE M3UTILIO
 
         IMPLICIT NONE
 
@@ -61,6 +57,10 @@ C...........   ARGUMENTS and their descriptions:
         INTEGER, INTENT( IN ) :: STIME   !  starting time  HHMMSS
         INTEGER, INTENT( IN ) :: TSTEP   !  time step      H*MMSS
 
+C...........   EXTERNAL FUNCTIONS and their descriptions:
+
+        INTEGER, EXTERNAL :: CURREC
+
 C...........   SCRATCH LOCAL VARIABLES and their descriptions:
 
         INTEGER         IREC, SECS
@@ -71,7 +71,7 @@ C***********************************************************************
 C   begin body of function  JSTEP3
 
         IF ( TSTEP .EQ. 0 ) THEN
-            JREC3 = 1
+            JSTEP3 = 1
             RETURN
         END IF
 
@@ -81,7 +81,7 @@ C   begin body of function  JSTEP3
 
 
         IF ( IREC .LT. 0 ) THEN
-            JREC3 = -1
+            JSTEP3 = -1
             RETURN
         END IF
 
@@ -95,9 +95,9 @@ C   begin body of function  JSTEP3
         !!  compare with CURREC() result:
         
         IF ( KDATE .EQ. CDATE .AND. KTIME .EQ. CTIME ) THEN
-            JREC3 = IREC
+            JSTEP3 = IREC
         ELSE
-            JREC3 = -1
+            JSTEP3 = -1
         END IF
 
         RETURN

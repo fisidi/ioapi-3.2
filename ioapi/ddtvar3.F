@@ -1,10 +1,9 @@
 
         LOGICAL FUNCTION DDTVAR3( FNAME, VNAME, CALLER,
      &                            JDATE, JTIME, RSIZE, BUFFER )
-     &                    RESULT( DFLAG3 )
 
 C***********************************************************************
-C Version "$Id: ddtvar3.F 171 2015-02-24 08:18:01Z coats $"
+C Version "$Id: ddtvar3.F 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2011 Baron Advanced Meteorological Systems,
@@ -63,15 +62,13 @@ C       native-binary BINFIL3 file type; uses INTEGER NAME2FID
 C       Modified  8/17/2004 by CJC:  deal with virtual-file bug.
 C       Modified 11/2004 by CJC:  new "verbose-flag" argument to RDTFLAG
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
-
-        USE M3UTILIO
 
         IMPLICIT NONE
 
 C...........   INCLUDES:
 
+        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'NETCDF.EXT'
 #ifdef IOAPICPL
@@ -106,6 +103,8 @@ C...........   PARAMETER :
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
+        INTEGER, EXTERNAL :: INDEX1, SECSDIFF, TIME2SEC
+        LOGICAL, EXTERNAL :: CURRSTEP, OPEN3
         INTEGER, EXTERNAL :: BUFDDT3         !  ddt() from circ. bufs. (C)
         INTEGER, EXTERNAL :: BUFVGT3         !  alloc/read for circ. bufs. (C)
         INTEGER, EXTERNAL :: NAME2FID        !  fname~~> fid lookup
@@ -172,7 +171,7 @@ C...........   Check length of name arguments; copy into length=16 buffers
             CALL M3MSG2( MESG )
             MESG = 'Invalid variable or file name arguments'
             CALL M3WARN( NAMBUF, JDATE, JTIME, MESG )
-            DFLAG3 = .FALSE.
+            DDTVAR3 = .FALSE.
             RETURN
         END IF          !  if len( fname ) > 16, or if len( vname ) > 16
 
@@ -204,7 +203,7 @@ C.......   Find netCDF index for the file, and check time step availability:
 !$OMP END CRITICAL( S_INTERP )
 
         IF ( EFLAG ) THEN
-            DFLAG3 = .FALSE.
+            DDTVAR3 = .FALSE.
             RETURN
 	END IF
 
@@ -254,7 +253,7 @@ C.......   Find netCDF index for the file, and check time step availability:
      &          '" of type ' // TYPNAMES( IDUM )
             CALL M3WARN( NAMBUF, JDATE, JTIME, MESG )
 
-            DFLAG3 = .FALSE.
+            DDTVAR3 = .FALSE.
             RETURN
 
         END IF              !  check file types; set DIMS, DELS, TDIM
@@ -267,7 +266,7 @@ C.......   Find netCDF index for the file, and check time step availability:
      &      '--REQ:', RSIZE, ' ACT:', NLAYS3( FID ) * BSIZE3( FID )
             NAMBUF = CALLER // ':DDTVAR3'
             CALL M3WARN( NAMBUF, JDATE, JTIME, MESG )
-            DFLAG3 = .FALSE.
+            DDTVAR3 = .FALSE.
             RETURN
 
         END IF          !  requested record-size in error
@@ -284,7 +283,7 @@ C.......   buffers for interpolation, and initialize related data structures.
             MESG = 'Variable "' // VNAME( 1:VLEN ) //
      &          '" not in file "' // FNAME( 1:FLEN ) // '"'
             CALL M3WARN( NAMBUF, JDATE, JTIME, MESG )
-            DFLAG3 = .FALSE.
+            DDTVAR3 = .FALSE.
             RETURN
 
         ELSE IF ( VTYPE3( VID,FID ) .NE. M3REAL  .AND. 
@@ -295,7 +294,7 @@ C.......   buffers for interpolation, and initialize related data structures.
      &          '" not of type REAL nor DOUBLE in file "' // 
      &          FNAME( 1:FLEN ) // '"'
             CALL M3WARN( NAMBUF, JDATE, JTIME, MESG )
-            DFLAG3 = .FALSE.
+            DDTVAR3 = .FALSE.
             RETURN
 
         END IF    !  if variable not available; else if not already set up
@@ -539,7 +538,7 @@ C..........   If read will be necessary, check timestep flags first:
 
 1001    CONTINUE
 	IF ( EFLAG ) THEN
-            DFLAG3 = .FALSE.
+            DDTVAR3 = .FALSE.
             RETURN
         END IF
 
@@ -552,11 +551,11 @@ C...........   check its success/failure status and return accordingly:
      &                       1.0 / FLOAT( TIME2SEC( TSTEP3( FID ) ) ),
      &                       BUFFER ) ) THEN
 
-            DFLAG3 = .TRUE.
+            DDTVAR3 = .TRUE.
 
         ELSE
 
-            DFLAG3 = .FALSE.
+            DDTVAR3 = .FALSE.
             LDATE3( VID, FID ) = IMISS3   !  "invalid"
 
             NAMBUF = CALLER // ':DDTVAR3'

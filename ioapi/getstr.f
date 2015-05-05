@@ -2,7 +2,7 @@
         SUBROUTINE GETSTR( PROMPT, DEFAULT, RESPONSE )
 
 C******************************************************************
-C Version "$Id: getstr.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: getstr.f 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -11,7 +11,7 @@ C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body begins at line 77
+C  function body begins at line 80
 C
 C  FUNCTION:
 C
@@ -47,14 +47,17 @@ C         RESPONSE  return value
 C
 C**********************************************************************
 
-        USE M3UTILIO
-
         IMPLICIT NONE
 
 C.......   Arguments:
 
             CHARACTER*(*), INTENT(IN   ) :: PROMPT, DEFAULT
             CHARACTER*(*), INTENT(  OUT) :: RESPONSE
+
+C.......   External functions:
+
+        LOGICAL, EXTERNAL :: ENVYN
+        INTEGER, EXTERNAL :: LBLANK
 
 C.......   Parameter:  maximum number of attempts allowed to the user
 

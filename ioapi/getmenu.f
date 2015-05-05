@@ -1,9 +1,8 @@
 
         INTEGER FUNCTION GETMENU( ITEMCNT, DEFAULT, PROMPT, CHOICES )
-     &                    RESULT( MENITEM )
 
 C...............................................................
-C Version "$Id: getmenu.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: getmenu.f 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -12,7 +11,7 @@ C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C       function body starts at line  84
+C       function body starts at line  87
 C
 C       CALLS:
 C       RETURNS:    user-selected item number from menu choices.
@@ -53,8 +52,6 @@ C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO.
 C       Fix MH violation of coding-standards:  check status IOS from  ENVYN!!
 C***********************************************************************
 
-        USE M3UTILIO
-
         IMPLICIT NONE
 
 C.......   ARGUMENTS:
@@ -63,6 +60,10 @@ C.......   ARGUMENTS:
         INTEGER      , INTENT(IN   ) :: DEFAULT         !  default response
         CHARACTER*(*), INTENT(IN   ) :: PROMPT          !  prompt string
         CHARACTER*(*), INTENT(IN   ) :: CHOICES ( * )   !  array of choice strings
+
+C.......   EXTERNAL FUNCTION:
+
+        LOGICAL, EXTERNAL :: ENVYN
 
 C.......   LOCAL VARIABLES:
 
@@ -95,7 +96,7 @@ C   begin body of GETMENU
         END IF
 
         IF( .NOT. PROMPTON ) THEN
-            MENITEM = DEFAULT
+            GETMENU = DEFAULT
             MESG = 'Using default response "' //
      &          TRIM( CHOICES( DEFAULT ) ) // '" for query:'
             CALL M3MSG2( MESG )
@@ -157,7 +158,7 @@ C   begin body of GETMENU
         IF ( IOS .NE. 0 )  THEN
             GO TO 900
         ELSE IF ( BUFFER ( 1:1 )  .EQ. ' ' )  THEN
-            MENITEM  =  DEFAULT
+            GETMENU  =  DEFAULT
             MESG = 'Using default "' // TRIM( CHOICES( DEFAULT ) )//'"'
         ELSE
             WRITE( FMTSTR, 94010 ) LEN_TRIM( BUFFER )
@@ -175,7 +176,7 @@ C   begin body of GETMENU
 
             END IF
 
-            MENITEM  =  ANSWER
+            GETMENU  =  ANSWER
             MESG = 'Using response "'// TRIM( CHOICES( ANSWER ) )// '"'
         END IF
         CALL M3MSG2( MESG )

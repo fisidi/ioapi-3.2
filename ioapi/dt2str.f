@@ -1,8 +1,8 @@
 
-        CHARACTER*24 FUNCTION  DT2STR( JDATE, JTIME ) RESULT( DTBUF )
+        CHARACTER*24 FUNCTION  DT2STR( JDATE, JTIME )
 
 C***********************************************************************
-C Version "$Id: dt2str.f 168 2015-02-24 07:51:22Z coats $"
+C Version "$Id: dt2str.f 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,
@@ -32,18 +32,20 @@ C
 C       Version    2/93 by CJC for CRAY, etc.
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
-C
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
 
-        USE M3UTILIO
-
-        IMPLICIT NONE
+      IMPLICIT NONE
 
 C...........   ARGUMENTS and their descriptions:
 
         INTEGER, INTENT(IN   ) :: JDATE   !  Julian date, coded YYYYDDD
         INTEGER, INTENT(IN   ) :: JTIME   !  time, coded HHMMSS
+
+
+C...........  EXTERNAL FUNCTIONS:
+
+        CHARACTER*10, EXTERNAL :: HHMMSS
+        CHARACTER*14, EXTERNAL :: MMDDYY
 
 
 C...........   SCRATCH LOCAL VARIABLES and their descriptions:
@@ -62,7 +64,7 @@ C   begin body of function  DT2STR
         CALL NEXTIME( J, T, 0 )
         TIMBUF = HHMMSS( T )
         DATBUF = MMDDYY( J )
-        DTBUF  = TIMBUF // DATBUF
+        DT2STR = TIMBUF // DATBUF
         RETURN
 
         END FUNCTION  DT2STR

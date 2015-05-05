@@ -1,9 +1,8 @@
          
         LOGICAL FUNCTION WRITE3( FNAME, VNAME, JDATE, JTIME, BUFFER )
-     &                   RESULT( WFLAG3 )
 
 C***********************************************************************
-C Version "$Id: write3.F 171 2015-02-24 08:18:01Z coats $"
+C Version "$Id: write3.F 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -74,16 +73,13 @@ C       Modified 9/2004 by CJC for virtual INTERP bug-fix: change to
 C       READ3V / WRITE3V interfaces
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
-C
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO;
 C***********************************************************************
-
-        USE M3UTILIO
 
         IMPLICIT NONE
 
 C...........   INCLUDES:
 
+        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'NETCDF.EXT'
 #ifdef IOAPICPL
@@ -102,6 +98,8 @@ C...........   ARGUMENTS and their descriptions:
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
+        INTEGER, EXTERNAL :: INDEX1, JSTEP3
+        LOGICAL, EXTERNAL :: ENVYN
         INTEGER, EXTERNAL :: NAME2FID   !  fname~~> fid lookup
         LOGICAL, EXTERNAL :: SYNCFID    !  disk-synch
         LOGICAL, EXTERNAL :: WRDICT3    !  read time steps for  DCTNRY3 files
@@ -166,7 +164,7 @@ C......,....   subscript for FNAME; check length of vname argument
         IF ( EFLAG ) THEN
             MESG = 'Invalid file.  FNAME="' // FNAME
             CALL M3WARN( 'WRITE3', JDATE, JTIME, MESG )
-            WFLAG3 = .FALSE.
+            WRITE3 = .FALSE.
             RETURN
         END IF
 
@@ -204,7 +202,7 @@ C......,....   subscript for FNAME; check length of vname argument
             MESG = 'Invalid arguments: file="' // FNAME //
      &                       '" or variable="' // VNAME // '"'
             CALL M3WARN( 'WRITE3', JDATE, JTIME, MESG )
-            WFLAG3 = .FALSE.
+            WRITE3 = .FALSE.
             RETURN
         END IF
 
@@ -214,7 +212,7 @@ C......,....   subscript for FNAME; check length of vname argument
 
                 MESG = 'Error with disk synch for file:  '// FNAME
                 CALL M3WARN( 'WRITE3', JDATE, JTIME, MESG )
-                WFLAG3 = .FALSE.
+                WRITE3 = .FALSE.
                 RETURN
 
             END IF      !  if NCSNC() error
@@ -225,7 +223,7 @@ C......,....   subscript for FNAME; check length of vname argument
         ITYP = FTYPE3( FID )
         IF ( ITYP .EQ. DCTNRY3 ) THEN
 
-            WFLAG3 = WRDICT3 ( FID, VNAME )
+            WRITE3 = WRDICT3 ( FID, VNAME )
             RETURN
 
         END IF          !  if file is a dictionary
@@ -252,7 +250,7 @@ C...........   | custom) files.
             
                 MESG = 'Variable ' // VNAME //' not in file:  '//FNAME
                 CALL M3WARN( 'WRITE3', JDATE, JTIME, MESG )
-                WFLAG3 = .FALSE.
+                WRITE3 = .FALSE.
                 RETURN
                    
             END IF
@@ -263,7 +261,7 @@ C...........   | custom) files.
             MESG =
      &          'File '//FNAME//' of type ' //TYPNAMES( ITYP ) //
      &          ' WRITE BY VARIABLE not supported.'
-                WFLAG3 = .FALSE.
+                WRITE3 = .FALSE.
                 CALL M3WARN( 'WRITE3', JDATE, JTIME, MESG )
                 RETURN
         
@@ -287,7 +285,7 @@ C...........   from file into BUFFER(), selecting by file type:
      &      'File starting date & time:', SDATE3( FID ), STIME3( FID ),
      &      'time step:', TSTEP3( FID )
             CALL M3MSG2( MESG )
-            WFLAG3 = .FALSE.
+            WRITE3 = .FALSE.
             MESG = 'Time step error writing file:  ' // FNAME
             CALL M3WARN( 'WRITE3', JDATE, JTIME, MESG )
             RETURN
@@ -372,13 +370,13 @@ C...........   from file into BUFFER(), selecting by file type:
             WRITE( MESG, '( 3 A, I5 )' )
      &      'File:  ', FNAME, ' of unknown type:', FTYPE3( FID )
 	    CALL M3WARN( 'WRITE3', JDATE, JTIME, MESG )
-            WFLAG3 = .FALSE.
+            WRITE3 = .FALSE.
 
             RETURN
 
         END IF          !  if time step bad, or if file of type
                         !  custom, gridded, ..., or unknown.
-        WFLAG3 = WFLAG
+        WRITE3 = WFLAG
 
         IF ( .NOT. WFLAG ) THEN		!  failure
 

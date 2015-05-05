@@ -1,5 +1,5 @@
 #.........................................................................
-# VERSION "$Id: Makefile 176 2015-03-02 16:20:06Z coats $"
+# VERSION "$Id: Makefile 187 2015-05-05 17:02:57Z coats $"
 #    EDSS/Models-3 I/O API Version 3.1
 #.........................................................................
 # COPYRIGHT
@@ -187,23 +187,26 @@ clean:  ${OBJDIR}
 install: ${INSTDIR}
 	echo "Installing in ${INSTDIR}" ; cd ${OBJDIR}; cp ${LIB} ${INSTDIR}
 
+dir:
+	mkdir -p ${OBJDIR}
+
 gtar:
 	cd ${BASEDIR}; make gtar
 
 bins:
 	make BIN=Linux2_x86_64sun
 	make BIN=Linux2_x86_64ifort
-	make BIN=Linux2_x86_64sundbg
-	make BIN=Linux2_x86_64ifortdbg
+	make BIN=Linux2_x86_64
 
 binclean:
 	make BIN=Linux2_x86_64          clean
-	make BIN=Linux2_x86_64g95       clean
 	make BIN=Linux2_x86_64sun       clean
 	make BIN=Linux2_x86_64ifort     clean
-	make BIN=Linux2_x86_64g95dbg    clean
-	make BIN=Linux2_x86_64sundbg    clean
-	make BIN=Linux2_x86_64ifortdbg  clean
+
+bindirs:
+	make BIN=Linux2_x86_64          dir
+	make BIN=Linux2_x86_64sun       dir
+	make BIN=Linux2_x86_64ifort     dir
 
 fixed_src:  ${FIXDIR} $(fix_EXT)
 

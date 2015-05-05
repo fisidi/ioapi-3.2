@@ -1,9 +1,10 @@
 
 !.........................................................................
-! Version "$Id: PARMS3.EXT 164 2015-02-24 06:50:01Z coats $"
+! Version "$Id: PARMS3.EXT 187 2015-05-05 17:02:57Z coats $"
 !   EDSS/Models-3 I/O API.
 !   Copyright (C) 1992-2002 MCNC, (C) 1992-2002,2005-2013 Carlie J. Coats, Jr.,
-!   and (C) 2003-2011 Baron Advanced Meteorological Systems, LLC.
+!   (C) 2003-2011 Baron Advanced Meteorological Systems, LLC., and
+!   (C) 2015- UNC Institute for the Environment.
 !
 !   Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 !   See file "LGPL.txt" for conditions of use.
@@ -54,6 +55,9 @@
 !       PARAMETER form
 !
 !       Modified 02/2015 by CJC for I/O AI version 3.2:  M3INT8 support
+!
+!       Modified 02/2015 by CJC:  SINUGRD3 map projection for MIMS
+!       Spatial Allocator
 !....................................................................
 
 !...........   Dimensioning parameters:
@@ -123,6 +127,7 @@
         INTEGER, PARAMETER :: TRMGRD3 =   8   !  grid type value: transverse Mercator
         INTEGER, PARAMETER :: ALBGRD3 =   9   !  grid type value: Albers conic Equal Area
         INTEGER, PARAMETER :: LEQGRD3 =  10   !  grid type value: Lambert Azimuthal Equal Area
+        INTEGER, PARAMETER :: SINUGRD3=  11   !  grid type value: Sinusoidal Equal Area
             
         !!......  Vertical-coordinate types:
 

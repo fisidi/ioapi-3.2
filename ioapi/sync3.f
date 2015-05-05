@@ -1,8 +1,8 @@
 
-      LOGICAL FUNCTION SYNC3( FNAME ) RESULT( SFLAG )
+      LOGICAL FUNCTION SYNC3( FNAME )
 
 C***********************************************************************
-C Version "$Id: sync3.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: sync3.f 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -31,22 +31,23 @@ C
 C       Modified 7/2007 by CJC:  bugfix -- format at line 120
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
-C
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
-
-        USE M3UTILIO
 
         IMPLICIT NONE
 
 C...........   INCLUDES:
 
+        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'NETCDF.EXT'
 
 C...........   ARGUMENTS and their descriptions:
 
         CHARACTER*(*), INTENT(IN   ) :: FNAME           !  logical file name
+
+        !!...........   EXTERNAL FUNCTIONS and their descriptions:
+
+        INTEGER, EXTERNAL :: INIT3, INDEX1
 
 C...........   SCRATCH LOCAL VARIABLES and their descriptions:
 
@@ -68,7 +69,7 @@ C.......   Check that Models-3 I/O has been initialized:
         END IF          !  if not FINIT3
 !$OMP   END CRITICAL( S_INIT )
         IF ( EFLAG ) THEN
-            SFLAG = .FALSE.
+            SYNC3 = .FALSE.
             CALL M3MSG2(  'SYNC3:  I/O API not yet initialized.' )
             RETURN
         END IF
@@ -88,7 +89,7 @@ C...........   Check length of name arguments; copy into length=16 buffers
         IF ( EFLAG ) THEN
             MESG = 'Invalid variable or file name arguments'
             CALL M3WARN( 'SYNC3', 0,0, MESG )
-	        SFLAG = .FALSE.
+	        SYNC3 = .FALSE.
             RETURN
         END IF          !  if len( fname ) > 16, or if len( vname ) > 16
 
@@ -99,7 +100,7 @@ C...........   Check length of name arguments; copy into length=16 buffers
 
             MESG = 'File:  '//FIL16// ' not yet opened.'
             CALL M3WARN( 'SYNC3', 0,0, MESG )
-            SFLAG = .FALSE.
+            SYNC3 = .FALSE.
 
         ELSE IF ( CDFID3( FID ) .GE. 0 ) THEN   !  netCDF file
 
@@ -108,19 +109,19 @@ C...........   Check length of name arguments; copy into length=16 buffers
 !$OMP       END CRITICAL( S_NC )
 
             IF ( IERR .EQ. 0 ) THEN
-                SFLAG = .TRUE.
+                SYNC3 = .TRUE.
             ELSE
 
                 WRITE( MESG, '( A , I5, 2X, A, 2X, A )' )
      &              'netCDF error number', IERR,
      &              'with disk synchronization for file:', FIL16
                 CALL M3WARN( 'SYNC3', 0,0, MESG )
-                SFLAG = .FALSE.
+                SYNC3 = .FALSE.
             END IF      !  if ncsnc() failed
 
         ELSE            !  not a netCDF file...default TRUE
 
-            SFLAG = .TRUE.
+            SYNC3 = .TRUE.
 
         END IF          !  if file not available, or if file is volatile
 

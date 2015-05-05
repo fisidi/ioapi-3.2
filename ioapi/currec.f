@@ -2,10 +2,9 @@
         INTEGER FUNCTION CURREC( JDATE, JTIME,
      &                           SDATE, STIME, TSTEP,
      &                           CDATE, CTIME )
-     &                   RESULT( RECNUM )
 
 C***********************************************************************
-C Version "$Id: currec.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: currec.f 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,
@@ -40,11 +39,7 @@ C
 C       Version 1/2008 by CJC:  Problem reported by Christian Hogrefe,
 C       NY Division of Environmental Conservation:  be careful to avoid
 C       integer overflow, for climate modeling applications, etc.
-C
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
-
-        USE M3UTILIO
 
         IMPLICIT NONE
 
@@ -55,6 +50,10 @@ C...........   ARGUMENTS and their descriptions:
         INTEGER, INTENT(IN   ) :: JDATE, JTIME    !  d&t requested
         INTEGER, INTENT(  OUT) :: CDATE, CTIME    !  d&t for timestep of JDATE:JTIME
 
+
+C...........   EXTERNAL FUNCTIONS and their descriptions:
+
+        INTEGER, EXTERNAL :: SECSDIFF, SEC2TIME, TIME2SEC
 
 C...........   PARAMETERS and their descriptions:
 
@@ -73,7 +72,7 @@ C   begin body of subroutine  CURREC
 
         IF ( TSTEP .EQ. 0 ) THEN   !  time-independent case:
 
-            RECNUM = 1
+            CURREC = 1
             CDATE  = SDATE
             CTIME  = STIME
             RETURN
@@ -83,7 +82,7 @@ C   begin body of subroutine  CURREC
         IF ( JDATE .LT. -10000000  .OR.         !  out-of-range
      &       JDATE .GT.  10000000  ) THEN       !  probable-error cases
 
-                RECNUM = -1
+                CURREC = -1
                 RETURN
 
         END  IF
@@ -104,11 +103,11 @@ C   begin body of subroutine  CURREC
         IF ( KDATE .LT. CDATE  .OR.
      &       KDATE .EQ. CDATE .AND. KTIME .LT. CTIME ) THEN
 
-            RECNUM = -1
+            CURREC = -1
 
         ELSE IF ( KDATE .EQ. CDATE .AND. KTIME .EQ. CTIME ) THEN
 
-            RECNUM = 1
+            CURREC = 1
             RETURN
 
         ELSE IF ( KDATE .LE. CDATE+5000 ) THEN  !  no overflow happens
@@ -119,7 +118,7 @@ C   begin body of subroutine  CURREC
             IREC = SECS / STEP
             CALL NEXTIME( CDATE, CTIME,
      &                    SEC2TIME( IREC * STEP ) )
-            RECNUM = 1 + IREC
+            CURREC = 1 + IREC
 
         ELSE IF ( STEP .GT. YSTEP4 ) THEN       !  iterate by STEP (> 4 years)
 
@@ -135,7 +134,7 @@ C   begin body of subroutine  CURREC
                 END IF
 
             CALL NEXTIME( CDATE, CTIME, -STEP )
-            RECNUM = IREC
+            CURREC = IREC
 
         ELSE    !  step < ysecs4:  iterate by approx 4 years
 
@@ -157,7 +156,7 @@ C   begin body of subroutine  CURREC
             CALL NEXTIME( CDATE, CTIME,
      &                    SEC2TIME( JREC * SECS ) )
 
-            RECNUM = 1 + IREC + JREC
+            CURREC = 1 + IREC + JREC
 
         END IF
 

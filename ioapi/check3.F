@@ -1,9 +1,8 @@
 
         LOGICAL   FUNCTION CHECK3( FNAME, VNAME, JDATE, JTIME )
-     &                     RESULT( CFLAG )
 
 C***********************************************************************
-C Version "$Id: check3.F 170 2015-02-24 07:56:35Z coats $"
+C Version "$Id: check3.F 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2011 Baron Advanced Meteorological Systems,
@@ -53,16 +52,13 @@ C
 C       Modified 11/2004 by CJC:  new "verbose-flag" argument to RDTFLAG
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
-C
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
-
-        USE M3UTILIO
 
         IMPLICIT NONE
 
 C...........   INCLUDES:
 
+        INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'NETCDF.EXT'
 #ifdef IOAPICPL
@@ -80,6 +76,7 @@ C...........   ARGUMENTS and their descriptions:
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
+        INTEGER, EXTERNAL :: INDEX1
         INTEGER, EXTERNAL :: NAME2FID   !  fname~~> fid lookup
         LOGICAL, EXTERNAL :: RDTFLAG    !  check time step record availability
         
@@ -124,7 +121,7 @@ C   begin body of function  CHECK3
             MESG  = 'Invalid file "'// FNAME // 
      &             '" or variable "'// VNAME //'"'
             CALL M3WARN( 'CHECK3', JDATE, JTIME, MESG )
-            CFLAG = .FALSE.
+            CHECK3 = .FALSE.
             RETURN
         END IF
         
@@ -143,7 +140,7 @@ C.......   Find netCDF index for the file, and check time step availability:
 
             VID = INDEX1( VNAME, NVARS3( FID ), VLIST3( 1,FID ) )
             IF ( VID .EQ. 0 ) THEN
-                CFLAG = .FALSE.
+                CHECK3 = .FALSE.
                 MESG = 'Variable "' // VNAME //
      &                 '" not in file "' // FNAME
                 CALL M3WARN( 'CHECK3', JDATE, JTIME, MESG )
@@ -173,21 +170,21 @@ C.......   Find netCDF index for the file, and check time step availability:
      &                              F1, F2, BUFFER )
                     EFLAG = ( EFLAG .AND. VFLAG )
                 END DO
-                CFLAG = EFLAG
+                CHECK3 = EFLAG
             ELSE
-                CFLAG = READ3V( FID, VID, SKIP, COUNT,
+                CHECK3 = READ3V( FID, VID, SKIP, COUNT,
      $                           F1, F2, BUFFER )
             END IF
 #endif
 #ifndef IOAPICPL
             CALL M3WARN( 'CHECK3', JDATE, JTIME, 
      &                   'Coupling mode not active' )
-            CFLAG = .FALSE.
+            CHECK3 = .FALSE.
 #endif
 
         ELSE
 
-            CFLAG = RDTFLAG( FID, VID, JDATE, JTIME, STEP, .FALSE. )
+            CHECK3 = RDTFLAG( FID, VID, JDATE, JTIME, STEP, .FALSE. )
 
         END IF  
 

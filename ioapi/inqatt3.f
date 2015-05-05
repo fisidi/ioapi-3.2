@@ -1,10 +1,9 @@
 
         LOGICAL FUNCTION INQATT3( FNAME, VNAME, MXATTS, 
      &                            NATTS, ANAMES, ATYPES, ASIZES )
-     &                    RESULT( ATTFLAG )
 
 C***********************************************************************
-C Version "$Id: inqatt3.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: inqatt3.f 187 2015-05-05 17:02:57Z coats $"
 C BAMS/MCNC/EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2004-2007 Baron Advanced Meteorological Systems,
@@ -13,7 +12,7 @@ C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  subroutine body starts at line  126
+C  subroutine body starts at line  123
 C
 C  FUNCTION:
 C       returns list of attributes, their types, and sizes for the
@@ -36,17 +35,14 @@ C       Modified 7/2012 by CJC:  bugfix associated with attribute-table
 C       overflow.  Exclude standard attributes
 C
 C       Modified 02/2015 by CJC for I/O API 3.2: Support for M3INT8
-C
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
-
-        USE M3UTILIO
 
         IMPLICIT NONE
 
 C...........   INCLUDES:
 
       INCLUDE 'NETCDF.EXT'      ! netCDF  constants
+      INCLUDE 'PARMS3.EXT'      ! I/O API constants
       INCLUDE 'STATE3.EXT'      ! I/O API internal state
 
 
@@ -62,7 +58,7 @@ C...........   ARGUMENTS and their descriptions:
 
 C...........   EXTERNAL FUNCTIONS and their descriptions:
 
-        INTEGER, EXTERNAL :: NAME2FID
+        INTEGER, EXTERNAL :: NAME2FID, INIT3, INDEX1
 
 
 C...........   PARAMETERs:  "standard-M3IO-attributes" table
@@ -133,7 +129,7 @@ C.......   Check that Models-3 I/O has been initialized:
 !$OMP   END CRITICAL( S_INIT )
         IF ( EFLAG ) THEN
             CALL M3MSG2(  'INQATT3:  I/O API not yet initialized.' )
-            ATTFLAG = .FALSE.
+            INQATT3 = .FALSE.
             RETURN
         END IF
         
@@ -154,7 +150,7 @@ C.......   Check that Models-3 I/O has been initialized:
         IF ( EFLAG ) THEN
             MESG = 'Invalid variable or file name arguments'
             CALL M3WARN( 'INQATT3', 0, 0, MESG )
-            ATTFLAG = .FALSE.
+            INQATT3 = .FALSE.
             RETURN
         END IF
 
@@ -165,14 +161,14 @@ C.......   Check that Models-3 I/O has been initialized:
 
             MESG = 'File "'// FIL16 // '" not yet opened.'
             CALL M3WARN( 'INQATT3', 0, 0, MESG )
-            ATTFLAG = .FALSE.
+            INQATT3 = .FALSE.
             RETURN
 
         ELSE IF ( CDFID3( F ) .LT. 0 ) THEN
 
             MESG = 'File:  "' // FIL16 // '" is NOT A NetCDF file.'
             CALL M3WARN( 'INQATT3', 0, 0, MESG )
-            ATTFLAG = .FALSE.
+            INQATT3 = .FALSE.
             RETURN
 
         ELSE
@@ -194,7 +190,7 @@ C...........   Get ID for variable(s) to be inquired.
                 MESG = 'Variable "'      // VAR16 //
      &                 '" not in file "' // FIL16 // '"'
                 CALL M3WARN( 'INQATT3', 0, 0, MESG )
-                ATTFLAG = .FALSE.
+                INQATT3 = .FALSE.
                 RETURN
             ELSE
                 VID = VINDX3( V, F )
@@ -279,15 +275,15 @@ C...........   one can't execute a RETURN within a critical section.
 !$OMP   END CRITICAL( S_NC )
 
         IF ( EFLAG ) THEN
-            ATTFLAG = .FALSE.
+            INQATT3 = .FALSE.
             MESG = 'INQATT3:  Error inquiring attributes for file "' //
      &             FNAME // '" and vble "' // VNAME // '"'
             CALL M3WARN( 'INQATT3', 0, 0, MESG )
         ELSE
-            ATTFLAG = .TRUE.
+            INQATT3 = .TRUE.
         END IF          !  ierr nonzero:  NCAPTC) failed, ro not
 
         RETURN
 
-        END
+        END FUNCTION INQATT3
 

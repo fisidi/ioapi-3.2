@@ -1,8 +1,8 @@
 
-        LOGICAL FUNCTION PROMPTGRID() RESULT( PFLAG )
+        LOGICAL FUNCTION PROMPTGRID()
 
 C***********************************************************************
-C Version "$Id: promptgrid.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: promptgrid.f 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -11,7 +11,7 @@ C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line 46
+C  function body starts at line 52
 C
 C  RETURNS:  TRUE iff success
 C
@@ -29,16 +29,22 @@ C
 C  REVISION  HISTORY:
 C       prototype 11/95 by CJC
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
 
-        USE M3UTILIO
+      IMPLICIT NONE
 
-        IMPLICIT NONE
+C...........   INCLUDES:
+
+      INCLUDE 'PARMS3.EXT'      ! I/O API constants
+      INCLUDE 'FDESC3.EXT'      ! I/O API file description data structure
+
+C...........   EXTERNAL FUNCTIONS and their descriptions:
+
+        LOGICAL, EXTERNAL :: DSCOORD, DSCGRID, GETYN
 
 C...........   Local Variables:
 
-        CHARACTER*16    ANAME, CNAME
+        CHARACTER*16  	ANAME, CNAME
 
 C***********************************************************************
 C   begin body of function  PROMPTGRID
@@ -60,7 +66,7 @@ C   begin body of function  PROMPTGRID
                 NROWS3D = IMISS3
                 NTHIK3D = IMISS3
 
-                PFLAG = .TRUE.
+                PROMPTGRID = .TRUE.
 
             ELSE IF ( DSCGRID( GDNAM3D, ANAME, GDTYP3D,     !  retry with dscgrid()
      &                         P_ALP3D, P_BET3D, P_GAM3D, 
@@ -68,7 +74,7 @@ C   begin body of function  PROMPTGRID
      &                         XCELL3D, YCELL3D, 
      &                         NCOLS3D, NROWS3D, NTHIK3D ) ) THEN
 
-                PFLAG = .TRUE.
+                PROMPTGRID = .TRUE.
 
             ELSE
 

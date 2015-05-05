@@ -1,8 +1,8 @@
 
-        LOGICAL   FUNCTION DESC3( FNAME )  RESULT( DFLAG3 )
+        LOGICAL   FUNCTION DESC3( FNAME )
 
 C***********************************************************************
-C Version "$Id: desc3.F 171 2015-02-24 08:18:01Z coats $"
+C Version "$Id: desc3.F 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2011 Baron Advanced Meteorological Systems,
@@ -11,7 +11,7 @@ C (C) 2014 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line 111
+C  function body starts at line 110
 C
 C  FUNCTION:
 C       puts description of FNAME into file description commons,
@@ -57,16 +57,14 @@ C       Revised 4/2011 by David Wong, US EPA, and by CJC, to add state for
 C       full buffered-file file descriptions.  Re-organized accordingly CJC
 C
 C       Modified 05/2011 by CJC:  better error-message
-C
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
-
-        USE M3UTILIO
 
         IMPLICIT NONE
 
 C...........   INCLUDES:
 
+        INCLUDE 'PARMS3.EXT'
+        INCLUDE 'FDESC3.EXT'
         INCLUDE 'STATE3.EXT'
         INCLUDE 'ATDSC3.EXT'
         INCLUDE 'NETCDF.EXT'
@@ -82,6 +80,7 @@ C...........   ARGUMENTS and their descriptions:
 
 C...........   EXTERNAL FUNCTIONS & BLOCK DATA
 
+        INTEGER, EXTERNAL :: INDEX1
         INTEGER, EXTERNAL :: DSCBIN3    !  native-binary (BINIO3) description stuff
         INTEGER, EXTERNAL :: NAME2FID   !  fname~~> fid lookup
         LOGICAL, EXTERNAL :: SYNCFID
@@ -113,11 +112,11 @@ C.......   Find STATE3 index for the file:
         IF ( FID .EQ. 0 ) THEN
             MESG = 'Invalid file name argument "' // FNAME // '"'
             CALL M3WARN( 'DESC3', 0, 0, MESG )
-            DFLAG3 = .FALSE.
+            DESC3 = .FALSE.
             RETURN
         END IF
 
-        CDF  = CDFID3( FID )
+        CDF   = CDFID3( FID )
         EFLAG = .FALSE.
 
 C.......   Characteristics stored in STATE3.EXT:
@@ -174,7 +173,7 @@ C.......   Characteristics stored in STATE3.EXT:
             FDESC3D = ' '
             UPDSC3D = ' '
 
-            DFLAG3 = .TRUE.
+            DESC3 = .TRUE.
             RETURN
 
         END IF		!  if "buffered" file
@@ -182,7 +181,7 @@ C.......   Characteristics stored in STATE3.EXT:
 #ifdef IOAPICPL
 
         IF ( CDFID3( FID ) .EQ. VIRFIL3 ) THEN     !  VIRTUAL "file"
-            DFLAG3  = DESC3V( PLIST3( FID ) )
+            DESC3  = DESC3V( PLIST3( FID ) )
             RETURN
         END IF		!  if "virtual" file
 
@@ -193,7 +192,7 @@ C.......   Characteristics stored in STATE3.EXT:
             IF ( .NOT. SYNCFID( FID ) ) THEN
                 MESG = 'Error with disk synch for file '//FLIST3( FID )
                 CALL M3WARN( 'DESC3', 0, 0, MESG )
-                DFLAG3 = .FALSE.
+                DESC3 = .FALSE.
                 RETURN
             END IF              !  if synch failed
 
@@ -204,7 +203,7 @@ C.......   Characteristics stored in STATE3.EXT:
             IF ( DSCBIN3( FID ) .EQ. 0 ) THEN
                 MESG = 'Error reading header for BINFIL3 file '// FNAME
                 CALL M3WARN( 'DESC3', 0, 0, MESG )
-                DFLAG3 = .FALSE.
+                DESC3 = .FALSE.
                 RETURN
             END IF
 
@@ -217,7 +216,7 @@ C.......   If not netcdf file:  already processed, so return
 
         IF ( CDF .LT. 0 ) THEN
 
-            DFLAG3 = .TRUE.
+            DESC3 = .TRUE.
             RETURN
 
         END IF		!  if "native-binary file; else if "buffered" file
@@ -402,7 +401,7 @@ C...............   attributes, lists of names and values for them:
             CALL M3WARN( 'DESC3', 0, 0, MESG )
         END IF
 
-        DFLAG3 = ( .NOT. EFLAG )
+        DESC3 = ( .NOT. EFLAG )
 
         RETURN
 

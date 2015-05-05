@@ -1,10 +1,9 @@
 
         INTEGER FUNCTION PROMPTDFILE( PROMPT, RDONLY, FMTTED, RECLEN,
      &                                DEFAULT, CALLER )
-     &                        RESULT( PFILE )
 
 C***********************************************************************
-C Version "$Id: promptdfile.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: promptdfile.f 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -42,11 +41,9 @@ C       Revised 6/2003 by CJC:  factor through M3MSG2, M3PROMPT, and
 C       M3FLUSH to ensure flush() of PROMPT and of log-messages for
 C       IRIX F90v7.4  
 C       Modified 03/2010 by CJC: F90 changes for I/O API v3.1
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO.
-C       Fix MH violation of coding-standards:  check status IOS from  ENVYN!!
+C       Modified 02/2015 by CJC for I/O API 3.2:  Fix MH violation
+C       of coding-standards:  check status IOS from  ENVYN!!
 C***********************************************************************
-
-        USE M3UTILIO
 
         IMPLICIT NONE
 
@@ -58,6 +55,11 @@ C...........   ARGUMENTS and their descriptions:
         INTEGER	     , INTENT(IN   ) :: RECLEN         !  record length
         CHARACTER*(*), INTENT(IN   ) :: DEFAULT        !  default logical file name
         CHARACTER*(*), INTENT(IN   ) :: CALLER         !  caller-name for logging messages
+
+C...........   EXTERNAL FUNCTIONS and their descriptions:
+
+        INTEGER, EXTERNAL :: GETDFILE
+        LOGICAL, EXTERNAL :: ENVYN, GETYN
 
 C...........   PARAMETER
 
@@ -152,10 +154,10 @@ C.......   Get file name; open input control definition file
                 END IF
 
                 IF ( AFLAG .AND. ( LNAME .EQ. ALL16 ) )  THEN
-                    PFILE = -3
+                    PROMPTDFILE = -3
                     RETURN
                 ELSE IF ( NFLAG .AND. LNAME .EQ. NONE16 )  THEN
-                    PFILE = -2
+                    PROMPTDFILE = -2
                     RETURN
                 END IF
     
@@ -180,13 +182,13 @@ C.......   Get file name; open input control definition file
             LNAME = DEFAULT 
 
             IF ( AFLAG .AND. ( LNAME .EQ. ALL16 ) )  THEN
-                 PFILE = -3
+                 PROMPTDFILE = -3
                  RETURN
 
             ELSE IF ( NFLAG )  THEN
 
                 IF ( LNAME .EQ. NONE16 )  THEN
-                    PFILE = -2
+                    PROMPTDFILE = -2
                     RETURN
                 END IF
 
@@ -197,7 +199,7 @@ C           ..  Study Planner to skip file without having to input "NONE"
      &                       BUF, IOS )
 
                 IF( IOS .LT. 0 ) THEN
-                    PFILE = -2
+                    PROMPTDFILE = -2
                     RETURN
                 END IF
 
@@ -215,7 +217,7 @@ C           ..  Study Planner to skip file without having to input "NONE"
 
         END IF
 
-        PFILE = IDEV
+        PROMPTDFILE = IDEV
         RETURN
 
         END FUNCTION PROMPTDFILE

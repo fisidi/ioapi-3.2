@@ -1,11 +1,10 @@
 
         LOGICAL   FUNCTION CURRSTEP ( JDATE, JTIME, 
      &                                SDATE, STIME, TSTEP, 
-     &                                CDATE, CTIME ) 
-     &                                RESULT( STEPFLAG )
+     &                                CDATE, CTIME )
 
 C***********************************************************************
-C Version "$Id: currstep.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: currstep.f 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,
@@ -37,11 +36,7 @@ C       prototype 5/92 by CJC
 C
 C       Gross simplification 1/2008 by CJC:  use result from CURREC(),
 C       new version of which is now relatively safe from integer overflow.
-C
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
-
-        USE M3UTILIO
 
         IMPLICIT NONE
 
@@ -52,6 +47,9 @@ C...........   ARGUMENTS and their descriptions:
         INTEGER, INTENT(IN   ) :: JDATE, JTIME    !  d&t requested
         INTEGER, INTENT(  OUT) :: CDATE, CTIME    !  d&t for timestep of JDATE:JTIME
 
+C...........   EXTERNAL FUNCTIONS and their descriptions:
+
+        INTEGER, EXTERNAL :: CURREC
 
 C...........   SCRATCH LOCAL VARIABLES and their descriptions:
 
@@ -64,7 +62,7 @@ C   begin body of subroutine  CURRSTEP
      &                 SDATE, STIME, TSTEP, 
      &                 CDATE, CTIME )
 
-        STEPFLAG = ( IREC .GT. 0 )
+        CURRSTEP = ( IREC .GT. 0 )
         RETURN
 
         END FUNCTION CURRSTEP

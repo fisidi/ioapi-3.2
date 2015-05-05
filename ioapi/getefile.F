@@ -1,9 +1,8 @@
 
       INTEGER FUNCTION GETEFILE( LNAME, RDONLY, FMTFLAG, CALLER )
-     &                   RESULT( GFILE )
 
 C***********************************************************************
-C Version "$Id: getefile.F 171 2015-02-24 08:18:01Z coats $"
+C Version "$Id: getefile.F 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -42,11 +41,7 @@ C
 C       Modified 11/2004 by CJC:  IOSTAT check for INQUIRE
 C
 C       Modified 03/2010, 09/2014 by CJC: F9x changes for I/O API v3.1
-C
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO.
 C***********************************************************************
-
-        USE M3UTILIO
 
         IMPLICIT NONE
 
@@ -57,6 +52,10 @@ C...........   ARGUMENTS and their descriptions:
        LOGICAL      , INTENT(IN   ) :: RDONLY         !  TRUE iff file is input-only
        LOGICAL      , INTENT(IN   ) :: FMTFLAG        !  TRUE iff file should be formatted
        CHARACTER*(*), INTENT(IN   ) :: CALLER         !  caller-name for logging
+
+C...........   EXTERNAL FUNCTIONS and their descriptions:
+
+        INTEGER, EXTERNAL :: INIT3, JUNIT
 
 C...........   LOCAL VARIABLES and their descriptions:
 
@@ -96,11 +95,11 @@ C.......   Check for existence of files ---
 
       IF ( JSTAT .NE. 0 ) THEN
           WRITE( MESG, '( A, I11, 2X, A, 1X, A)' )
-     &       'Error', JSTAT, 'inquiring about', LNAME
+     &       'GETEFILE:  Error', JSTAT, 'inquiring about', LNAME
           CALL M3MESG( MESG )
           MESG = 'Path-name: ' // PNAME
           CALL M3MESG( MESG )
-          GFILE = -1
+          GETEFILE = -1
           RETURN
       END IF
 
@@ -111,7 +110,7 @@ C.......   Check for existence of files ---
      &            'ERROR: input file not found: ',
      &            TRIM( LNAME ),
      &            TRIM( PNAME )
-              GFILE = -1
+              GETEFILE = -1
               RETURN
           END IF
 
@@ -146,7 +145,7 @@ C.......   Check for existence of files ---
      &        TRIM( LNAME ),
      &        TRIM( PNAME ),
      &        'I/O status:  ', ISTAT
-              GFILE = -1
+              GETEFILE = -1
               RETURN
           END IF
 
@@ -195,7 +194,7 @@ C.......   Check for existence of files ---
      &        TRIM( LNAME ),
      &        TRIM( PNAME ),
      &        'I/O status:  ', ISTAT
-              GFILE = -1
+              GETEFILE = -1
               RETURN
           END IF
 
@@ -206,7 +205,7 @@ C.......   Check for existence of files ---
 
       END IF
 
-      GFILE = IUNIT
+      GETEFILE = IUNIT
       RETURN
 
 C----------------------------------------------------------------------
@@ -218,7 +217,7 @@ C     handle messaging errors:
            CALL PERROR( 'ERROR writing log message.')
            WRITE( LOGDEV, 9200, IOSTAT=ISTAT )
      &         'I/O status:', JSTAT
-           GFILE = -1
+           GETEFILE = -1
            RETURN
       END IF
 

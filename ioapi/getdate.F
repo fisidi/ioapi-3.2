@@ -1,8 +1,8 @@
 
-        INTEGER FUNCTION GETDATE ( DEFAULT , PROMPT )  RESULT( GDATE )
+        INTEGER FUNCTION GETDATE ( DEFAULT , PROMPT )
 
 C********************************************************************
-C Version "$Id: getdate.F 171 2015-02-24 08:18:01Z coats $"
+C Version "$Id: getdate.F 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,
@@ -35,11 +35,7 @@ C       2/2002 Unification by Carlie J. Coats, Jr., MCNC Environmental
 C       Programs with global-climate GETDATE, which uses a 360-day "year".
 C
 C       Modified 03/20010 by CJC: F9x changes for I/O API v3.1
-C
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
 C***********************************************************************
-
-        USE M3UTILIO
 
         IMPLICIT NONE
 
@@ -48,6 +44,9 @@ C.......   ARGUMENTS:
         INTEGER      , INTENT(IN   ) :: DEFAULT         !  Default return date, YYYYDDD
         CHARACTER*(*), INTENT(IN   ) :: PROMPT          !  Prompt for user
 
+C...........   EXTERNAL FUNCTIONS and their descriptions:
+
+        INTEGER, EXTERNAL :: GETNUM, JULIAN
 
 C.......   LOCAL VARIABLES:
 
@@ -88,7 +87,7 @@ C.........  Check range
 
         WRITE( MESG, '( A, I9.7 )' ) 'Using date', JDATE
         CALL M3MSG2( MESG )
-        GDATE = JDATE
+        GETDATE = JDATE
 
         RETURN
 

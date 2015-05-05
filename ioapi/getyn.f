@@ -1,8 +1,8 @@
 
-        LOGICAL FUNCTION GETYN( PROMPT , DEFAULT ) RESULT( YNFLAG )
+        LOGICAL FUNCTION GETYN( PROMPT , DEFAULT )
 
 C******************************************************************
-C Version "$Id: getyn.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: getyn.f 187 2015-05-05 17:02:57Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -52,8 +52,6 @@ C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO.
 C       Fix MH violation of coding-standards:  check status IOS from  ENVYN!!
 C***********************************************************************
 
-        USE M3UTILIO
-
         IMPLICIT NONE
 
 C.......   Arguments:
@@ -61,6 +59,9 @@ C.......   Arguments:
         CHARACTER*(*), INTENT(IN   ) :: PROMPT      !!  prompt for user
         LOGICAL      , INTENT(IN   ) :: DEFAULT     !!  default return value
 
+C.......   External functions:
+
+        LOGICAL, EXTERNAL :: ENVYN
 
 C.......   Parameter:  maximum number of attempts allowed to the user
 
@@ -91,7 +92,7 @@ C*********************   begin  GETYN   *******************************
         END IF
 
         IF( .NOT. PROMPTON ) THEN
-            YNFLAG = DEFAULT
+            GETYN = DEFAULT
             IF ( DEFAULT ) THEN
                CALL M3MSG2( 'Returning default value TRUE for query:')
             ELSE
@@ -128,7 +129,7 @@ C.....  Continue only if PROMPTON is true
      &          .OR.  ( ANSWER ( 1:2 ) .EQ.'.T' )
      &          .OR.  ( ANSWER ( 1:2 ) .EQ.'.t' ) )  THEN
 
-            YNFLAG  =  .TRUE.
+            GETYN  =  .TRUE.
             CALL M3MSG2( 'Returning value TRUE for query:')
 
         ELSE IF (     ( ANSWER ( 1:1 ) .EQ. 'N' )
@@ -138,13 +139,13 @@ C.....  Continue only if PROMPTON is true
      &          .OR.  ( ANSWER ( 1:2 ) .EQ.'.F' )
      &          .OR.  ( ANSWER ( 1:2 ) .EQ.'.f' ) )  THEN
 
-            YNFLAG  =  .FALSE.
+            GETYN  =  .FALSE.
             CALL M3MSG2( 'Returning value FALSE for query:')
 
         ELSE IF  (    ( ANSWER ( 1:1 ) .EQ. ' ' )
      &           .OR. ( ANSWER ( 1:1 ) .EQ. '!' ) )  THEN
 
-            YNFLAG = DEFAULT
+            GETYN = DEFAULT
             IF ( DEFAULT ) THEN
                CALL M3MSG2( 'Returning default value TRUE for query:')
             ELSE

@@ -2,7 +2,7 @@
         SUBROUTINE RUNSPEC( FNAME, USEENV, SDATE, STIME, TSTEP, NRECS )
 
         !!***********************************************************************
-        !! Version "$Id: runspec.f 176 2015-03-02 16:20:06Z coats $"
+        !! Version "$Id: runspec.f 187 2015-05-05 17:02:57Z coats $"
         !! EDSS/Models-3 I/O API.
         !! (C) 2015 UNC Institute for the Environment.
         !! Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
@@ -34,9 +34,11 @@
         !!      used in various "m3tools" programs
         !!***********************************************************************
 
-        USE M3UTILIO
-
         IMPLICIT NONE
+
+        INCLUDE 'PARMS3.EXT'
+        INCLUDE 'FDESC3.EXT'
+        INCLUDE 'IODECL3.EXT'
 
         !!...........   ARGUMENTS and their descriptions:
 
@@ -51,6 +53,11 @@
 
         CHARACTER*1 , PARAMETER :: BLANK = ' '
         CHARACTER*16, PARAMETER :: PNAME = 'RUNSPEC'
+
+        !!...........   EXTERNAL FUNCTIONS and their descriptions:
+
+        LOGICAL, EXTERNAL :: ENVYN
+        INTEGER, EXTERNAL :: ENVINT, GETNUM, JSTEP3
 
         !!...........   SCRATCH LOCAL VARIABLES and their descriptions:
 

@@ -2,7 +2,7 @@
 MODULE MODGCTP
 
     !!***************************************************************
-    !!  Version "$Id: modgctp.f90 147 2015-02-03 19:57:42Z coats $"
+    !!  Version "$Id: modgctp.f90 187 2015-05-05 17:02:57Z coats $"
     !!  Copyright (c) 2014 UNC Institute for the Environment.
     !!  Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
     !!  See file "LGPL.txt" for conditions of use.
@@ -177,7 +177,7 @@ MODULE MODGCTP
 
 
     CHARACTER*132, SAVE :: SVN_ID = &
-'$Id:: modgctp.f90 147 2015-02-03 19:57:42Z coats                     $'
+'$Id:: modgctp.f90 187 2015-05-05 17:02:57Z coats                     $'
 
 
     !!  internal state-variables for SETSPHERE, INITSPHERES, SPHEREDAT:
@@ -3443,23 +3443,36 @@ CONTAINS    ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
             DSCR = 60.0D0 * ( DSCR - DBLE( DEG ) )          !  minutes
             MNT  = INT( DSCR )                              !  int minutes
             DSCR = 60.0D0 * ( DSCR - DBLE( MNT ) )          !  seconds
-            TPA( 4 ) = DSCR + 1000.0D0*( MNT + 1000*DEG ) !  dddmmmsss.sssD0
+            TPA( 4 ) = DSCR + 1000.0D0*( MNT + 1000*DEG )   !  dddmmmsss.sssD0
 
             DSCR = P_GAM
             DEG  = INT( DSCR )                              !  int degrees
             DSCR = 60.0D0 * ( DSCR - DBLE( DEG ) )          !  minutes
             MNT  = INT( DSCR )                              !  int minutes
             DSCR = 60.0D0 * ( DSCR - DBLE( MNT ) )          !  seconds
-            TPA( 5 ) = DSCR + 1000.0D0*( MNT + 1000*DEG ) !  dddmmmsss.sssD0
+            TPA( 5 ) = DSCR + 1000.0D0*( MNT + 1000*DEG )   !  dddmmmsss.sssD0
 
             DSCR = YCENT
             DEG  = INT( DSCR )                              !  int degrees
             DSCR = 60.0D0 * ( DSCR - DBLE( DEG ) )          !  minutes
             MNT  = INT( DSCR )                              !  int minutes
             DSCR = 60.0D0 * ( DSCR - DBLE( MNT ) )          !  seconds
-            TPA( 6 ) = DSCR + 1000.0D0*( MNT + 1000*DEG ) !  dddmmmsss.sssD0
+            TPA( 6 ) = DSCR + 1000.0D0*( MNT + 1000*DEG )   !  dddmmmsss.sssD0
 
             ISYS  = 3       !  Albers Conic Equal Area
+            IZONE = IZONE1 + 5
+            IUNIT = 2       !  input units:  meters
+
+        ELSE IF ( GDTYP .EQ. SINUGRD3 ) THEN
+
+            DSCR = P_GAM
+            DEG  = INT( DSCR )                              !  int degrees
+            DSCR = 60.0D0 * ( DSCR - DBLE( DEG ) )          !  minutes
+            MNT  = INT( DSCR )                              !  int minutes
+            DSCR = 60.0D0 * ( DSCR - DBLE( MNT ) )          !  seconds
+            TPA( 5 ) = DSCR + 1000.0D0*( MNT + 1000*DEG )   !  dddmmmsss.sssD0
+
+            ISYS  = 16       !  Sinusoidal Equal Area
             IZONE = IZONE1 + 5
             IUNIT = 2       !  input units:  meters
 
@@ -3547,21 +3560,21 @@ CONTAINS    ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
             DSCR = 60.0D0 * ( DSCR - DBLE( DEG ) )          !  minutes
             MNT  = INT( DSCR )                              !  int minutes
             DSCR = 60.0D0 * ( DSCR - DBLE( MNT ) )          !  seconds
-            TPA( 4 ) = DSCR + 1000.0D0*( MNT + 1000*DEG ) !  dddmmmsss.sssD0
+            TPA( 4 ) = DSCR + 1000.0D0*( MNT + 1000*DEG )   !  dddmmmsss.sssD0
 
             DSCR = P_GAM
             DEG  = INT( DSCR )                              !  int degrees
             DSCR = 60.0D0 * ( DSCR - DBLE( DEG ) )          !  minutes
             MNT  = INT( DSCR )                              !  int minutes
             DSCR = 60.0D0 * ( DSCR - DBLE( MNT ) )          !  seconds
-            TPA( 5 ) = DSCR + 1000.0D0*( MNT + 1000*DEG ) !  dddmmmsss.sssD0
+            TPA( 5 ) = DSCR + 1000.0D0*( MNT + 1000*DEG )   !  dddmmmsss.sssD0
 
             DSCR = YCENT
             DEG  = INT( DSCR )                              !  int degrees
             DSCR = 60.0D0 * ( DSCR - DBLE( DEG ) )          !  minutes
             MNT  = INT( DSCR )                              !  int minutes
             DSCR = 60.0D0 * ( DSCR - DBLE( MNT ) )          !  seconds
-            TPA( 6 ) = DSCR + 1000.0D0*( MNT + 1000*DEG ) !  dddmmmsss.sssD0
+            TPA( 6 ) = DSCR + 1000.0D0*( MNT + 1000*DEG )   !  dddmmmsss.sssD0
 
             ISYS  = 4       !  Lambert conformal conic
             IZONE = IZONE1 + 1
@@ -3581,14 +3594,14 @@ CONTAINS    ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
             DSCR = 60.0D0 * ( DSCR - DBLE( DEG ) )          !  minutes
             MNT  = INT( DSCR )                              !  int minutes
             DSCR = 60.0D0 * ( DSCR - DBLE( MNT ) )          !  seconds
-            TPA( 5 ) = DSCR + 1000.0D0*( MNT + 1000*DEG ) !  dddmmmsss.sssD0
+            TPA( 5 ) = DSCR + 1000.0D0*( MNT + 1000*DEG )   !  dddmmmsss.sssD0
 
             DSCR = P_BET
             DEG  = INT( DSCR )                              !  int degrees
             DSCR = 60.0D0 * ( DSCR - DBLE( DEG ) )          !  minutes
             MNT  = INT( DSCR )                              !  int minutes
             DSCR = 60.0D0 * ( DSCR - DBLE( MNT ) )          !  seconds
-            TPA( 6 ) = DSCR + 1000.0D0*( MNT + 1000*DEG ) !  dddmmmsss.sssD0
+            TPA( 6 ) = DSCR + 1000.0D0*( MNT + 1000*DEG )   !  dddmmmsss.sssD0
 
             ISYS  = 6       !  Polar stereographic
             IZONE = IZONE1 + 2
@@ -3610,7 +3623,7 @@ CONTAINS    ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
             DSCR = 60.0D0 * ( DSCR - DBLE( DEG ) )          !  minutes
             MNT  = INT( DSCR )                              !  int minutes
             DSCR = 60.0D0 * ( DSCR - DBLE( MNT ) )          !  seconds
-            TPA( 6 ) = DSCR + 1000.0D0*( MNT + 1000*DEG ) !  dddmmmsss.sssD0
+            TPA( 6 ) = DSCR + 1000.0D0*( MNT + 1000*DEG )   !  dddmmmsss.sssD0
 
             ISYS  = 9       !  Transverse Mercator
             IZONE = IZONE1 + 3
@@ -3623,7 +3636,7 @@ CONTAINS    ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
             DSCR = 60.0D0 * ( DSCR - DBLE( DEG ) )          !  minutes
             MNT  = INT( DSCR )                              !  int minutes
             DSCR = 60.0D0 * ( DSCR - DBLE( MNT ) )          !  seconds
-            TPA( 5 ) = DSCR + 1000.0D0*( MNT + 1000*DEG ) !  dddmmmsss.sssD0
+            TPA( 5 ) = DSCR + 1000.0D0*( MNT + 1000*DEG )   !  dddmmmsss.sssD0
 
             DSCR = P_ALP
             DEG  = INT( DSCR )                              !  int degrees
@@ -3650,7 +3663,7 @@ CONTAINS    ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
             DSCR = 60.0D0 * ( DSCR - DBLE( DEG ) )          !  minutes
             MNT  = INT( DSCR )                              !  int minutes
             DSCR = 60.0D0 * ( DSCR - DBLE( MNT ) )          !  seconds
-            TPA( 4 ) = DSCR + 1000.0D0*( MNT + 1000*DEG ) !  dddmmmsss.sssD0
+            TPA( 4 ) = DSCR + 1000.0D0*( MNT + 1000*DEG )   !  dddmmmsss.sssD0
 
             DSCR = P_GAM
             DEG  = INT( DSCR )                              !  int degrees
@@ -3664,9 +3677,22 @@ CONTAINS    ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
             DSCR = 60.0D0 * ( DSCR - DBLE( DEG ) )          !  minutes
             MNT  = INT( DSCR )                              !  int minutes
             DSCR = 60.0D0 * ( DSCR - DBLE( MNT ) )          !  seconds
-            TPA( 6 ) = DSCR + 1000.0D0*( MNT + 1000*DEG ) !  dddmmmsss.sssD0
+            TPA( 6 ) = DSCR + 1000.0D0*( MNT + 1000*DEG )   !  dddmmmsss.sssD0
 
             ISYS  = 3       !  Albers Conic Equal Area
+            IZONE = IZONE1 + 5
+            IUNIT = 2       !  input units:  meters
+
+        ELSE IF ( GDTYP .EQ. SINUGRD3 ) THEN
+
+            DSCR = P_GAM
+            DEG  = INT( DSCR )                              !  int degrees
+            DSCR = 60.0D0 * ( DSCR - DBLE( DEG ) )          !  minutes
+            MNT  = INT( DSCR )                              !  int minutes
+            DSCR = 60.0D0 * ( DSCR - DBLE( MNT ) )          !  seconds
+            TPA( 5 ) = DSCR + 1000.0D0*( MNT + 1000*DEG )   !  dddmmmsss.sssD0
+
+            ISYS  = 16      !  Sinusoidal Equal Area
             IZONE = IZONE1 + 5
             IUNIT = 2       !  input units:  meters
 
