@@ -2,7 +2,7 @@
         SUBROUTINE RUNSPEC( FNAME, USEENV, SDATE, STIME, TSTEP, NRECS )
 
         !!***********************************************************************
-        !! Version "$Id: runspec.f 187 2015-05-05 17:02:57Z coats $"
+        !! Version "$Id: runspec.f 196 2015-06-18 13:50:15Z coats $"
         !! EDSS/Models-3 I/O API.
         !! (C) 2015 UNC Institute for the Environment.
         !! Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1

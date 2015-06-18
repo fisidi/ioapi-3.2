@@ -1,5 +1,5 @@
 #.........................................................................
-# VERSION "$Id: Makefile 187 2015-05-05 17:02:57Z coats $"
+# VERSION "$Id: Makefile 196 2015-06-18 13:50:15Z coats $"
 #    EDSS/Models-3 I/O API Version 3.1
 #.........................................................................
 # COPYRIGHT
@@ -125,7 +125,7 @@ opnlist3.f    pcoef.f	    pgrdsum.f     pmatvec.f     poly.f        \
 promptdfile.f promptffile.f promptgrid.f  promptmfile.f rdatt3.f      \
 rdbndary.f    rdbuf3.f      rdcustom.f    rddict3.f     rdgrdded.f    \
 rdiddata.f    rdsmatrx.f    rdtflag.f     readsmet.f    realist.f     \
-runspec.f     scanint.f     sec2time.f    str2dble.f    skipl.f       \
+ runspec.f    scanint.f     sec2time.f    str2dble.f    skipl.f       \
 smatvec.f     splitline.f   str2int.f     str2real.f    strlist.f     \
 sync3.f       syncfid.f     synchtao.f    time2sec.f    trimlen.f     \
 ungridb.f     ungridi.f     upcase.f      wratt3.f      wrbndary.f    \
@@ -176,7 +176,7 @@ OBJ  = $(fSRC:.f=.o) $(FSRC:.F=.o) $(CSRC:.c=.o) $(M4SRC:.m4=.o) ${MOBJ}
 
 ######################################################################
 
-all: ${OBJDIR} ${LIB} ${MODS} # fixed_src
+all: ${MODS} ${LIB} # fixed_src
 
 mod:  ${MODS}
 
@@ -310,6 +310,7 @@ rdtflag.o     :  m3utilio.mod
 read3.o       :  m3utilio.mod
 read4d.o      :  m3utilio.mod
 readsmet.o    :  m3utilio.mod
+runspec.o     :  m3utilio.mod
 sync3.o       :  m3utilio.mod
 synchtao.o    :  m3utilio.mod
 updtvir3.o    :  m3utilio.mod

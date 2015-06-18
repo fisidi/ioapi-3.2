@@ -1,5 +1,5 @@
 #.........................................................................
-# VERSION "$Id: Makefile.cpphack 176 2015-03-02 16:20:06Z coats $"
+# VERSION "$Id: Makefile.cpphack 196 2015-06-18 13:50:15Z coats $"
 #    EDSS/Models-3 I/O API Version 3.1
 #.........................................................................
 # COPYRIGHT
@@ -308,6 +308,7 @@ rdtflag.o     :  m3utilio.mod
 read3.o       :  m3utilio.mod
 read4d.o      :  m3utilio.mod
 readsmet.o    :  m3utilio.mod
+runspec.o     :  m3utilio.mod
 sync3.o       :  m3utilio.mod
 synchtao.o    :  m3utilio.mod
 updtvir3.o    :  m3utilio.mod

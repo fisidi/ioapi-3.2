@@ -2,7 +2,7 @@
 MODULE MODGCTP
 
     !!***************************************************************
-    !!  Version "$Id: modgctp.f90 187 2015-05-05 17:02:57Z coats $"
+    !!  Version "$Id: modgctp.f90 193 2015-06-18 13:01:22Z coats $"
     !!  Copyright (c) 2014 UNC Institute for the Environment.
     !!  Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
     !!  See file "LGPL.txt" for conditions of use.
@@ -123,12 +123,12 @@ MODULE MODGCTP
                           INSPH, IPR, JPR, LEMSG, LPARM,            &
                           CRDIO, IOSYS, IOZONE, TPARIO, IOUNIT,     &
                           LN27, LN83, FN27, FN83, LENGTH, IFLG )
-        REAL*8 , INTENT( IN ) :: CRDIN(2), TPARIN(15)
+        REAL*8 , INTENT( IN ) :: CRDIN(2), TPARIN(15), TPARIO(15)
         INTEGER, INTENT( IN ) :: INSYS, INZONE, INUNIT, INSPH
         INTEGER, INTENT( IN ) :: IPR, JPR, LEMSG, LPARM, IOUNIT
         INTEGER, INTENT( IN ) :: LN27, LN83, LENGTH
         CHARACTER(LEN=128), INTENT( IN ) :: FN27, FN83
-        REAL*8 , INTENT( OUT ) :: CRDIO(2), TPARIO(15)
+        REAL*8 , INTENT( OUT ) :: CRDIO(2)
         INTEGER, INTENT( OUT ) :: IFLG
         END SUBROUTINE GTPZ0
     END INTERFACE
@@ -177,7 +177,7 @@ MODULE MODGCTP
 
 
     CHARACTER*132, SAVE :: SVN_ID = &
-'$Id:: modgctp.f90 187 2015-05-05 17:02:57Z coats                     $'
+'$Id:: modgctp.f90 193 2015-06-18 13:01:22Z coats                     $'
 
 
     !!  internal state-variables for SETSPHERE, INITSPHERES, SPHEREDAT:

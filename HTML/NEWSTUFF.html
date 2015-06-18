@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML> 
 <HEAD>
-<!-- "$Id: NEWSTUFF.html 188 2015-05-05 17:15:16Z coats $" -->
+<!-- "$Id: NEWSTUFF.html 199 2015-06-18 14:00:50Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> 
     What's New with the I/O&nbsp;API
@@ -16,7 +16,7 @@
       MARGINWIDTH="15">
 
     <EM>
-    $Id: NEWSTUFF.html 188 2015-05-05 17:15:16Z coats $
+    $Id: NEWSTUFF.html 199 2015-06-18 14:00:50Z coats $
     </EM>
     <HR>
 
@@ -50,6 +50,8 @@
 </A></H2>
 
     <UL>
+         <LI>  <A HREF = "#jun182015">
+               Fix in <CODE>GCTP()</CODE>for Intel <VAR>ifort</VAR> v-11 and later.</A>
          <LI>  <A HREF = "#may052015">
                More <VAR>gfortran</VAR> hacks; <CODE>SINUGRD3</CODE>
                map projection</A>
@@ -488,6 +490,24 @@
 
 <HR> <!----------------------------------------------------------------->
     
+<H2> <A NAME = "jun182015">
+    Fix in <CODE>GCTP()</CODE>for Intel <VAR>ifort</VAR> v-11 and later.
+</A></H2>
+   
+    June&nbsp;18, 2015:
+    <P>
+
+    Introduce new scratch variables in <A HREF="GCTP.html">gctp.f</A>
+    so that <CODE>INTENT</CODE> works correctly for Intel 
+    <VAR>ifort</VAR> version 11 and later.
+    <P>
+
+    Back to <STRONG><EM><A HREF = "#contents">Contents</A></EM></STRONG>
+    <P>
+        
+
+<HR> <!----------------------------------------------------------------->
+    
 <H2> <A NAME = "may052015">
     More <VAR>gfortran</VAR> hacks; <CODE>SINUGRD3</CODE>
                map projection
@@ -507,7 +527,7 @@
 
     Back to <STRONG><EM><A HREF = "#contents">Contents</A></EM></STRONG>
     <P>
-      
+
 
 <HR> <!----------------------------------------------------------------->
     
@@ -5346,7 +5366,7 @@ Send comments to
 
 
     <PRE>
-    $Id: NEWSTUFF.html 188 2015-05-05 17:15:16Z coats $
+    $Id: NEWSTUFF.html 199 2015-06-18 14:00:50Z coats $
     </PRE>
 </BODY>      <!--end body  -->
 </HTML>      <!--end html  -->
