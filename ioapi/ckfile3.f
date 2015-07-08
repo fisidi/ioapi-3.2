@@ -34,7 +34,8 @@ C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
 C       Bug-fix  04/2011 in format 94030  from Matt Turner, UC Boulder.
 C       Modified 02/2015 by CJC for I/O API 3.2: Support for M3INT8. 
 C       USE M3UTILIO
-C       Modified 07/2015 by CJC:
+C       Modified 07/2015 by CJC:  bug reported by Mogesh Naidoo:
+C       Add support for EQMGRD3, TRMGRD3, ALBGRD3, LEQGRD3, SINIGRD3.
 C***********************************************************************
 
         USE M3UTILIO
