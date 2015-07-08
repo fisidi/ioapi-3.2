@@ -2,7 +2,7 @@
         LOGICAL FUNCTION CKFILE3( FID )  RESULT( CKFLAG )
 
 C***********************************************************************
-C Version "$Id: ckfile3.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: ckfile3.f 202 2015-07-08 13:44:17Z coats $"
 C BAMS/MCNC/EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2011 Baron Advanced Meteorological Systems, and 
@@ -34,6 +34,7 @@ C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
 C       Bug-fix  04/2011 in format 94030  from Matt Turner, UC Boulder.
 C       Modified 02/2015 by CJC for I/O API 3.2: Support for M3INT8. 
 C       USE M3UTILIO
+C       Modified 07/2015 by CJC:
 C***********************************************************************
 
         USE M3UTILIO
@@ -655,6 +656,200 @@ C...........   Checks on the horizontal coordinate description:
      &                DBLE( NINT( P_ALP3( FID ) ) ) ) .GT. 0.01 ) THEN
                 WRITE( MESG, 94020 )
      &              'Bad PROJ-ALPHA', P_ALP3( FID ), 'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+        ELSE IF ( GDTYP3( FID ) .EQ. EQMGRD3 ) THEN
+
+            IF ( XCENT3( FID ) .LT. -180.0D0 .OR.
+     &           XCENT3( FID ) .GT.  180.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad X-Y origin', XCENT3( FID ), 'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+            IF ( YCENT3( FID ) .LT. -90.0D0 .OR.
+     &           YCENT3( FID ) .GT.  90.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad X-Y origin', YCENT3( FID ),
+     &              'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+            IF ( P_ALP3( FID ) .LT. -90.0D0 .OR.
+     &           P_ALP3( FID ) .GT.  90.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad PROJ-ALPHA', P_ALP3( FID ), 'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+            IF ( P_GAM3( FID ) .LT. -180.0D0 .OR.
+     &           P_GAM3( FID ) .GT.  180.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad PROJ-GAMMA', P_GAM3( FID ), 'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+        ELSE IF ( GDTYP3( FID ) .EQ. TRMGRD3 ) THEN
+
+            IF ( XCENT3( FID ) .LT. -180.0D0 .OR.
+     &           XCENT3( FID ) .GT.  180.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad X-Y origin', XCENT3( FID ), 'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+            IF ( YCENT3( FID ) .LT. -90.0D0 .OR.
+     &           YCENT3( FID ) .GT.  90.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad X-Y origin', YCENT3( FID ),
+     &              'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+            IF ( P_ALP3( FID ) .LT. -90.0D0 .OR.
+     &           P_ALP3( FID ) .GT.  90.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad PROJ-ALPHA', P_ALP3( FID ), 'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+            IF ( P_GAM3( FID ) .LT. -180.0D0 .OR.
+     &           P_GAM3( FID ) .GT.  180.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad PROJ-GAMMA', P_GAM3( FID ), 'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+        ELSE IF ( GDTYP3( FID ) .EQ. ALBGRD3 ) THEN
+
+            IF ( XCENT3( FID ) .LT. -180.0D0 .OR.
+     &           XCENT3( FID ) .GT.  180.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad X-Y origin', XCENT3( FID ), 'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+            IF ( YCENT3( FID ) .LT. -90.0D0 .OR.
+     &           YCENT3( FID ) .GT.  90.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad X-Y origin', YCENT3( FID ),
+     &              'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+            IF ( P_ALP3( FID ) .LT. -90.0D0 .OR.
+     &           P_ALP3( FID ) .GT.  90.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad PROJ-ALPHA', P_ALP3( FID ), 'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+            IF ( P_BET3( FID ) .LT. P_ALP3( FID ) .OR.
+     &           P_BET3( FID ) .GT.  90.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad PROJ-BETA', P_BET3( FID ), 'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+            IF ( P_GAM3( FID ) .LT. -180.0D0 .OR.
+     &           P_GAM3( FID ) .GT.  180.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad PROJ-GAMMA', P_GAM3( FID ), 'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+        ELSE IF ( GDTYP3( FID ) .EQ. LEQGRD3 ) THEN
+
+            IF ( P_ALP3( FID ) .LT. -90.0D0 .OR.
+     &           P_ALP3( FID ) .GT.  90.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad PROJ-ALPHA', P_ALP3( FID ), 'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+            IF ( P_GAM3( FID ) .LT. -180.0D0 .OR.
+     &           P_GAM3( FID ) .GT.  180.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad PROJ-GAMMA', P_GAM3( FID ), 'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+        ELSE IF ( GDTYP3( FID ) .EQ. SINUGRD3 ) THEN
+
+            IF ( XCENT3( FID ) .LT. -180.0D0 .OR.
+     &           XCENT3( FID ) .GT.  180.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad X-Y origin', XCENT3( FID ), 'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+            IF ( YCENT3( FID ) .LT. -90.0D0 .OR.
+     &           YCENT3( FID ) .GT.  90.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad X-Y origin', YCENT3( FID ),
+     &              'in file "' //
+     &              TRIM( FLIST3( FID ) ) // '"'
+                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
+                CKFLAG = .FALSE.
+                RETURN
+            END IF
+
+            IF ( P_GAM3( FID ) .LT. -180.0D0 .OR.
+     &           P_GAM3( FID ) .GT.  180.0D0 ) THEN
+                WRITE( MESG, 94020 )
+     &              'Bad PROJ-GAMMA', P_GAM3( FID ), 'in file "' //
      &              TRIM( FLIST3( FID ) ) // '"'
                 CALL M3WARN( 'CKFILE3', 0, 0, MESG )
                 CKFLAG = .FALSE.
