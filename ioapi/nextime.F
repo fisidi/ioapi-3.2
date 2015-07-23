@@ -2,7 +2,7 @@
       SUBROUTINE NEXTIME  ( JDATE , JTIME, DTIME )
 
 C.....................................................................
-C Version "$Id: nextime.F 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: nextime.F 210 2015-07-22 19:08:40Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems
@@ -220,3 +220,51 @@ C...........   Note that each year must be treated individually
 
         RETURN
         END  SUBROUTINE NEXTIME
+
+
+
+        !!-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+
+        SUBROUTINE LASTTIME( SDATE,STIME,TSTEP,NRECS, EDATE,ETIME )
+
+        INTEGER, INTENT(IN   ) :: SDATE, STIME, TSTEP, NRECS
+        INTEGER, INTENT(  OUT) :: EDATE, ETIME
+
+        INTEGER, PARAMETER :: S365 = 365 * 24 * 60 * 60     !!  seconds
+        INTEGER, PARAMETER :: T365 = 365 * 24 * 10000       !!  time as H*MMSS
+
+        !!.......   LOCAL VARIABLES:  day and year components of date
+
+        INTEGER     ISEC, STEP
+        INTEGER*8   IREC, SECS
+
+        !!  Normalized copies of the arguments:
+
+        EDATE = SDATE
+        ETIME = STIME
+        CALL NEXTIME( EDATE, ETIME, 0 )
+
+        IF ( TSTEP .EQ. 0 ) THEN   !  time-independent case:
+            RETURN
+        ELSE IF ( NRECS .LE. 1 ) THEN   !  at most 1 record
+            RETURN
+        END  IF
+
+        IREC = NRECS - 1
+        SECS = IREC * TIME2SEC( ABS( TSTEP ) )
+
+        DO
+            IF ( SECS .LT. S365 ) EXIT
+            SECS = SECS - S365
+            CALL NEXTIME( EDATE, ETIME, T365 )
+        END DO
+
+        ISEC = SECS
+        STEP = SEC2TIME( ISEC )
+        CALL NEXTIME( EDATE, ETIME, STEP )
+
+        RETURN
+
+        END SUBROUTINE LASTTIME
+

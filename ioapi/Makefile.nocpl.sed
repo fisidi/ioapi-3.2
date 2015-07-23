@@ -1,5 +1,5 @@
 #.........................................................................
-# VERSION "$Id: Makefile.nocpl.sed 196 2015-06-18 13:50:15Z coats $"
+# VERSION "$Id: Makefile.nocpl.sed 212 2015-07-23 13:24:31Z coats $"
 #    EDSS/Models-3 I/O API Version 3.1
 #.........................................................................
 #    (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
@@ -115,19 +115,20 @@ findr4.f      flush3.f      gcd.f         gctp.f        getdble.f     \
 getmenu.f     getnum.f      getreal.f     getstr.f      getyn.f	      \
 grdchk3.f     gridops.f     hhmmss.f      index1.f      initblk3.f    \
 inqatt3.f     intg2real.f   intlist.f     ioparms3.f    kfindx.f      \
-kfopen.f      lblank.f      len2.f        locat1.f      locat2.f      \
-locat3.f      locat4.f      locatc.f      locatr1.f     locatr2.f     \
-locatr3.f     locatr4.f     lustr.f	  m3warn.f      name2fid.f    \
-opnlist3.f    pcoef.f	    pgrdsum.f     pmatvec.f     poly.f        \
-promptdfile.f promptffile.f promptgrid.f  promptmfile.f rdatt3.f      \
-rdbndary.f    rdbuf3.f      rdcustom.f    rddict3.f     rdgrdded.f    \
-rdiddata.f    rdsmatrx.f    rdtflag.f     readsmet.f    realist.f     \
-runspec.f     scanint.f     sec2time.f    str2dble.f    skipl.f       \
-smatvec.f     splitline.f   str2int.f     str2real.f    strlist.f     \
-sync3.f       syncfid.f     synchtao.f    time2sec.f    trimlen.f     \
-ungridb.f     ungridi.f     upcase.f      wratt3.f      wrbndary.f    \
-wrbuf3.f      wrcustom.f    wrdict3.f     wrgrdded.f    wriddata.f    \
-wrsmatrx.f    wrtflag.f     xtbuf3.f      xtract3.f     year4.f       \
+kfopen.f      lambert.f     lblank.f      len2.f        ll2utm.f      \
+locat1.f      locat2.f      locat3.f      locat4.f      locatc.f      \
+locatr1.f     locatr2.f     locatr3.f     locatr4.f     lustr.f	      \
+m3warn.f      name2fid.f    opnlist3.f    pcoef.f	pgrdsum.f     \
+pmatvec.f     poly.f        promptdfile.f promptffile.f promptgrid.f  \
+promptmfile.f rdatt3.f      rdbndary.f    rdbuf3.f      rdcustom.f    \
+rddict3.f     rdgrdded.f    rdiddata.f    rdsmatrx.f    rdtflag.f     \
+readsmet.f    realist.f     runspec.f     scanint.f     setsphere.f   \
+sec2time.f    str2dble.f    skipl.f       smatvec.f     splitline.f   \
+str2int.f     str2real.f    strlist.f     sync3.f       syncfid.f     \
+synchtao.f    time2sec.f    trimlen.f     ungridb.f     ungridi.f     \
+upcase.f      wratt3.f      wrbndary.f    wrbuf3.f      wrcustom.f    \
+wrdict3.f     wrgrdded.f    wriddata.f    wrsmatrx.f    wrtflag.f     \
+xtbuf3.f      xtract3.f     year4.f       \
 chkbuf3.f
 
 FSRC = \

@@ -2,7 +2,7 @@
         MODULE M3UTILIO
 
         !!-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-        !! Version "$Id: m3utilio.f 182 2015-04-15 18:57:30Z coats $"
+        !! Version "$Id: m3utilio.f 210 2015-07-22 19:08:40Z coats $"
         !! Copyright (c) 2004-2013 Baron Advanced Meteorological Systems,
         !! (c) 2007-2013 Carlie J. Coats, Jr., and
         !! (C) 2014 UNC Institute for the Environment.
@@ -31,6 +31,8 @@
         !!      Version  06/2014:  Add SORTIN4(), SORTIN8() interfaces to SORTI()
         !!      Version  08/2014:  Add FINDL1() ... FINDL4, LOCATL1() ... LOCATL4(),
         !!      SORTL1() ...SORTL4() interfaces to FINDKEY(), LOCAT(), SORTI()
+        !!      Version  07/2015:  move LASTTIME() into "nexttime.F", and
+        !!      provide INTERFACE for it.
         !!-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
             IMPLICIT NONE
@@ -40,12 +42,12 @@
             INCLUDE 'IODECL3.EXT'       !  I/O API function declarations
 
             CHARACTER*72, PRIVATE, SAVE :: ID =
-     &'$Id:: m3utilio.f 182 2015-04-15 18:57:30Z coats                $'
+     &'$Id:: m3utilio.f 210 2015-07-22 19:08:40Z coats                $'
 
 
             !!........  PUBLIC Routines:
 
-            PUBLIC  FIXFIELD, KEYVAL, KEYSTR, LASTTIME, LCM
+            PUBLIC  FIXFIELD, KEYVAL, KEYSTR, LCM
 
 
             !!........  INTERFACE Blocks:
@@ -695,6 +697,14 @@
              INTERFACE
                 INTEGER FUNCTION JUNIT()
                 END FUNCTION JUNIT
+            END INTERFACE
+
+            INTERFACE
+                SUBROUTINE LASTTIME( SDATE,STIME,TSTEP,NRECS, 
+     &                               EDATE,ETIME )
+                INTEGER, INTENT(IN   ) :: SDATE, STIME, TSTEP, NRECS
+                INTEGER, INTENT(  OUT) :: EDATE, ETIME
+                END SUBROUTINE LASTTIME
             END INTERFACE
 
             INTERFACE
@@ -1482,52 +1492,6 @@
 
 
             END SUBROUTINE KEYSTR
-
-
-            !!-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-
-            SUBROUTINE LASTTIME( SDATE,STIME,TSTEP,NRECS, EDATE,ETIME )
-
-            INTEGER, INTENT(IN   ) :: SDATE, STIME, TSTEP, NRECS
-            INTEGER, INTENT(  OUT) :: EDATE, ETIME
-
-            INTEGER, PARAMETER :: S365 = 365 * 24 * 60 * 60     !!  seconds
-            INTEGER, PARAMETER :: T365 = 365 * 24 * 10000       !!  time as H*MMSS
-
-            !!.......   LOCAL VARIABLES:  day and year components of date
-
-            INTEGER     ISEC, STEP
-            INTEGER*8   IREC, SECS
-
-            !!  Normalized copies of the arguments:
-
-            EDATE = SDATE
-            ETIME = STIME
-            CALL NEXTIME( EDATE, ETIME, 0 )
-
-            IF ( TSTEP .EQ. 0 ) THEN   !  time-independent case:
-                RETURN
-            ELSE IF ( NRECS .LE. 1 ) THEN   !  at most 1 record
-                RETURN
-            END  IF
-
-            IREC = NRECS - 1
-            SECS = IREC * TIME2SEC( ABS( TSTEP ) )
-
-            DO
-                IF ( SECS .LT. S365 ) EXIT
-                SECS = SECS - S365
-                CALL NEXTIME( EDATE, ETIME, T365 )
-            END DO
-
-            ISEC = SECS
-            STEP = SEC2TIME( ISEC )
-            CALL NEXTIME( EDATE, ETIME, STEP )
-
-            RETURN
-
-            END SUBROUTINE LASTTIME
 
 
         ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

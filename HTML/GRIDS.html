@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: GRIDS.html 203 2015-07-08 13:47:13Z coats $" -->
+<!-- "$Id: GRIDS.html 211 2015-07-22 19:46:32Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> On The Definition of Grids and Coordinates for Models-3  </TITLE>
 </HEAD>
@@ -99,17 +99,18 @@ data against a map will be particularly troublesome; sorry.
 </EM>
 <P>
 
-The following types of coordinate systems are supported.  They are
-identified by the use of  <A HREF = "INCLUDE.html#magic"> &quot;magic
-number&quot; token values </A>  as the <CODE>GDTYP3D</CODE> in file
-description data structures such as those found in
-<A HREF = "INCLUDE.html#fdesc"> <CODE>FDESC3.EXT</CODE> </A>.
-The magic numbers are specified in
-<A HREF = "INCLUDE.html#parms"><CODE>PARMS3.EXT</CODE></A>, which gives
-their names as <CODE>LATGRD3, LAMGRD3, MERGRD3, STEGRD3, UTMGRD3,
-POLGRD3, TRMGRD3, EQMGRD3, ALBGRD3,</CODE>, and <CODE>LEQGRD3</CODE>
-They may be identified by the corresponding map coordinate identifier,
-and further specified by five additional descriptive parameters
+<A NAME="coords">The following types of coordinate systems are
+supported.</A>
+They are identified by the use of  <A HREF = "INCLUDE.html#magic">
+&quot;magic number&quot; token values </A>  as the <CODE>GDTYP3D</CODE>
+in file description data structures such as those found in <A HREF =
+"INCLUDE.html#fdesc"> <CODE>FDESC3.EXT</CODE> </A>. The magic numbers
+are specified in <A HREF =
+"INCLUDE.html#parms"><CODE>PARMS3.EXT</CODE></A>, which gives their
+names as <CODE>LATGRD3, LAMGRD3, MERGRD3, STEGRD3, UTMGRD3, POLGRD3,
+TRMGRD3, EQMGRD3, ALBGRD3,</CODE>, and <CODE>LEQGRD3</CODE> They may be
+identified by the corresponding map coordinate identifier, and further
+specified by five additional descriptive parameters
 <CODE>PROJ_ALPHA</CODE>, <CODE>PROJ_BETA</CODE>,
 <CODE>PROJ_GAMMA</CODE>, <CODE>X_CENT</CODE>, and <CODE>Y_CENT</CODE>. 
 Note that file descriptions contain all of these specifying parameters,
