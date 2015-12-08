@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: AA.html 211 2015-07-22 19:46:32Z coats $" -->
+<!-- "$Id: AA.html 271 2015-11-28 16:53:44Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE">
 <TITLE>  The BAMS/EDSS/Models-3 I/O&nbsp;API </TITLE>
 </HEAD>
@@ -43,6 +43,9 @@ Contents
                   <LI><A HREF = "BUFFERED.html"    >Files as Data Sets:
                                                     netCDF and native
                                                     binary disk files,
+                                                    PnetCDF/MPI
+                                                    distributed files,
+                                                    file-list sequnces,
                                                     and buffered and
                                                     PVM virtual files</A>
               </UL>
@@ -201,10 +204,11 @@ Contents
         <DT> <A HREF = "BUFFERED.html">
              <STRONG>Files as Data Sets</STRONG>:
              </A>
-             NetCDF and native-binary disk files, PVM-mailbox
-             <STRONG>Coupling-Mode virtual</STRONG> &quot;files&quot;
-             and memory-resident <STRONG>buffered virtual</STRONG>
-             &quot;files&quot;.
+             NetCDF and native-binary disk files, PnetCDF/MPI
+             distributed-I/O files for CMAQ, <CODE>LIST:</CODE>
+             sequences of disk-files,  PVM-mailbox <STRONG>Coupling-Mode
+             virtual</STRONG> &quot;files&quot;, and memory-resident
+             <STRONG>buffered virtual</STRONG> &quot;files&quot;.
     </DL></BLOCKQUOTE>
 
     Back to <STRONG><EM><A HREF = "#contents">Contents</A></EM></STRONG>
@@ -1063,7 +1067,7 @@ Contents
         <DT> <A HREF = "AIRS2M3.html" >
              <STRONG>airs2m3</STRONG>:
              </A>
-             Import air quality monitor data from an AIRS AMP350-format
+             import air quality monitor data from an AIRS AMP350-format
              ASCII file and put it into an I/O&nbsp;API
              &quot;observational data&quot; file.
         <P>
@@ -1077,7 +1081,7 @@ Contents
         <DT> <A HREF = "CAMXTOM3.html" >
              <STRONG>camxtom3</STRONG>:
              </A>
-             Convert CAMx and other UAM-format binary files to GRIDDED
+             convert CAMx and other UAM-format binary files to GRIDDED
              I/O&nbsp;API files.
         <P>
         <DT> <A HREF = "DAYAGG.html" >
@@ -1086,6 +1090,12 @@ Contents
              construct weighted averages from a set of input files
              and write the result to a seasonal &quot;standard day&quot;
              (year-zero) output file.
+        <DT> <A HREF = "GRIDPROBE.html" >
+             <STRONG>gridprobe</STRONG>:
+             </A>
+             build ASCII time series file by interpolating a selected
+             set of (Lat-Lon specified) points for a selected variable
+             from a GRIDDED file.
         <P>
         <DT> <A HREF = "INSERTGRID.html" >
              <STRONG>insertgrid</STRONG>:
@@ -1106,7 +1116,7 @@ Contents
         <DT> <A HREF = "M3COMBO.html" >
              <STRONG>m3combo</STRONG>:
              </A>
-             Compute linear combinations of sets of variables from
+             compute linear combinations of sets of variables from
              an I/O&nbsp;API input file, and write the resulting
              variables to an I/O&nbsp;API output file.
         <DT> <A HREF = "M3DIFF.html" >
@@ -1128,7 +1138,7 @@ Contents
         <DT> <A HREF = "M3MERGE.html" >
              <STRONG>m3merge</STRONG>:
              </A>
-             Merges selected variables from a set of input files for a
+             merge selected variables from a set of input files for a
              specified time period, and writes them to a single output
              file, with optional variable-renaming in the process.
         <DT> <A HREF = "M3PAIR.html" >
@@ -1140,9 +1150,9 @@ Contents
         <DT> <A HREF = "M3PROBE.html" >
              <STRONG>m3probe</STRONG>:
              </A>
-             build ASCII time series file for a selected set of points
-             for a selected variable from a GRIDDED, BOUNDARY, or CUSTOM
-             file.
+             build ASCII time series file for a selected set of
+             (subscript specified) points for a selected variable from a
+             GRIDDED, BOUNDARY, or CUSTOM file.
         <DT> <A HREF = "M3STAT.html" >
              <STRONG>m3stat</STRONG>:
              </A>
@@ -1150,7 +1160,7 @@ Contents
         <DT> <A HREF = "M3TOTXT.html" >
              <STRONG>m3totxt</STRONG>:
              </A>
-             Extract selected variables for a specified
+             extract selected variables for a specified
              window and time period into a GRIDDED M3IO file
              and write to an ASCII report file.
         <DT> <A HREF = "M3TPROC.html" >
@@ -1182,12 +1192,12 @@ Contents
         <DT> <A HREF = "MTXBUILD.html" >
              <STRONG>mtxbuild</STRONG>:
              </A>
-             Build a sparse-matrix transform file from user-supplied
+             build a sparse-matrix transform file from user-supplied
              ASCII coefficient inputs.
         <DT> <A HREF = "MTXCALC.html" >
              <STRONG>mtxcalc</STRONG>:
              </A>
-             Build a grid-to-grid sparse-matrix transform file for
+             build a grid-to-grid sparse-matrix transform file for
              program <VAR>mtxcple</VAR> [etc...] using
              a sub-sampling algorithm.
         <DT> <A HREF = "MTXCPLE.html" >
@@ -1239,6 +1249,18 @@ Contents
              variables in a 3-D GRIDDED file (does not take
              layer-thickness nor mass-weighting into account;
              think of it as a programming-example)
+        <P>
+        <DT> <A HREF = "WRFGRIDDESC.html" >
+             <STRONG>wrfgriddesc</STRONG>:
+             </A>
+             Create a <VAR>GRIDDESC</VAR> file from the header-data
+             in a WRF-format netCDF file.
+        <P>
+        <DT> <A HREF = "WRFTOM3.html" >
+             <STRONG>wrftom3</STRONG>:
+             </A>
+             Convert/extract/window variables from WRF-format netCDF
+             files to GRIDDED I/O&nbsp;API files.
         <P>
         <DT> <STRONG>Programs for coordinate-manipulation </STRONG>
         <P>
@@ -1409,7 +1431,7 @@ Send comments to
 
 <!--#include virtual="/INCLUDES/footer.html" -->
     <PRE>
-    $Id: AA.html 211 2015-07-22 19:46:32Z coats $
+    $Id: AA.html 271 2015-11-28 16:53:44Z coats $
     </PRE>
 
 </BODY>

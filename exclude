@@ -1,3 +1,8 @@
+Makefile
+ioapi/Makefile
+m3tools/Makefile
+.svn
+.git
 HTML/.svn
 HTML/svn-commit.tmp
 ioapi/.svn

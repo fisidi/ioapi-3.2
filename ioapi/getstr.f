@@ -2,7 +2,7 @@
         SUBROUTINE GETSTR( PROMPT, DEFAULT, RESPONSE )
 
 C******************************************************************
-C Version "$Id: getstr.f 187 2015-05-05 17:02:57Z coats $"
+C Version "$Id: getstr.f 219 2015-08-17 18:05:54Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
@@ -51,18 +51,18 @@ C**********************************************************************
 
 C.......   Arguments:
 
-            CHARACTER*(*), INTENT(IN   ) :: PROMPT, DEFAULT
-            CHARACTER*(*), INTENT(  OUT) :: RESPONSE
-
-C.......   External functions:
-
-        LOGICAL, EXTERNAL :: ENVYN
-        INTEGER, EXTERNAL :: LBLANK
+        CHARACTER*(*), INTENT(IN   ) :: PROMPT, DEFAULT
+        CHARACTER*(*), INTENT(  OUT) :: RESPONSE
 
 C.......   Parameter:  maximum number of attempts allowed to the user
 
         INTEGER,      PARAMETER :: MAX = 5
         CHARACTER*16, PARAMETER :: PNAME   = 'GETSTR'
+
+C.......   External functions:
+
+        LOGICAL, EXTERNAL :: ENVYN
+        INTEGER, EXTERNAL :: LBLANK
 
 C.......   Local Variables:
 

@@ -2,23 +2,23 @@
         LOGICAL FUNCTION CKDESC3( FNAME )  RESULT( CKFLAG )
 
 C***********************************************************************
-C Version "$Id: ckdesc3.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: ckdesc3.f 219 2015-08-17 18:05:54Z coats $"
 C BAMS/MCNC/EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2011 Baron Advanced Meteorological Systems, and 
+C (C) 2003-2011 Baron Advanced Meteorological Systems, and
 C (C) 2015 UNC Institute for the Environment
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  100
+C  function body starts at line  102
 C
 C  RETURNS:
 C       If environment variable IOAPI_CHECK_HEADERS begins with 'Y' or 'y',
-C	checks whether file attributes in FDESC3.EXT commons fit into
+C       checks whether file attributes in FDESC3.EXT commons fit into
 C       standard valid ranges, and returns TRUE or FALSE accordingly.
 C       Always checks for duplicate variable-names:  the error messages
 C       from netCDF for this condition are quite obscure.
-C	Returns TRUE otherwise.
+C       Returns TRUE otherwise.
 C
 C  PRECONDITIONS REQUIRED:
 C       FDESC3.EXT commons set by user
@@ -28,7 +28,7 @@ C       m3err()
 C
 C  REVISION  HISTORY:
 C       Prototype 9/1995 by CJC
-C	Revised   7/1996 by CJC:  UNITS3D must be nonblank.
+C       Revised   7/1996 by CJC:  UNITS3D must be nonblank.
 C       Revised  10/1996 by CJC:  new file type TSERIES3 for hydrology work.
 C       Modified  2/1997 by CJC:  check for legality of variable-names
 C       Modified  5/2003 by CJC:  corrected error-message
@@ -46,7 +46,10 @@ C       Modified  7/2008 by CJC:  add support for EQMGRD3, TRMGRD3,
 C       ALBGRD3, LEQGRD3
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
 C       Bug-fix  04/2011 in format 94030  from Matt Turner, UC Boulder.
-C       Modified 02/2015 by CJC for I/O API 3.2: Support for M3INT8; USE M3UTILIO
+C       Modified 02/2015 by CJC for I/O API 3.2: Support for M3INT8;
+C       USE M3UTILIO; eliminate unused NETCDF.EXT
+C       Modified 08/2015 by CJC:  support type MPIGRD3 for MPI/PnetCDF
+C       distributed I/O
 C***********************************************************************
 
         USE M3UTILIO
@@ -56,7 +59,6 @@ C***********************************************************************
 C...........   INCLUDES:
 
         INCLUDE 'STATE3.EXT'
-        INCLUDE 'NETCDF.EXT'
 
 
 C...........   ARGUMENTS and their descriptions:
@@ -87,10 +89,10 @@ C...........   for variables which must retain their values from call to call.
 
 C...........   SCRATCH LOCAL VARIABLES and their descriptions:
 
-        INTEGER         ENVSTAT         !  return value for ENVYN()
-        INTEGER         L, U, V         !  loop counters
-        LOGICAL		INCREASING
-        LOGICAL		EFLAG
+        INTEGER     ENVSTAT         !  return value for ENVYN()
+        INTEGER     L, U, V         !  loop counters
+        LOGICAL     INCREASING
+        LOGICAL     EFLAG
         CHARACTER*256   MESG
 
 
@@ -181,6 +183,7 @@ C...........   First:  file type and type-specific dimension checks:
             END IF
 
         ELSE IF ( FTYPE3D .EQ. GRDDED3  .OR.
+     &            FTYPE3D .EQ. MPIGRD3   .OR.
      &            FTYPE3D .EQ. TSRIES3  ) THEN
 
             IF ( NCOLS3D .LE. 0 ) THEN
@@ -199,7 +202,7 @@ C...........   First:  file type and type-specific dimension checks:
                 EFLAG = .TRUE.
             END IF
 
-        ELSE IF ( FTYPE3D .EQ. PTRFLY3 ) THEN	! "exotic" grdded3
+        ELSE IF ( FTYPE3D .EQ. PTRFLY3 ) THEN       ! "exotic" grdded3
 
             IF ( NCOLS3D .LE. 0 ) THEN
                 WRITE( MESG, 94010 )

@@ -2,7 +2,7 @@
 PROGRAM  M3TPROC
 
     !!***********************************************************************
-    !! Version "$Id: m3tproc.f90 163 2015-02-24 06:48:57Z coats $"
+    !! Version "$Id: m3tproc.f90 231 2015-10-08 20:45:24Z coats $"
     !! EDSS/Models-3 M3TOOLS.
     !! Copyright (C) 1992-2002 MCNC,
     !! (C) 1995-2002,2005-2013 Carlie J. Coats, Jr.,
@@ -183,7 +183,7 @@ PROGRAM  M3TPROC
 '    Chapel Hill, NC 27599-1105',                                           &
 '',                                                                         &
 'Program version: ',                                                        &
-'$Id: m3tproc.f90 163 2015-02-24 06:48:57Z coats $',&
+'$Id: m3tproc.f90 231 2015-10-08 20:45:24Z coats $',&
 ' '
 
     ARGCNT = IARGC()
@@ -335,6 +335,8 @@ PROGRAM  M3TPROC
             VDESC( N ) = VDESC3D( V )
             VTYPE( N ) = VTYPE3D( V )
 
+            NVARS   = N
+
        END DO   !  to head of loop
 
 199     CONTINUE        !  end loop getting variables-list for analysis
@@ -344,7 +346,6 @@ PROGRAM  M3TPROC
     IF ( N .EQ. 0 ) THEN
         CALL M3EXIT( PNAME, 0, 0, 'No variables selected', 2 )
     ELSE
-        NVARS   = N
         NVARS3D = NVARS
     END IF
 

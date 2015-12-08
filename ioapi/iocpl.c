@@ -1,7 +1,7 @@
 /***********************************************************************
 VERSION:
     EDSS/Models-3 I/O API -- Version 3
-    "iobin3.c" version "$Id: iocpl.c 164 2015-02-24 06:50:01Z coats $"
+    "iobin3.c" version "$Id: iocpl.c 216 2015-08-17 17:47:29Z coats $"
 
 COPYRIGHT
     (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
@@ -21,6 +21,9 @@ REVISION HISTORY:
     Modified 02/2015 by CJC for I/O API version 3.2:  M3INT8  support
 
 ***********************************************************************/
+
+#ifdef IOAPICPL
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -1433,3 +1436,5 @@ void attempt2sleep()
 }
 
 /* =========================================================== */
+
+#endif      /*  ifdef IOAPICPL   */

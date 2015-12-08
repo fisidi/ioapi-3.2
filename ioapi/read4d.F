@@ -4,16 +4,16 @@
      &                 RESULT( RDFLAG3 )
 
 C***********************************************************************
-C Version "$Id: read4d.F 171 2015-02-24 08:18:01Z coats $"
+C Version "$Id: read4d.F 230 2015-10-08 20:44:26Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
 C (C) 2007-2013 Carlie J. Coats, Jr., and
-C (C) 2014 UNC Institute for the Environment.
+C (C) 2014-2015 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  136
+C  function body starts at line  145
 C
 C  FUNCTION:
 C       reads all the data for the specified LAYER and the timestep
@@ -55,10 +55,13 @@ C       READ4D = .TRUE. for success.
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
 C
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO;
-C       support for M3INT8 variables
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO
+C
+C       Modified 02/2015 by CJC: USE MODNCFIO, NF_*() interfaces.
+C       Support for M3INT8 variables
 C***********************************************************************
 
+        USE MODNCFIO
         USE M3UTILIO
 
         IMPLICIT NONE
@@ -66,7 +69,6 @@ C***********************************************************************
 C...........   INCLUDES:
 
         INCLUDE 'STATE3.EXT'
-        INCLUDE 'NETCDF.EXT'
 #ifdef IOAPICPL
         INCLUDE 'STATE3V.EXT'
 #endif
@@ -102,9 +104,9 @@ C...........   SCRATCH LOCAL VARIABLES and their descriptions:
         INTEGER         JTIME           !  time, formatted HHMMSS
         INTEGER         IDUM            !  holds return value for INIT3()
         INTEGER         ITYP            !  holds file type
-        INTEGER         DELTA           !  d(INDX) / d(NCVGTcall)
-        INTEGER         DIMS ( 5 )      !  start  arg array for NCVPT()
-        INTEGER         DELTS( 5 )      !  corner arg array for NCVPT()
+        INTEGER         DELTA           !  d(INDX) / d(NF_GET_VARA_* call)
+        INTEGER         DIMS ( 5 )      !  start  arg array for NF_GET_VARA_*()
+        INTEGER         DELTS( 5 )      !  corner arg array for NF_GET_VARA_*()
         INTEGER         IREC            !  record number:  loop counter
         INTEGER         IT              !  subscript for STEP
         INTEGER         IS              !  subscript for BUFFER

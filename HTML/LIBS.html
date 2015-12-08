@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: LIBS.html 151 2015-02-06 17:18:13Z coats $" -->
+<!-- "$Id: LIBS.html 236 2015-10-14 19:52:34Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE">
 <TITLE>
     Object Libraries, Executables, and Supported Machines
@@ -38,7 +38,7 @@
     Release Version&nbsp;3.0, 3.1, 3.2-<VAR>beta</VAR> of the
     I/O&nbsp;API and the I/O&nbsp;-related tool and sample programs, as
     well as obsolete prior versions 2.1 and 2.2, are available here
-    on teh CMAS Center web site:
+    on the CMAS Center web site:
     <BLOCKQUOTE><DL>
          <DT><A HREF = "../../../download/ioapi-3.2.tar.gz">ioapi-3.2.tar.gz</A>
          <DT><A HREF = "../../../download/ioapi-3.1.tar.gz">ioapi-3.1.tar.gz</A>
@@ -51,7 +51,7 @@
     are <A HREF="AVAIL.html#build">available here</A>.
     <P>
 
-    For each supported architecture, there are three relevant archive
+    For each supported architecture, there are several relevant archive
     libraries of compiled object files:
     <BLOCKQUOTE><DL>
         <DT> <STRONG>libioapi.a</STRONG>
@@ -65,16 +65,17 @@
              <A HREF = "AA.html#utility"> utility routines</A>.
         <DT> <STRONG>libnetcdf.a</STRONG> (and  <STRONG>libnetcdff.a</STRONG>
              for netCDF-4 or later)
-        <DD> contains object files for
-             the underlying <A HREF =
-	     "http://www.unidata.ucar.edu/packages/netcdf/index.html">
+        <DD> contains object files for the underlying
+             <A HREF = "http://www.unidata.ucar.edu/packages/netcdf/index.html">
              netCDF library</A>; it is compiled with optimization on
              (typically at optimization level -O2).
+        <DT> <STRONG>libpnetcdf.a</STRONG> 
+        <DD> if you are building with PnetCDF/MPI distributed I/O enabled (e.g., for CMAQ).
         <DT> <STRONG>libpvm3.a</STRONG>
         <DD> contains object files for
              the underlying <A HREF = "http://www.epm.ornl.gov:80/pvm/">
-             PVM library</A>: <EM>needed only if you build with I/O&nbsp;API
-             Coupling Mode enabled.</EM>
+             PVM library</A>: if you build with I/O&nbsp;API
+             Coupling Mode enabled.
     </DL></BLOCKQUOTE>
     <P>
 
@@ -84,18 +85,24 @@
     you should segregate profiling-enabled (etc.) libraries similarly.
     If you call I/O&nbsp;API routines, you will need
     <STRONG>both</STRONG>  <VAR>libioapi.a</VAR> and
-    <VAR>libnetcdf.a</VAR> (normally copied into the relevant
-    build-directory); if you build with coupling mode enabled, you will
-    also need <VAR>libpvm3.a</VAR>. If you call only coordinate and grid
-    or date and time manipulation  routines or utility routines, you
-    will just need <VAR>libioapi.a</VAR>.
+    <VAR>libnetcdf.a</VAR> (and, for netCDF-4, <VAR>libnetcdff.a</VAR>;
+    these are normally copied into the relevant build-directory); if you
+    build with PnetCDF/MPI distributed I/O enabled, you will need
+    <VAR>libpnetcdf.a</VAR> if you build with coupling mode enabled, you
+    will also need <VAR>libpvm3.a</VAR>. If you call only coordinate and
+    grid or date and time manipulation  routines or utility routines,
+    you will just need <VAR>libioapi.a</VAR>.
     <P>
 
     <STRONG><A HREF = "NEWSTUFF.html#ver30">I/O&nbsp;API
     Version&nbsp;3.x</A></STRONG> libraries have build support for
-    Fortran-90 only, on the  <A NAME="platforms">following platforms</A>
-    (and supporting additional platforms generally is quite easy,
-    following the pattern of the existing builds):
+    C and Fortran-90 compilers only (but not Fortran-77), on the
+    <A NAME="platforms">following
+    hardware/operating-system/compiler-set/compiler-option platforms</A>
+    referred to by environment variable <CODE>$BIN</CODE>.
+    Note that supporting additional platforms generally is quite easy,
+    following the pattern of these existing builds, as found in the
+    <VAR>ioapi/Makeinclude.$BIN</VAR> configuration files:
     <BLOCKQUOTE>
     <DL>
         <DT>  <STRONG><CODE>AIX</CODE></STRONG>
@@ -129,7 +136,7 @@
               <VAR>cc</VAR>, with OpenMP support.
               <P>
         <DT>  <STRONG><CODE>IRIX64dbg</CODE></STRONG>
-        <DD>  Like <CODE>IRIX64</CODE>but compiled for debug.
+        <DD>  Like <CODE>IRIX64</CODE> but compiled for debug.
               <P>
         <DT>  <STRONG><CODE>IRIX64r8</CODE></STRONG>
         <DD>
@@ -140,10 +147,10 @@
               <VAR>cc</VAR>, with OpenMP support.
               <P>
         <DT>  <STRONG><CODE>IRIX6n32dbg</CODE></STRONG>
-        <DD>  Like <CODE>IRIX6n32</CODE>but compiled for debug.
+        <DD>  Like <CODE>IRIX6n32</CODE> but compiled for debug.
               <P>
         <DT>  <STRONG><CODE>IRIX6n32r8</CODE></STRONG>
-        <DD>  Like <CODE>IRIX6n32</CODE>but compiled for
+        <DD>  Like <CODE>IRIX6n32</CODE> but compiled for
               <CODE>INTEGER*8</CODE> and <CODE>REAL*8</CODE>
               <P>
         <DT>  <STRONG><CODE>Linux2_alpha</CODE></STRONG>
@@ -151,7 +158,7 @@
               using Digital  <VAR>fort</VAR>.
               <P>
         <DT>  <STRONG><CODE>Linux2_alphadbg</CODE></STRONG>
-        <DD>  Like <CODE>Linux2_alpha</CODE>but compiled for debug.
+        <DD>  Like <CODE>Linux2_alpha</CODE> but compiled for debug.
               <P>
         <DT>  <STRONG><CODE>Linux2_ia64</CODE></STRONG>
         <DD>  For Linux on Intel <VAR>IA64</VAR> using Intel
@@ -193,7 +200,10 @@
               blocks, and initialized data to less than 2 GB,
               unless you override this by compile-flags.<BR>
               Exceptions are the Sun compilers, which default to
-              medium memory model.</EM>
+              medium memory model, which supports huge arrays
+              and huge <CODE>COMMON</CODE> blocks (but not huge
+              machine-code surbroutines).  Note that there are
+              also Intel-compiler medium-memory-model configurations.</EM>
               <P>
         <DT>  <STRONG><CODE>Linux2_x86_64</CODE></STRONG>
         <DD>  For Linux on (64-bit) Intel(/AMD) <VAR>x86_64</VAR> using
@@ -231,21 +241,29 @@
         <DD>  For Linux on (64-bit) Intel(/AMD) <VAR>x86_64</VAR> using
               <VAR>gcc</VAR> and <VAR>gfortran</VAR>, with OpenMP support.
               <P>
+        <DT>  <STRONG><CODE>Linux2_x86_64gfortmpi</CODE></STRONG>
+        <DD>  Like <CODE>Linux2_x86_64gfort</CODE> but compiled
+              for using PnetCDF/MPI distributed I/O in CMAQ.
+              <P>
         <DT>  <STRONG><CODE>Linux2_x86_64ifort</CODE></STRONG>
         <DD>  For Linux on (64-bit) Intel(/AMD) <VAR>x86_64</VAR> using
               Intel <VAR>icc</VAR> and <VAR>ifort</VAR>, with OpenMP support.
               <P>
+        <DT>  <STRONG><CODE>Linux2_x86_64ifortdbg</CODE></STRONG>
+        <DD>  Like <CODE>Linux2_x86_64ifort</CODE> but compiled
+              for debug
+              <P>
+        <DT>  <STRONG><CODE>Linux2_x86_64ifortmpi</CODE></STRONG>
+        <DD>  Like <CODE>Linux2_x86_64ifort</CODE> but compiled
+              for using PnetCDF/MPI distributed I/O in CMAQ.
+              <P>
         <DT>  <STRONG><CODE>Linux2_x86_64ifort_medium</CODE></STRONG>
         <DD>  Like <CODE>Linux2_x86_64ifort</CODE> but compiled with
-              <VAR>=mcmodel=medium</VAR>, as needed for arrays and
-              <CODE>COMMON</CODE> blocks larger than 2 GB.
+              <VAR>=mcmodel=medium</VAR>, as needed for programs with
+              arrays and <CODE>COMMON</CODE> blocks larger than 2 GB.
               <P>
         <DT>  <STRONG><CODE>Linux2_x86_64ifort_mediumdbg</CODE></STRONG>
         <DD>  Like <CODE>Linux2_x86_64ifort_medium</CODE> but compiled
-              for debug
-              <P>
-        <DT>  <STRONG><CODE>Linux2_x86_64ifortdbg</CODE></STRONG>
-        <DD>  Like <CODE>Linux2_x86_64ifort</CODE> but compiled
               for debug
               <P>
         <DT>  <STRONG><CODE>Linux2_x86_64path</CODE></STRONG>
@@ -260,6 +278,15 @@
         <DD>  For Linux on (64-bit) Intel(/AMD) <VAR>x86_64</VAR> using
               Portland Group <VAR>pgcc</VAR> and <VAR>pgf90</VAR>, with
               OpenMP support.
+              <P>
+        <DT>  <STRONG><CODE>Linux2_x86_64pg</CODE></STRONG>
+        <DD>  For Linux on (64-bit) Intel(/AMD) <VAR>x86_64</VAR> using
+              Portland Group <VAR>pgcc</VAR> and <VAR>pgf90</VAR>, with
+              OpenMP support.
+              <P>
+        <DT>  <STRONG><CODE>Linux2_x86_64pgmpi</CODE></STRONG>
+        <DD>  Like <CODE>Linux2_x86_64pg</CODE> but compiled
+              for using PnetCDF/MPI distributed I/O in CMAQ.
               <P>
         <DT>  <STRONG><CODE>Linux2_x86_64pg_gcc_nomp</CODE></STRONG>
         <DD>  For Linux on (64-bit) Intel(/AMD) <VAR>x86_64</VAR> using
@@ -279,6 +306,10 @@
         <DT>  <STRONG><CODE>Linux2_x86_64sundbg</CODE></STRONG>
         <DD>  Like <CODE>Linux2_x86_64sun</CODE> but compiled
               for debug
+              <P>
+        <DT>  <STRONG><CODE>Linux2_x86_64sunmpi</CODE></STRONG>
+        <DD>  Like <CODE>Linux2_x86_64sun</CODE> but compiled
+              for  using PnetCDF/MPI distributed I/O in CMAQ.
               <P>
         <DT>  <STRONG><CODE>Linux2_x86af95</CODE></STRONG>
         <DD>  For Linux on (32-bit) Intel(/AMD) <VAR>x86</VAR> using
@@ -345,6 +376,14 @@
               <P>
         <DT>  <STRONG><CODE>Linux2_x86sundbg</CODE></STRONG>
         <DD>  Like <CODE>Linux2_x86sun</CODE> but compiled for debug
+              <P>
+        <DT>  I/O&nbsp;API-3.2 only:  <STRONG><CODE>WIN_x86gfort</CODE></STRONG>
+        <DD>  for the Cygwin environment under <VAR>MS-Windows</VAR> using
+              Cygwin 32-bit <VAR>gcc</VAR> and <VAR>gfortran</VAR>
+              <P>
+        <DT>  I/O&nbsp;API-3.2 only:  <STRONG><CODE>WIN_x86_64mingw64</CODE></STRONG>
+        <DD>  for the Cygwin environment under <VAR>MS-Windows</VAR> using
+              MingW64 64-bit <VAR>gcc</VAR> and <VAR>gfortran</VAR>
               <P>
         <DT>  <STRONG><CODE>OSF1</CODE></STRONG>
         <DD>  For Digital Alpha or Vax OSF1, using Digital <VAR>cc</VAR>

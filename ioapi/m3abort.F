@@ -2,14 +2,16 @@
         SUBROUTINE  M3ABORT( FNAME, FNUM, IERR, MESSAGE )
 
 C***********************************************************************
-C Version "$Id: m3abort.F 100 2015-01-16 16:52:16Z coats $"
+C Version "$Id: m3abort.F 219 2015-08-17 18:05:54Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C (C) 2003-2010 by Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and 
+C (C) 2015 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  subroutine body starts at line  57
+C  subroutine body starts at line  62
 C
 C  FUNCTION:  
 C       Generate complex netCDF-related messages for I/O API,
@@ -28,14 +30,16 @@ C       Modified 9/1999 by CJC for AIX "flush_"
 C       Modified 7/2003 by CJC:  factor through M3MSG2(); declare TRIMLEN()
 C       Bug-fix  2/2005 by CJC:  start with M3MSG2(MESSAGE) not M3MSG2(MESG)
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C       Modified 08/2015 by CJC: USE MODNCFIO
 C***********************************************************************
+
+      USE MODNCFIO
 
       IMPLICIT NONE
 
 C...........   INCLUDES:
 
         INCLUDE 'IODECL3.EXT'
-        INCLUDE 'NETCDF.EXT'
 
 
 C...........   ARGUMENT and its description:

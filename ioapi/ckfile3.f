@@ -2,15 +2,15 @@
         LOGICAL FUNCTION CKFILE3( FID )  RESULT( CKFLAG )
 
 C***********************************************************************
-C Version "$Id: ckfile3.f 210 2015-07-22 19:08:40Z coats $"
+C Version "$Id: ckfile3.f 219 2015-08-17 18:05:54Z coats $"
 C BAMS/MCNC/EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2011 Baron Advanced Meteorological Systems, and 
+C (C) 2003-2011 Baron Advanced Meteorological Systems, and
 C (C) 2015 UNC Institute for the Environment
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  function body starts at line  89
+C  function body starts at line  92
 C
 C  RETURNS:
 C       If environment variable IOAPI_CHECK_HEADERS begins with 'Y' or 'y',
@@ -32,10 +32,12 @@ C       Modified  6/06 by CJC: modification to support WRF vertical
 C       coordinates, from Tanya Otte
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
 C       Bug-fix  04/2011 in format 94030  from Matt Turner, UC Boulder.
-C       Modified 02/2015 by CJC for I/O API 3.2: Support for M3INT8. 
+C       Modified 02/2015 by CJC for I/O API 3.2: Support for M3INT8.
 C       USE M3UTILIO
-C       Modified 07/2015 by CJC:  bug reported by Mogesh Naidoo:
+C       Modified 07-08/2015 by CJC:  bug reported by Mogesh Naidoo:
 C       Add support for EQMGRD3, TRMGRD3, ALBGRD3, LEQGRD3, SINIGRD3.
+C       Eliminate unused NETCDF.EXT.  MPIGRD3 type for MPI/PnetCDF
+C       distributed I/O
 C***********************************************************************
 
         USE M3UTILIO
@@ -45,7 +47,6 @@ C***********************************************************************
 C...........   INCLUDES:
 
         INCLUDE 'STATE3.EXT'
-        INCLUDE 'NETCDF.EXT'
 
 
 C...........   ARGUMENTS and their descriptions:
@@ -137,6 +138,7 @@ C...........   First:  file type and type-specific dimension checks:
             END IF
 
         ELSE IF ( FTYPE3( FID ) .EQ. GRDDED3  .OR.
+     &            FTYPE3( FID ) .EQ. MPIGRD3  .OR.
      &            FTYPE3( FID ) .EQ. TSRIES3  .OR.              !  "exotic"
      &            FTYPE3( FID ) .EQ. PTRFLY3     ) THEN         !  grdded3's
 
@@ -894,31 +896,12 @@ C...........   Checks on the vertical coordinate description:
 
         ELSE IF ( NLAYS3( FID ) .GT. 1 ) THEN
 
-            CALL NCAGT( CDFID3( FID ), NCGLOBAL, 'VGTYP', VGTYP, IERR )
-            IF ( IERR .NE. 0 ) THEN
-                WRITE( MESG,94010 )
-     &          'netCDF error', IERR, 'reading VGTYP for file "' //
-     &          TRIM( FLIST3( FID ) ) // '"'
-                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
-                CKFLAG = .FALSE.
-            END IF          !  ierr nonzero:  NCAGT() failed
+            INCREASING = ( VGLVS3( 2,FID ) .GT. VGLVS3( 1,FID ) )
 
-            CALL NCAGT( CDFID3( FID ), NCGLOBAL, 'VGLVLS', VGLVS, IERR )
-            IF ( IERR .NE. 0 ) THEN
-                WRITE( MESG,94010 )
-     &          'netCDF error', IERR, 'reading VGLVLS for file "' //
-     &          TRIM( FLIST3( FID ) ) // '"'
-                CALL M3WARN( 'CKFILE3', 0, 0, MESG )
-                CKFLAG = .FALSE.
-                RETURN
-            END IF          !  ierr nonzero:  NCAGT() failed
-
-            INCREASING = ( VGLVS( 2 ) .GT. VGLVS( 1 ) )
-
-            DO  111  L = 2, MIN( NLAYS3( FID ), MXLAYS3 )
+            DO  L = 2, MIN( NLAYS3( FID ), MXLAYS3 )
 
                 IF ( INCREASING .NEQV.
-     &               ( VGLVS( L+1 ) .GT. VGLVS( L ) ) ) THEN
+     &               ( VGLVS3( L+1,FID ) .GT. VGLVS3( L,FID ) ) ) THEN
 
                     WRITE( MESG, 94010 )
      &              'Bad layer monotonicity at layer', L, 'in file "'//
@@ -930,13 +913,13 @@ C...........   Checks on the vertical coordinate description:
 
                 END IF
 
-111         CONTINUE
+            END DO
 
-            IF ( VGTYP .EQ. IMISS3  ) THEN   !  "other" -- legal but unusual
+            IF ( VGTYP3(FID) .EQ. IMISS3  ) THEN   !  "other" -- legal but unusual
 
                 WRITE( MESG, 94010 )
      &              'WARNING:  Vertical grid/coordinate type:',
-     &              VGTYP,
+     &              VGTYP3(FID),
      &              '"MISSING" in file "' //
      &              TRIM( FLIST3( FID ) ) // '"'
                 CALL M3WARN( 'CKFILE3', 0, 0, MESG )
@@ -951,9 +934,8 @@ C...........   Checks on the vertical coordinate description:
      &                ( VGTYP .NE. VGWRFNM ) ) THEN
 
                 WRITE( MESG, 94010 )
-     &         'Unknown vertical grid/coordinate type:', VGTYP,
-     &         'in file "' //
-     &          TRIM( FLIST3( FID ) ) // '"'
+     &             'Unknown vertical grid/coordinate type:', VGTYP,
+     &             'in file "' // TRIM( FLIST3( FID ) ) // '"'
                 CALL M3WARN( 'CKFILE3', 0, 0, MESG )
                 CKFLAG = .FALSE.
                 RETURN

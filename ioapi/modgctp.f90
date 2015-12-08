@@ -2,8 +2,8 @@
 MODULE MODGCTP
 
     !!***************************************************************
-    !!  Version "$Id: modgctp.f90 193 2015-06-18 13:01:22Z coats $"
-    !!  Copyright (c) 2014 UNC Institute for the Environment.
+    !!  Version "$Id: modgctp.f90 266 2015-11-20 16:59:47Z coats $"
+    !!  Copyright (c) 2014-2015 UNC Institute for the Environment.
     !!  Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
     !!  See file "LGPL.txt" for conditions of use.
     !!..............................................................
@@ -41,9 +41,57 @@ MODULE MODGCTP
     !!      and critical sections; support for additional spheres.
     !!      Version   12/2014 by CJC for I/O API-3.2:  move to "ioapi" and
     !!      unify with "lambert.f", "ll2utm.f", "utm2ll.f", and "setsphere.f"
+    !!      Version  11/2015:  re-add LAMBERT etc. INTERFACEs from 3.1
+    !!      to MODULE M3UTILIO, together with re-naming clauses here
+    !!      to avoid double-declaration problems.
     !!..............................................................
 
-    USE M3UTILIO
+    USE M3UTILIO, M3U_GTPZ0       => GTPZ0      ,   &
+                  M3U_SETSPHERE   => SETSPHERE  ,   &
+                  M3U_INITSPHERES => INITSPHERES,   &
+                  M3U_SPHEREDAT   => SPHEREDAT  ,   &
+                  M3U_LAMBERT     => LAMBERT    ,   &
+                  M3U_EQMERC      => EQMERC     ,   &
+                  M3U_TRMERC      => TRMERC     ,   &
+                  M3U_ALBERS      => ALBERS     ,   &
+                  M3U_SETLAM      => SETLAM     ,   &
+                  M3U_SETPOL      => SETPOL     ,   &
+                  M3U_SETEQM      => SETEQM     ,   &
+                  M3U_SETTRM      => SETTRM     ,   &
+                  M3U_SETALB      => SETALB     ,   &
+                  M3U_LAM2LL      => LAM2LL     ,   &
+                  M3U_LL2LAM      => LL2LAM     ,   &
+                  M3U_UTM2LL      => UTM2LL     ,   &
+                  M3U_LL2UTM      => LL2UTM     ,   &
+                  M3U_LAM2UTM     => LAM2UTM    ,   &
+                  M3U_UTM2LAM     => UTM2LAM    ,   &
+                  M3U_LAM2POL     => LAM2POL    ,   &
+                  M3U_POL2LAM     => POL2LAM    ,   &
+                  M3U_POL2LL      => POL2LL     ,   &
+                  M3U_LL2POL      => LL2POL     ,   &
+                  M3U_POL2UTM     => POL2UTM    ,   &
+                  M3U_UTM2POL     => UTM2POL    ,   &
+                  M3U_TRM2LL      => TRM2LL     ,   &
+                  M3U_LL2TRM      => LL2TRM     ,   &
+                  M3U_LAM2TRM     => LAM2TRM    ,   &
+                  M3U_TRM2LAM     => TRM2LAM    ,   &
+                  M3U_TRM2UTM     => TRM2UTM    ,   &
+                  M3U_UTM2TRM     => UTM2TRM    ,   &
+                  M3U_TRM2POL     => TRM2POL    ,   &
+                  M3U_POL2TRM     => POL2TRM    ,   &
+                  M3U_EQM2LL      => EQM2LL     ,   &
+                  M3U_LL2EQM      => LL2EQM     ,   &
+                  M3U_LAM2EQM     => LAM2EQM    ,   &
+                  M3U_EQM2LAM     => EQM2LAM    ,   &
+                  M3U_EQM2UTM     => EQM2UTM    ,   &
+                  M3U_UTM2EQM     => UTM2EQM    ,   &
+                  M3U_EQM2POL     => EQM2POL    ,   &
+                  M3U_POLSTE      => POLSTE     ,   &
+                  M3U_POL2EQM     => POL2EQM    ,   &
+                  M3U_EQM2TRM     => EQM2TRM    ,   &
+                  M3U_TRM2EQM     => TRM2EQM    ,   &
+                  M3U_ALB2LL      => ALB2LL     ,   &
+                  M3U_LL2ALB      => LL2ALB
 
     IMPLICIT NONE
 
@@ -177,7 +225,7 @@ MODULE MODGCTP
 
 
     CHARACTER*132, SAVE :: SVN_ID = &
-'$Id:: modgctp.f90 193 2015-06-18 13:01:22Z coats                     $'
+'$Id:: modgctp.f90 266 2015-11-20 16:59:47Z coats                     $'
 
 
     !!  internal state-variables for SETSPHERE, INITSPHERES, SPHEREDAT:

@@ -4,7 +4,7 @@
      &                           CDATE, CTIME )
 
 C***********************************************************************
-C Version "$Id: currec.f 187 2015-05-05 17:02:57Z coats $"
+C Version "$Id: currec.f 219 2015-08-17 18:05:54Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,

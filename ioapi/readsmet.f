@@ -5,7 +5,7 @@
      &                    RESULT( RDFLAG )
 
 C***********************************************************************
-C Version "$Id: readsmet.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: readsmet.f 219 2015-08-17 18:05:54Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,

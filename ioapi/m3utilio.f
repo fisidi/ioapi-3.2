@@ -2,7 +2,7 @@
         MODULE M3UTILIO
 
         !!-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-        !! Version "$Id: m3utilio.f 210 2015-07-22 19:08:40Z coats $"
+        !! Version "$Id: m3utilio.f 275 2015-12-03 18:42:26Z coats $"
         !! Copyright (c) 2004-2013 Baron Advanced Meteorological Systems,
         !! (c) 2007-2013 Carlie J. Coats, Jr., and
         !! (C) 2014 UNC Institute for the Environment.
@@ -17,6 +17,23 @@
         !!                     leading blanks in FIELD to all-zeros
         !!          KEYVAL:    retrieve value of REAL KEY from FDESC3D fields
         !!          KEYSTR:    retrieve value of char-string KEY.
+        !!
+        !!  DO NOT EDIT !!!!
+        !!
+        !!        The EDSS/Models-3 I/O API depends in an essential manner
+        !!        upon the contents of this MODULE file.  ANY CHANGES are
+        !!        likely to result in very obscure, difficult-to-diagnose
+        !!        bugs caused by an inconsistency between standard "libioapi.a"
+        !!        object-libraries and whatever code is compiled with the
+        !!        resulting modified MODULE-file.
+        !!
+        !!        By making any changes to this MODULE file, the user
+        !!        explicitly agrees that in the case any assistance is
+        !!        required of MCNC or of the I/O API author, Carlie J. Coats, Jr.
+        !!        THE USER AND/OR HIS PROJECT OR CONTRACT AGREES TO REIMBURSE
+        !!        UNC AND/OR THE I/O API AUTHOR, CARLIE J. COATS, JR., AT A
+        !!        RATE TRIPLE THE NORMAL CONTRACT RATE FOR THE SERVICES
+        !!        REQUIRED.
         !!
         !!  PRECONDITIONS:
         !!      Consistency of INTERFACE blocks with I/O API sources.
@@ -33,6 +50,8 @@
         !!      SORTL1() ...SORTL4() interfaces to FINDKEY(), LOCAT(), SORTI()
         !!      Version  07/2015:  move LASTTIME() into "nexttime.F", and
         !!      provide INTERFACE for it.
+        !!      Version  11/2015:  re-add LAMBERT etc. INTERFACEs from 3.1,
+        !!      together with re-naming clauses for MODULE MODGCTP
         !!-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
             IMPLICIT NONE
@@ -42,7 +61,7 @@
             INCLUDE 'IODECL3.EXT'       !  I/O API function declarations
 
             CHARACTER*72, PRIVATE, SAVE :: ID =
-     &'$Id:: m3utilio.f 210 2015-07-22 19:08:40Z coats                $'
+     &'$Id:: m3utilio.f 275 2015-12-03 18:42:26Z coats                $'
 
 
             !!........  PUBLIC Routines:
@@ -288,6 +307,16 @@
             END INTERFACE
 
             INTERFACE ENVLIST
+
+                LOGICAL FUNCTION DBLLIST( ENAME, EDESC,
+     &                                    NMAX, NCNT, LIST )
+                CHARACTER*(*), INTENT(IN   ) :: ENAME   ! environment variable for the list
+                CHARACTER*(*), INTENT(IN   ) :: EDESC   ! environment variable description
+                INTEGER      , INTENT(IN   ) :: NMAX    ! dimension for list
+                INTEGER      , INTENT(  OUT) :: NCNT    ! actual number of entries in list
+                REAL*8       , INTENT(  OUT) :: LIST( NMAX )    ! array of values found
+                END FUNCTION DBLLIST
+
 
                 LOGICAL FUNCTION INTLIST( ENAME, EDESC,
      &                                    NMAX, NCNT, LIST )
@@ -645,6 +674,21 @@
                 REAL         , INTENT(IN   ) :: VGTOP
                 REAL         , INTENT(IN   ) :: VGLEV( * )
                 END FUNCTION GRDCHK3
+            END INTERFACE
+
+            INTERFACE
+                SUBROUTINE GTPZ0( CRDIN, INSYS, INZONE, TPARIN, INUNIT,
+     &                            INSPH, IPR, JPR, LEMSG, LPARM,
+     &                            CRDIO, IOSYS, IOZONE, TPARIO, IOUNIT,
+     &                            LN27, LN83, FN27, FN83, LENGTH, IFLG )
+                REAL*8 , INTENT( IN ) :: CRDIN(2), TPARIN(15)
+                INTEGER, INTENT( IN ) :: INSYS, INZONE, INUNIT, INSPH
+                INTEGER, INTENT( IN ) :: IPR, JPR, LEMSG, LPARM, IOUNIT
+                INTEGER, INTENT( IN ) :: LN27, LN83, LENGTH
+                CHARACTER(LEN=128), INTENT( IN ) :: FN27, FN83
+                REAL*8 , INTENT( OUT ) :: CRDIO(2), TPARIO(15)
+                INTEGER, INTENT( OUT ) :: IFLG
+                END SUBROUTINE GTPZ0
             END INTERFACE
 
             INTERFACE
@@ -1034,6 +1078,24 @@
             END INTERFACE
 
             INTERFACE
+                LOGICAL FUNCTION SETSPHERE( PARM1, PARM2 )
+                REAL*8, INTENT(IN   ) :: PARM1, PARM2
+                END FUNCTION SETSPHERE
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION INITSPHERES( )
+                END FUNCTION INITSPHERES
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION SPHEREDAT( INSPHERE, INPARAM, IOPARAM )
+                INTEGER, INTENT(  OUT) :: INSPHERE
+                REAL*8 , INTENT(  OUT) :: INPARAM( 15 ), IOPARAM( 15 )
+                END FUNCTION SPHEREDAT
+            END INTERFACE
+
+            INTERFACE
                 SUBROUTINE SKIPL( UNIT, NLINES )
                 INTEGER, INTENT(IN   ) :: UNIT
                 INTEGER, INTENT(IN   ) :: NLINES
@@ -1352,6 +1414,412 @@
                 REAL FUNCTION YR2DAY ( YEAR )
                 INTEGER, INTENT(IN   ) :: YEAR  ! 4 digit year YYYY
                 END FUNCTION YR2DAY
+            END INTERFACE
+
+
+!-=-=-=-=-=-=-=-=-=-=-=-=-  LAMBERT()  Related Interfaces  -=-=-=-=-=-=-=-
+
+            INTERFACE
+                LOGICAL FUNCTION LAMBERT( CNAME, A, B, C, X, Y )
+                CHARACTER(LEN=*), INTENT(IN   ) :: CNAME
+                REAL, INTENT(IN   ) :: A          !  first secant latitude
+                REAL, INTENT(IN   ) :: B          !  second secant latitude.  B > A
+                REAL, INTENT(IN   ) :: C          !  central meridian
+                REAL, INTENT(IN   ) :: X          !  Lambert easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  Lambert northing in meters
+                END FUNCTION LAMBERT
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION POLSTE( CNAME, A, B, C, X, Y )
+                CHARACTER(LEN=*), INTENT(IN   ) :: CNAME
+                REAL, INTENT(IN   ) :: A          !  first secant latitude
+                REAL, INTENT(IN   ) :: B          !  second secant latitude.  B > A
+                REAL, INTENT(IN   ) :: C          !  central meridian
+                REAL, INTENT(IN   ) :: X          !  POLSTE easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  POLSTE northing in meters
+                END FUNCTION POLSTE
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION EQMERC( CNAME, A, B, C, X, Y )
+                CHARACTER(LEN=*), INTENT(IN   ) :: CNAME
+                REAL, INTENT(IN   ) :: A          !  first secant latitude
+                REAL, INTENT(IN   ) :: B          !  second secant latitude.  B > A
+                REAL, INTENT(IN   ) :: C          !  central meridian
+                REAL, INTENT(IN   ) :: X          !  EQMERC easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  EQMERC northing in meters
+                END FUNCTION EQMERC
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION TRMERC( CNAME, A, B, C, X, Y )
+                CHARACTER(LEN=*), INTENT(IN   ) :: CNAME
+                REAL, INTENT(IN   ) :: A          !  first secant latitude
+                REAL, INTENT(IN   ) :: B          !  second secant latitude.  B > A
+                REAL, INTENT(IN   ) :: C          !  central meridian
+                REAL, INTENT(IN   ) :: X          !  TRMERC easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  TRMERC northing in meters
+                END FUNCTION TRMERC
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION ALBERS( CNAME, A, B, C, X, Y )
+                CHARACTER(LEN=*), INTENT(IN   ) :: CNAME
+                REAL, INTENT(IN   ) :: A          !  first secant latitude
+                REAL, INTENT(IN   ) :: B          !  second secant latitude.  B > A
+                REAL, INTENT(IN   ) :: C          !  central meridian
+                REAL, INTENT(IN   ) :: X          !  Lambert easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  Lambert northing in meters
+                END FUNCTION ALBERS
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION SETLAM( A, B, C, X, Y )
+                REAL, INTENT(IN   ) :: A          !  first secant latitude
+                REAL, INTENT(IN   ) :: B          !  second secant latitude.  B > A
+                REAL, INTENT(IN   ) :: C          !  central meridian
+                REAL, INTENT(IN   ) :: X          !  Lambert easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  Lambert northing in meters
+                END FUNCTION SETLAM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION SETPOL( A, B, C, X, Y )
+                REAL, INTENT(IN   ) :: A          !  first secant latitude
+                REAL, INTENT(IN   ) :: B          !  second secant latitude.  B > A
+                REAL, INTENT(IN   ) :: C          !  central meridian
+                REAL, INTENT(IN   ) :: X          !  Lambert easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  Lambert northing in meters
+                END FUNCTION SETPOL
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION SETEQM( A, B, C, X, Y )
+                REAL, INTENT(IN   ) :: A          !  first secant latitude
+                REAL, INTENT(IN   ) :: B          !  second secant latitude.  B > A
+                REAL, INTENT(IN   ) :: C          !  central meridian
+                REAL, INTENT(IN   ) :: X          !  Lambert easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  Lambert northing in meters
+                END FUNCTION SETEQM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION SETTRM( A, B, C, X, Y )
+                REAL, INTENT(IN   ) :: A          !  first secant latitude
+                REAL, INTENT(IN   ) :: B          !  second secant latitude.  B > A
+                REAL, INTENT(IN   ) :: C          !  central meridian
+                REAL, INTENT(IN   ) :: X          !  Lambert easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  Lambert northing in meters
+                END FUNCTION SETTRM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION SETALB( A, B, C, X, Y )
+                REAL, INTENT(IN   ) :: A          !  first secant latitude
+                REAL, INTENT(IN   ) :: B          !  second secant latitude.  B > A
+                REAL, INTENT(IN   ) :: C          !  central meridian
+                REAL, INTENT(IN   ) :: X          !  Lambert easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  Lambert northing in meters
+                END FUNCTION SETALB
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION LAM2LL( X, Y, LON, LAT )
+                REAL, INTENT(IN   ) :: X          !  Lambert easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  Lambert northing in meters
+                REAL           LON        !  Lambert easting  in meters
+                REAL           LAT        !  Lambert northing in meters
+                END FUNCTION LAM2LL
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION LL2LAM( LON, LAT, X, Y )
+                REAL           X          !  Lambert easting  in meters
+                REAL           Y          !  Lambert northing in meters
+                REAL, INTENT(IN   ) :: LON        !  Lambert easting  in meters
+                REAL, INTENT(IN   ) :: LAT        !  Lambert northing in meters
+                END FUNCTION LL2LAM
+            END INTERFACE
+
+            INTERFACE
+                SUBROUTINE LL2UTM( LON, LAT, Z, X, Y )
+                REAL   , INTENT(IN   ) :: LON    !  Longitude in decimal degrees
+                REAL   , INTENT(IN   ) :: LAT    !  Latitude in decimal degrees
+                REAL   , INTENT(  OUT) :: X      !  Returned UTM Easting in meters
+                REAL   , INTENT(  OUT) :: Y      !  Returned UTM Northing in meters
+                INTEGER, INTENT(IN   ) :: Z      !  UTM zone
+                END SUBROUTINE LL2UTM
+            END INTERFACE
+
+            INTERFACE
+                SUBROUTINE UTM2LL( X, Y, Z, LON, LAT )
+                REAL   , INTENT(IN   ) :: X       !  UTM easting  in meters
+                REAL   , INTENT(IN   ) :: Y       !  UTM northing in meters
+                INTEGER, INTENT(IN   ) :: Z       !  UTM zone
+                REAL   , INTENT(  OUT) :: LON     !  East longitude in decimal degrees
+                REAL   , INTENT(  OUT) :: LAT     !  North latitude in decimal degrees
+                END SUBROUTINE UTM2LL
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION LAM2UTM( X, Y, Z, U, V )
+                REAL, INTENT(IN   ) :: X          !  Lambert easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  Lambert northing in meters
+                INTEGER, INTENT(IN   ) :: Z          !  UTM zone (1...36)
+                REAL, INTENT(  OUT) :: U          !  UTM easting  in meters
+                REAL, INTENT(  OUT) :: V          !  UTM northing in meters
+                END FUNCTION LAM2UTM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION UTM2LAM( U, V, Z, X, Y )
+                REAL, INTENT(IN   ) :: U          !  UTM easting  in meters
+                REAL, INTENT(IN   ) :: V          !  UTM northing in meters
+                INTEGER, INTENT(IN) :: Z          !  UTM zone (1...36)
+                REAL, INTENT(  OUT) :: X          !  Lambert easting  in meters
+                REAL, INTENT(  OUT) :: Y          !  Lambert northing in meters
+                END FUNCTION UTM2LAM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION LAM2POL( X, Y, U, V )
+                REAL, INTENT(IN   ) :: X          !  Lambert easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  Lambert northing in meters
+                REAL, INTENT(  OUT) :: U          !  POL easting  in meters
+                REAL, INTENT(  OUT) :: V          !  POL northing in meters
+                END FUNCTION LAM2POL
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION POL2LAM( U, V, X, Y )
+                REAL, INTENT(IN   ) :: U          !  POL easting  in meters
+                REAL, INTENT(IN   ) :: V          !  POL northing in meters
+                REAL, INTENT(  OUT) :: X          !  Lambert easting  in meters
+                REAL, INTENT(  OUT) :: Y          !  Lambert northing in meters
+                END FUNCTION POL2LAM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION POL2LL( X, Y, LON, LAT )
+                REAL, INTENT(IN   ) :: X          !  POL easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  POL northing in meters
+                REAL, INTENT(  OUT) :: LON        !  longitude (degrees)
+                REAL, INTENT(  OUT) :: LAT        !  latitude  (degrees)
+                END FUNCTION POL2LL
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION LL2POL( LON, LAT, X, Y )
+                REAL, INTENT(IN   ) :: LON        !  longitude (degrees)
+                REAL, INTENT(IN   ) :: LAT        !  latitude  (degrees)
+                REAL, INTENT(  OUT) :: X          !  POL easting  in meters
+                REAL, INTENT(  OUT) :: Y          !  POL northing in meters
+                END FUNCTION LL2POL
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION POL2UTM( X, Y, Z, U, V )
+                REAL, INTENT(IN   ) :: X          !  POL easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  POL northing in meters
+                INTEGER, INTENT(IN) :: Z          !  UTM zone (1...36)
+                REAL, INTENT(  OUT) :: U          !  UTM easting  in meters
+                REAL, INTENT(  OUT) :: V          !  UTM northing in meters
+                END FUNCTION POL2UTM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION UTM2POL( U, V, Z, X, Y )
+                REAL, INTENT(IN   ) :: U          !  UTM easting  in meters
+                REAL, INTENT(IN   ) :: V          !  UTM northing in meters
+                INTEGER, INTENT(IN) :: Z          !  UTM zone (1...36)
+                REAL, INTENT(  OUT) :: X          !  POL easting  in meters
+                REAL, INTENT(  OUT) :: Y          !  POL northing in meters
+                END FUNCTION UTM2POL
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION TRM2LL( X, Y, LON, LAT )
+                REAL, INTENT(IN   ) :: X          !  TRM easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  TRM northing in meters
+                REAL, INTENT(  OUT) :: LON        !  longitude (degrees)
+                REAL, INTENT(  OUT) :: LAT        !  latitude  (degrees)
+                END FUNCTION TRM2LL
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION LL2TRM( LON, LAT, X, Y )
+                REAL, INTENT(IN   ) :: LON        !  longitude (degrees)
+                REAL, INTENT(IN   ) :: LAT        !  latitude  (degrees)
+                REAL, INTENT(  OUT) :: X          !  TRM easting  in meters
+                REAL, INTENT(  OUT) :: Y          !  TRM northing in meters
+                END FUNCTION LL2TRM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION LAM2TRM( X, Y, U, V )
+                REAL, INTENT(IN   ) :: X          !  Lambert easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  Lambert northing in meters
+                REAL, INTENT(  OUT) :: U          !  TRM easting  in meters
+                REAL, INTENT(  OUT) :: V          !  TRM northing in meters
+                END FUNCTION LAM2TRM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION TRM2LAM( U, V, X, Y )
+                REAL, INTENT(IN   ) :: U          !  TRM easting  in meters
+                REAL, INTENT(IN   ) :: V          !  TRM northing in meters
+                REAL, INTENT(  OUT) :: X          !  Lambert easting  in meters
+                REAL, INTENT(  OUT) :: Y          !  Lambert northing in meters
+                END FUNCTION TRM2LAM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION TRM2UTM( X, Y, Z, U, V )
+                REAL, INTENT(IN   ) :: X          !  TRM easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  TRM northing in meters
+                INTEGER, INTENT(IN) :: Z          !  UTM zone (1...36)
+                REAL, INTENT(  OUT) :: U          !  UTM easting  in meters
+                REAL, INTENT(  OUT) :: V          !  UTM northing in meters
+                END FUNCTION TRM2UTM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION UTM2TRM( U, V, Z, X, Y )
+                REAL, INTENT(IN   ) :: U          !  UTM easting  in meters
+                REAL, INTENT(IN   ) :: V          !  UTM northing in meters
+                INTEGER, INTENT(IN) :: Z          !  UTM zone (1...36)
+                REAL, INTENT(  OUT) :: X          !  TRM easting  in meters
+                REAL, INTENT(  OUT) :: Y          !  TRM northing in meters
+                END FUNCTION UTM2TRM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION TRM2POL( U, V, X, Y )
+                REAL, INTENT(IN   ) :: U          !  TRM easting  in meters
+                REAL, INTENT(IN   ) :: V          !  TRM northing in meters
+                REAL, INTENT(  OUT) :: X          !  POL easting  in meters
+                REAL, INTENT(  OUT) :: Y          !  POL northing in meters
+                END FUNCTION TRM2POL
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION POL2TRM( X, Y, U, V )
+                REAL, INTENT(IN   ) :: X          !  POL easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  POL northing in meters
+                REAL, INTENT(  OUT) :: U          !  TRM easting  in meters
+                REAL, INTENT(  OUT) :: V          !  TRM northing in meters
+                END FUNCTION POL2TRM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION EQM2LL( X, Y, LON, LAT )
+                REAL, INTENT(IN   ) :: X          !  EQM easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  EQM northing in meters
+                REAL, INTENT(  OUT) :: LON        !  longitude (degrees)
+                REAL, INTENT(  OUT) :: LAT        !  latitude  (degrees)
+                END FUNCTION EQM2LL
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION LL2EQM( LON, LAT, X, Y )
+                REAL, INTENT(IN   ) :: LON        !  longitude (degrees)
+                REAL, INTENT(IN   ) :: LAT        !  latitude  (degrees)
+                REAL, INTENT(  OUT) :: X          !  EQM easting  in meters
+                REAL, INTENT(  OUT) :: Y          !  EQM northing in meters
+                END FUNCTION LL2EQM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION LAM2EQM( X, Y, U, V )
+                REAL, INTENT(IN   ) :: X          !  Lambert easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  Lambert northing in meters
+                REAL, INTENT(  OUT) :: U          !  EQM easting  in meters
+                REAL, INTENT(  OUT) :: V          !  EQM northing in meters
+                END FUNCTION LAM2EQM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION EQM2LAM( U, V, X, Y )
+                REAL, INTENT(IN   ) :: U          !  EQM easting  in meters
+                REAL, INTENT(IN   ) :: V          !  EQM northing in meters
+                REAL, INTENT(  OUT) :: X          !  Lambert easting  in meters
+                REAL, INTENT(  OUT) :: Y          !  Lambert northing in meters
+                END FUNCTION EQM2LAM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION EQM2UTM( X, Y, Z, U, V )
+                REAL, INTENT(IN   ) :: X          !  EQM easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  EQM northing in meters
+                INTEGER, INTENT(IN) :: Z          !  UTM zone (1...36)
+                REAL, INTENT(  OUT) :: U          !  UTM easting  in meters
+                REAL, INTENT(  OUT) :: V          !  UTM northing in meters
+                END FUNCTION EQM2UTM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION UTM2EQM( U, V, Z, X, Y )
+                REAL, INTENT(IN   ) :: U          !  UTM easting  in meters
+                REAL, INTENT(IN   ) :: V          !  UTM northing in meters
+                INTEGER, INTENT(IN) :: Z          !  UTM zone (1...36)
+                REAL, INTENT(  OUT) :: X          !  EQM easting  in meters
+                REAL, INTENT(  OUT) :: Y          !  EQM northing in meters
+                END FUNCTION UTM2EQM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION EQM2POL( U, V, X, Y )
+                REAL, INTENT(IN   ) :: U          !  EQM easting  in meters
+                REAL, INTENT(IN   ) :: V          !  EQM northing in meters
+                REAL, INTENT(  OUT) :: X          !  POL easting  in meters
+                REAL, INTENT(  OUT) :: Y          !  POL northing in meters
+                END FUNCTION EQM2POL
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION POL2EQM( X, Y, U, V )
+                REAL, INTENT(IN   ) :: X          !  POL easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  POL northing in meters
+                REAL, INTENT(  OUT) :: U          !  EQM easting  in meters
+                REAL, INTENT(  OUT) :: V          !  EQM northing in meters
+                END FUNCTION POL2EQM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION EQM2TRM( U, V, X, Y )
+                REAL, INTENT(IN   ) :: U          !  EQM easting  in meters
+                REAL, INTENT(IN   ) :: V          !  EQM northing in meters
+                REAL, INTENT(  OUT) :: X          !  TRM easting  in meters
+                REAL, INTENT(  OUT) :: Y          !  TRM northing in meters
+                END FUNCTION EQM2TRM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION TRM2EQM( X, Y, U, V )
+                REAL, INTENT(IN   ) :: X          !  TRM easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  TRM northing in meters
+                REAL, INTENT(  OUT) :: U          !  EQM easting  in meters
+                REAL, INTENT(  OUT) :: V          !  EQM northing in meters
+                END FUNCTION TRM2EQM
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION ALB2LL( X, Y, LON, LAT )
+                REAL, INTENT(IN   ) :: X          !  Albers easting  in meters
+                REAL, INTENT(IN   ) :: Y          !  Albers northing in meters
+                REAL, INTENT(  OUT) :: LON        !  Lambert easting  in meters
+                REAL, INTENT(  OUT) :: LAT        !  Lambert northing in meters
+                END FUNCTION ALB2LL
+            END INTERFACE
+
+            INTERFACE
+                LOGICAL FUNCTION LL2ALB( LON, LAT, X, Y )
+                REAL, INTENT(IN   ) :: LON        !  longitude (degrees)
+                REAL, INTENT(IN   ) :: LAT        !  latitude  (degrees)
+                REAL, INTENT(  OUT) :: X          !  Albers easting  in meters
+                REAL, INTENT(  OUT) :: Y          !  Albers northing in meters
+                END FUNCTION LL2ALB
             END INTERFACE
 
 

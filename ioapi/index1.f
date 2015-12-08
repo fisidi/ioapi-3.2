@@ -2,7 +2,7 @@
       INTEGER FUNCTION INDEX1( NAME, N, NLIST )
 
 C***********************************************************************
-C Version "$Id: index1.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: index1.f 219 2015-08-17 18:05:54Z coats $"
 C EDSS/Models-3 I/O API.
 C BAMS/MCNC/EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,

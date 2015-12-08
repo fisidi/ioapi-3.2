@@ -2,7 +2,7 @@
         INTEGER FUNCTION YEAR4 ( YY )
 
 C********************************************************************
-C Version "$Id: year4.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: year4.f 219 2015-08-17 18:05:54Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (c) 2004-2007 Baron Advanced Meteorological Systems,

@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: M3PROBE.html 175 2015-02-27 12:57:33Z coats $" -->
+<!-- "$Id: M3PROBE.html 271 2015-11-28 16:53:44Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE"> 
 <TITLE> Program M3PROBE </TITLE>
 </HEAD>
@@ -16,29 +16,34 @@
 <H1>    Program M3PROBE </H1>
 
 <H2> Summary </H2>
+<BLOCKQUOTE>
 
     The <VAR>m3probe</VAR> program <STRONG>extracts the time
     series</STRONG> for a specified variable for a specified set of
-    points from a GRIDDED, BOUNDARY, or CUSTOM input file, and write the
-    resulting time series as columns to a (human-readable) ASCII
-    REPORT-file.
+    points from a GRIDDED, BOUNDARY, or CUSTOM input file, and writes
+    the resulting time series as columns to a (human-readable) ASCII
+    REPORT-file. Points to be extracted are specified in terms of
+    grid or CUSTOM-array subscripts.
     <P>
 
-    Source code for program <CODE>m3probe</CODE> is available <A HREF =
-    "gpl.txt">under the GNU GPL License, Version 2</A>, can be found <A
-    HREF="M3PROBE.txt">here</A>,  and can be downloaded from the CMAS
-    web site as part of the I/O&nbsp;API distribution tar-ball
+    Source code for program <CODE>m3probe</CODE> is available
+    <A HREF = "gpl.txt">under the GNU GPL License, Version 2</A>, can be
+    found <A HREF="M3PROBE.txt">here</A>,  and can be downloaded from the
+    CMAS web site as part of the I/O&nbsp;API distribution tar-ball
     <A HREF = "AVAIL.html">from this page</A>.
+    <P>
+</BLOCKQUOTE>
 
 <H2> Usage </H2>
+<BLOCKQUOTE>
 
 <PRE>
     setenv  INFILE    &lt;path name&gt;
-    setenv  REPORT;   &lt;path name&gt;
+    setenv  REPORT    &lt;path name&gt;
     m3probe [and answer the prompts]
 </PRE>
     where <VAR>INFILE</VAR> is the <A HREF = "LOGICALS.html"> logical
-    name </A>  of the input file, and <VAR>REPORT</VAR> is the logical
+    name </A>  of the input data file, and <VAR>REPORT</VAR> is the logical
     name of the  report file to which the ASCII time series report is
     printed.  <VAR>INFILE</VAR> must be of type <CODE>GRDDED3</CODE>,
     <CODE>CUSTOM3</CODE>, or <CODE>BNDARY3</CODE>. <STRONG>The program
@@ -76,7 +81,7 @@
     setenv REPORT ${data}/SPEED.base.2013239.txt
     set    UI  = /tmp/speed.$$
 
-    echo "Yes           " &gt;&amp;! ${UI}     #  Yes, continue with program
+    echo "Yes           " &gt;&amp; ${UI}      #  Yes, continue with program
     echo "              " &gt;&gt;  ${UI}     #  default starting date for run
     echo "              " &gt;&gt;  ${UI}     #  default starting time
     echo "              " &gt;&gt;  ${UI}     #  default time step
@@ -134,9 +139,14 @@
   2013240:000000    2.554426E+01    1.913849E+01    4.619951E+01
 </PRE>
 <P>
+</BLOCKQUOTE>
 
 
 <HR>
+
+<A HREF = "GRIDPRIBE.html" >
+See Also: <STRONG>program GRIDPROBE</STRONG>
+</A><P> 
 
 <A HREF = "M3PAIR.html" >
 Previous:  <STRONG>M3PAIR</STRONG>

@@ -2,7 +2,7 @@
         LOGICAL FUNCTION CRTBUF3( FID ) RESULT( CRTFLAG )
 
 C***********************************************************************
-C Version "$Id: crtbuf3.f 167 2015-02-24 07:48:49Z coats $"
+C Version "$Id: crtbuf3.f 219 2015-08-17 18:05:54Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2011 Baron Advanced Meteorological Systems, and
@@ -27,7 +27,7 @@ C
 C  REVISION  HISTORY:
 C       prototype 07/1994 by CJC
 C
-C	Revised   10/1996 by CJC:  new file type TSERIES3 for hydrology work.
+C       Revised   10/1996 by CJC:  new file type TSERIES3 for hydrology work.
 C
 C       Modified  05/1998 by CJC for OpenMP thread-safety
 C
@@ -136,7 +136,7 @@ C...........   Set grid and coordinate system parameters
 
 C.......   Define all the Models-3 variables for this file:
 
-        DO 111  VAR = 1 , NVARS3D
+        DO  VAR = 1 , NVARS3D
             VINDX3( VAR,FID ) = IMISS3
             VTYPE3( VAR,FID ) = VTYPE3D( VAR )
             ILAST3( VAR,FID ) = 0
@@ -153,7 +153,7 @@ C.......   Define all the Models-3 variables for this file:
                 CRTFLAG = .FALSE.
                 RETURN
             END IF
-111     CONTINUE
+        END DO
 
 C.......   Call BUFCRE3() to allocate buffers for each variable
 C.......   in this "file"

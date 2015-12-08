@@ -2,7 +2,7 @@
         SUBROUTINE M3MSG2( MESSAGE )
 
 C***********************************************************************
-C Version "$Id: m3msg2.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: m3msg2.F 219 2015-08-17 18:05:54Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010  Baron Advanced Meteorological Systems

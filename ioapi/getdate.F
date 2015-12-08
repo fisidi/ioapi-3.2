@@ -2,11 +2,11 @@
         INTEGER FUNCTION GETDATE ( DEFAULT , PROMPT )
 
 C********************************************************************
-C Version "$Id: getdate.F 187 2015-05-05 17:02:57Z coats $"
+C Version "$Id: getdate.F 258 2015-11-11 00:08:12Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr., and
 C (C) 2003-2010 Baron Advanced Meteorological Systems,
-C (C) 2007-2013 Carlie J. Coats, Jr., and 
+C (C) 2007-2013 Carlie J. Coats, Jr., and
 C (C) 2015 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
@@ -35,6 +35,8 @@ C       2/2002 Unification by Carlie J. Coats, Jr., MCNC Environmental
 C       Programs with global-climate GETDATE, which uses a 360-day "year".
 C
 C       Modified 03/20010 by CJC: F9x changes for I/O API v3.1
+C
+C       Modified 11/2015 by CJC: IO_365 changes
 C***********************************************************************
 
         IMPLICIT NONE
@@ -61,6 +63,7 @@ C       begin GETDATE
         JDATE = GETNUM( 0, 999999999, DEFAULT, PROMPT )
 
 #ifndef IO_360
+#ifndef IO_365
 
 C.........  For Gregorian input date - convert to Julian
 
@@ -83,6 +86,7 @@ C.........  Check range
             GO TO 11   ! Read in date again.
 
         ENDIF
+#endif
 #endif
 
         WRITE( MESG, '( A, I9.7 )' ) 'Using date', JDATE

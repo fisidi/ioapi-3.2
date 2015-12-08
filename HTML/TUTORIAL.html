@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: TUTORIAL.html 177 2015-03-02 16:20:58Z coats $" -->
+<!-- "$Id: TUTORIAL.html 236 2015-10-14 19:52:34Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE">
 <TITLE> TUTORIAL:  Using the I/O&nbsp;API </TITLE>
 </HEAD>
@@ -74,12 +74,15 @@ data (especially atmospheric data) and the models that use
 it&nbsp;&mdash; see the <A HREF="REQUIREMENTS.html">Requirements
 Document</A> for more detail.  In general, if you're wondering about how
 to manipulate the underlying objects according to the I/O&nbsp;API
-conventions, <EM>there is probably an I/O&nbsp;API routine already
-written to do it for you.</EM><BR> On the other hand, a number of people
-have attempted to &quot;get around&quot; the API and treat it as a
-&quot;data format&quot;, reading or writing its data directly with their
-programs (e.g., <VAR>PAVE</VAR> and <VAR>VERDI</VAR>). <STRONG>So far,
-every one of them has screwed up.</STRONG>
+conventions, <EM>there is probably an I/O&nbsp;API routine or
+<A HREF = "#tools"><VAR>m3tools</VAR>. program</A> already
+written to do it for you.</EM>
+<BR>
+On the other hand, a number of people have attempted to &quot;get
+around&quot; the API and treat it as a &quot;data format&quot;, reading
+or writing its data directly with their programs (e.g., <VAR>PAVE</VAR>
+and <VAR>VERDI</VAR>). <STRONG>So far, every one of these attempts has
+screwed up to one degree or another.</STRONG>
 <P>
 
 
@@ -99,14 +102,16 @@ in <VAR>fdesc3.h</VAR>  instead of a <CODE>COMMON</CODE> found in
 
 There are <STRONG>9 fundamental I/O routines</STRONG> you'll need to
 know; these are described in more detail in later sections of the
-documentation.  (In all, there are 170 Fortran and 59 C routines,
+documentation.  (In all, there are about 200 Fortran and 60 C routines,
 many of which are &quot;private&quot; routines used internally.
 See the <A HREF = "AA.html"> I/O&nbsp;API Programmers Manual</A>.)
 <P>
 <BLOCKQUOTE>
 <DL>
     <DT><A HREF = "#start"><STRONG><CODE>INIT3()</CODE></STRONG></A> to
-        start up;
+        start up (returning the Fortran unit number for the log file;
+        it may be called repeatedly, and is a &quot;no-op&quot; for
+        such repeated calls);
     <DT><A HREF = "M3EXIT.html"><STRONG><CODE>M3EXIT()</CODE></STRONG></A>,
         to shut programs down properly; it flushes all files, generates
         exit messages to the <A HREF = "ENVIRONMENT.html">program log</A>
@@ -241,13 +246,27 @@ look something like:
     ...
     setenv foo          /tmp/mydir/somedata.mymodel
     setenv bar          /tmp/mydir/otherdata.whatever
-    setenv qux          &quot;/tmp/mydir/volatilestuff.mymodel -v&quot;
+    setenv qux         &quot;/tmp/mydir/volatilestuff.mymodel -v&quot;
     setenv LOGFILE      /tmp/mydir/mymodel.log
     setenv SCENFILE     /tmp/mydir/test17a.description
     setenv EXECUTION_ID TEST17A
     /user/mydir/myprogram
     ...
 </PRE>
+
+<A HREF="BUFFERED.html#pncf">PnetCDF/MPI distributed files</A>  are indicated
+by a leading <CODE>MPI:</CODE> prefix, e.g., 
+<PRE>
+    setenv foo       MPI:/tmp/mydir/somedata.mymodel
+</PRE>
+<P>
+
+<A HREF="BUFFERED.html#vol">Native-binary files</A> (For NCEP) are indicated
+by a leading <CODE>BIN:</CODE> prefix, e.g., 
+<PRE>
+    setenv bar       BIN:/tmp/mydir/somedata.mymodel
+</PRE>
+<P>
 
 <A HREF="BUFFERED.html#vol">VOLATILE files</A>  are indicated by a
 trailing <CODE>&nbsp;-v</CODE> in the <VAR>setenv</VAR> command, as
@@ -260,8 +279,8 @@ if the program crashes unexpectedly).
 <P>
 
 <A HREF="BUFFERED.html#buf">BUFFERED virtual files</A> can be used to
-provide safe, structured exchange of data -- of &quot;gridded&quot;,
-&quot;boundary&quot;, or &quot;custom&quot;  types only -- between
+provide safe, structured exchange of data &mdash; of &quot;gridded&quot;,
+&quot;boundary&quot;, or &quot;custom&quot;  types only &mdash; between
 different modules in the same program.  If you  <CODE>setenv</CODE>
 the value of a logical name to the value  <CODE>BUFFERED</CODE>, as
 given below:
@@ -297,18 +316,22 @@ time the requester is awaked and given the requested data).  The
 decision of which files are disk-based and which are COUPLING-MODE
 virtual files is also made by <VAR>setenv</VAR> commands at
 program-launch, the value being of the form
-&quot;virtual&nbsp;&lt;communications-channel-name&gt;&quot;:
+<CODE>virtual&nbsp;&lt;communications-channel-name&gt;</CODE>
+or <CODE>PVM:&lt;communications-channel-name&gt;</CODE> as in
+one of the following:
 <PRE>
     ...
+    setenv  qux  PVM:CHEM_CONC_2D_G3
     setenv  zok  &quot;virtual CHEM_CONC_3D_G3&quot;
     /user/mydir/myprogram
     ...
 </PRE>
 <P>
 
-Except for <CODE>INIT3()</CODE>, all of the fundamental I/O&nbsp;API
-routines are <CODE>LOGICAL</CODE> functions  returning <CODE>TRUE</CODE>
-for success and <CODE>FALSE</CODE> for failure.
+Except for <CODE>INIT3()</CODE> (which returns the Fortran unit number
+for the log file), all of the fundamental I/O&nbsp;API routines are
+<CODE>LOGICAL</CODE> functions  returning <CODE>TRUE</CODE> for success
+and <CODE>FALSE</CODE> for failure.
 <P>
 
 There are a number of <A HREF = "INCLUDE.html#dims">dimensioning</A>
@@ -447,7 +470,7 @@ file type  parameter values (&quot;magic numbers&quot;)
 </BLOCKQUOTE>
 (for which <CODE>GRDDED3</CODE> and <CODE>BNDARY3</CODE> will account for
 almost all CTM uses); <CODE>CUSTOM3</CODE> and <CODE>SMATRX3</CODE>
-are used primarily in emissions modeling).
+are used primarily in emissions and hydrology modeling).
 These <CODE>PARAMETER</CODE>s are defined in INCLUDE-file
 <A HREF="INCLUDE.html">PARMS3.EXT</A>.
 <P>
@@ -460,7 +483,7 @@ The basic types are associated with &quot;magic numbers&quot;
     <DT> <STRONG><CODE>M3DBLE</CODE></STRONG>, for 8-byte (64-bit)
          <CODE>REAL</CODE>s (i.e., <CODE>DOUBLE PRECISION</CODE>), and
     <DT> <STRONG><CODE>M3INT8</CODE></STRONG>, for 8-byte (64-bit) <CODE>INTEGER</CODE>s
-            (<EM>I/O&nbsp;API-3.2 or later only</EM>)
+            (<EM>I/O&nbsp;API-3.2 or later only, if netCDF4 is enabled</EM>)
 </DL>
 </BLOCKQUOTE>
 also defined in <CODE>INCLUDE</CODE>-file <VAR>PARMS3.EXT</VAR>.
@@ -768,11 +791,13 @@ messages to the log).
 <P>
 
 <A HREF = "INIT3.html"><STRONG><CODE>INIT3()</CODE></STRONG></A> is an integer
-function.  It returns the unit number to be used
-for the program's log (if you setenv <CODE>LOGFILE</CODE>, the I/O&nbsp;API's log and
-error messages will be written to this unit; otherwise, they go to
-standard output, unit 6).  <CODE>INIT3()</CODE> can be called as many times as you
-want, to get the unit number for the program log.
+function for initializing the I/O&nbsp;API, and must be called before
+any other I/O API operation.  It returns the unit number to be used
+for the program's log (if you <CODE>setenv&nbsp;LOGFILE&nbsp;&lt;path&gt;</CODE>,
+the I/O&nbsp;API's log and error messages will be written to this unit;
+otherwise, they go to standard output, unit 6).  <CODE>INIT3()</CODE>
+can be called as many times as you want, to get the unit number for the
+program log.
 <P>
 
 <A HREF = "SHUT3.html"><STRONG><CODE>SHUT3()</CODE></STRONG></A> is a logical
@@ -833,15 +858,16 @@ decreasing.
 <P>
 
 The arguments to <CODE>OPEN3()</CODE> are the logical name <CODE>FNAME</CODE> 
-of the file, an <CODE>INTEGER</CODE> &quot;magic number&quot;  <CODE>FSTATUS</CODE> indicating
-the type of open operation and the caller's name  <CODE>PGNAME</CODE> for logging and
-audit-trail purposes.  You can call <CODE>OPEN3()</CODE> many times for the same file
-without hurting anything, if you want -- as long as you don't first open
-it read-only and then try to change your mind, or try to open it as a
-<CODE>NEW</CODE> file after it is already open.  Names and values for the
-mode-of-opening magic number argument are defined in
-<A HREF = "INCLUDE.html#parms"><STRONG><VAR>PARMS3.EXT</VAR></STRONG></A> as
-the following:
+of the file, an <CODE>INTEGER</CODE> &quot;magic number&quot; 
+<CODE>FSTATUS</CODE> indicating the type of open operation and the
+caller's name  <CODE>PGNAME</CODE> for logging and audit-trail
+purposes.  You can call <CODE>OPEN3()</CODE> many times for the same
+file without hurting anything, if you want -- as long as you don't first
+open it read-only and then try to change your mind and then open it for
+output, or try to open it as a <CODE>NEW</CODE> file after it is already
+open.  Names and values for the mode-of-opening magic number argument
+are defined in <A HREF = "INCLUDE.html#parms"><STRONG><VAR>PARMS3.EXT</VAR></STRONG></A>
+as the following:
 <BLOCKQUOTE>
 <DL>
     <DT>  <STRONG><CODE>FSREAD3</CODE></STRONG> = 1 for READ-ONLY access to
@@ -871,7 +897,8 @@ the following:
           access to files:  If the file is open, close it.  If the file
           exists, delete it.  Then create a new file according to the
           user-supplied file definition.<BR>
-          <EM><STRONG>NOTE: </STRONG>dangerous, but the Powers That BE&reg; insisted<BR>
+          <EM><STRONG>NOTE: </STRONG>dangerous, but the Powers That
+          BE&reg; insisted.<BR>
           Joan Novak (EPA)  and Ed Bilicki (MCNC)
           have declared as a software standard that <STRONG>modeling programs
           may not  use <CODE>FSCREA3</CODE> as the mode for opening files.</STRONG>
@@ -989,18 +1016,19 @@ succeed, <CODE>FALSE</CODE> when  they fail.
 The first two require that the time step you request be on the file --
 they won't give you data for the half-hour, for example, if the file has
 hourly data only.  Because it optimizes the interpolation problem for
-you, <CODE>INTERP3()</CODE> is probably the most useful of these.  Note that it has a
-<CODE>size</CODE> argument -- you tell it how much data you expect, and
-it checks that against how much data the file thinks you ought to get,
-for error checking purposes.  A typical <CODE>INTERP3()</CODE> call to read/interpolate
-the variable HNO3 to 12:30 PM on February 4, 1987 (Models-3 Convention
-date&amp;time 1987035:123000) might look like:
+you, <CODE>INTERP3()</CODE> is probably the most useful of these
+routines.  Note that it has a <CODE>size</CODE> argument -- you tell it
+how much data you expect, and it checks that against how much data the
+file thinks you ought to get, for error checking purposes.  A typical
+<CODE>INTERP3()</CODE> call to read/interpolate the variable
+<CODE>HNO3</CODE> to 12:37&nbsp;PM on February&nbsp;4, 1987 (Models-3
+Convention date&amp;time 1987035:123000) might look like:
 <PRE>
         ...
         CHARACTER*16 FNAME, VNAME
         REAL*4       ARRAY( NCOLS, NROWS, NLAYS )
         ...
-        IF ( .NOT. INTERP3( 'myfile', 'HNO3', 1987035, 123000,
+        IF ( .NOT. INTERP3( 'myfile', 'HNO3', 1987035, 123700,
         &amp;                   NCOLS*NROWS*NLAYS, ARRAY ) ) THEN
         ...(some kind of error happened--deal with it here)
         END IF
@@ -1032,7 +1060,7 @@ time step of data at a time (in which case, use
 <A HREF = "INCLUDE.html#magic">&quot;magic value&quot;</A>
 <CODE>ALLVAR3</CODE> (<CODE>='ALL'</CODE>, defined in
 <A HREF = "INCLUDE.html#parms"><CODE>PARMS3.EXT</CODE></A>) as the
-variable-name.  For ID-referenced,
+variable-name).  For ID-referenced,
 profile, and grid-nest files, you must write an entire time step at a time
 (i.e., the variable-name <EM>must</EM> be <CODE>ALLVAR3</CODE>).
 <CODE>WRITE3()</CODE> is affected by <A HREF = "ENVIRONMENT.html">standard
@@ -1189,15 +1217,15 @@ routines for manipulating dates and times  are the following:
           <STRONG><CODE>DAYMON( JDATE, MONTH, MDAY )</CODE></STRONG></A>  is a
           utility subroutine which returns the month (1, ..., 12) and
           day of month (1, ..., 31) for the specified Julian date;
-          <BR>
-          <EM><STRONG>NOTE:</STRONG> Non-standard week (beginning with
-          Monday instead of Sunday) dictated by the emissions
-          modelers.</EM>
           <P>
 
     <DT>  <A HREF = "WKDAY.html"><STRONG><CODE>WKDAY( JDATE )</CODE></STRONG></A>
           is a utility  integer function which returns the day-of-week
           (1=Monday, ..., 7=Sunday) for the  specified Julian date;
+          <BR>
+          <EM><STRONG>NOTE:</STRONG> Non-standard week (beginning with
+          Monday instead of Sunday) dictated by the emissions
+          modelers.</EM>
           <P>
 
     <DT>  <A HREF = "JULIAN.html">
@@ -1264,7 +1292,6 @@ Particularly notable are the following:
 </DL>
 </BLOCKQUOTE>
 <P>
-</BLOCKQUOTE>
 </BLOCKQUOTE>
 
 <HR>

@@ -4,7 +4,7 @@ C
       LOGICAL FUNCTION INTERP3V( FID, VID, JDATE, JTIME, BUFFER )
 
 C***********************************************************************
-C Version "$Id: interp3v.F 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: interp3v.F 219 2015-08-17 18:05:54Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2010 by Baron Advanced Meteorological Systems.

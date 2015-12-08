@@ -2,7 +2,7 @@
         SUBROUTINE SYNCHTAO( JDATE, JTIME )
 
 C*************************************************************************
-C Version "$Id: synchtao.f 164 2015-02-24 06:50:01Z coats $"
+C Version "$Id: synchtao.f 219 2015-08-17 18:05:54Z coats $"
 C EDSS/Models-3 I/O API.100 2015-01-16 16:52:16Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,

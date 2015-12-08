@@ -8,18 +8,20 @@
         LOGICAL INTERPX
 
 C***********************************************************************
-C Version "$Id: interp3.F 171 2015-02-24 08:18:01Z coats $"
+C Version "$Id: interp3.F 219 2015-08-17 18:05:54Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
-C (C) 2003-2010 by Baron Advanced Meteorological Systems.
+C (C) 2003-2010 by Baron Advanced Meteorological Systems,
+C (C) 2007-2013 Carlie J. Coats, Jr., and 
+C (C) 2014-2015 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
-C  INTERP3 function body starts at line  195
-C  Entry INTERPX         starts at line  201
+C  INTERP3 function body starts at line  199
+C  Entry INTERPX         starts at line  205
 C
-C  NOTE:  MACHINE-DEPENDENT CODE !!!  depends upon FORTRAN :: C
-C       coupling between INTERP3() and BUFINT3()
+C  NOTE:  MACHINE-DEPENDENT CODE !!!
+C           depends upon FORTRAN :: C coupling between INTERP3() and BUFINT3()
 C
 C  FUNCTION:
 C       INTERP3() interpolates data from Models-3 data file with logical
@@ -88,6 +90,8 @@ C       Modified  3/14/2004 by CJC:  FORMAT changes.
 C       Modified  8/17/2004 by CJC:  deal with virtual-file bug.
 C       Modified 11/2004 by CJC:  new "verbose-flag" argument to RDTFLAG
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C       Modified 08/2015 by CJC for I/O API 3.2:  support for type MPIGRD3
+C       for MPI/PnetCDF distributed I/O
 C***********************************************************************
 
 #define REAL8 DOUBLE PRECISION
@@ -96,7 +100,6 @@ C...........   INCLUDES:
 
         INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
-        INCLUDE 'NETCDF.EXT'
 
 
 C...........   ARGUMENTS and their descriptions:
@@ -298,7 +301,7 @@ C.......   Find netCDF index for the file, and open it if necessary
                 IFLAG3 = .FALSE.
             END IF
             RETURN
-	END IF
+        END IF
 
 
         IDUM = FTYPE3( FID )
@@ -312,7 +315,7 @@ C.......   Find netCDF index for the file, and open it if necessary
 
             TDIM  = 3
 
-        ELSE IF ( IDUM .EQ. GRDDED3 ) THEN
+        ELSE IF ( IDUM .EQ. GRDDED3 .OR. IDUM .EQ. MPIGRD3 ) THEN
 
             DIMS( 1 ) = 1
             DELS( 1 ) = NCOLS3( FID )
@@ -528,7 +531,7 @@ C.......   Interpolate/copy to JDATE:JTIME
             NDATE3( VID,FID ) = 0
             NTIME3( VID,FID ) = 0
 
-        ELSE IF ( CDFID3( FID ) .EQ. BUFFIL3 ) THEN	!  "buffered" file
+        ELSE IF ( CDFID3( FID ) .EQ. BUFFIL3 ) THEN     !  "buffered" file
 
             RFLAG = .FALSE.
 
@@ -559,7 +562,7 @@ C.......   Interpolate/copy to JDATE:JTIME
                 DTJL = SECSDIFF( LDATE3( VID,FID ), LTIME3( VID,FID ),
      &                           JDATE,             JTIME )
 
-                IF ( DTJL .LT. 0 ) THEN	!  ldate:ltime not OK for interp
+                IF ( DTJL .LT. 0 ) THEN     !  ldate:ltime not OK for interp
 
                     WRITE( MESG, 94030 )
      &              JDATE, JTIME,
@@ -586,9 +589,9 @@ C.......   Interpolate/copy to JDATE:JTIME
                         CALL M3WARN( NAMBUF, JDATE, JTIME, MESG )
                         EFLAG   = .TRUE.
 
-                    END IF	!  if ndate:ntime not OK for interp
+                    END IF      !  if ndate:ntime not OK for interp
 
-                END IF	!  if dtjl < 0; else if dtjl > 0 (just copy if dtjl=0)
+                END IF      !  if dtjl < 0; else if dtjl > 0 (just copy if dtjl=0)
 
                 QQ   = DBLE( DTJL ) / DBLE( DT )  !  Interpolation coefficients
                 PP   = 1.0 - QQ                   ! = dble(dt - dtjl)/dble( dt )
@@ -804,7 +807,7 @@ C..........   If read will be necessary, check timestep flags first:
 !$OMP   END CRITICAL( S_INTERP )
 
 1001    CONTINUE
-	IF ( EFLAG ) THEN
+        IF ( EFLAG ) THEN
             IF ( XFLAG ) THEN
                 INTERPX = .FALSE.
             ELSE

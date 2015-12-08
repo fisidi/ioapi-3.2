@@ -1,6 +1,6 @@
 
 C.........................................................................
-C Version "$Id: gctp.f 194 2015-06-18 13:02:48Z coats $"
+C Version "$Id: gctp.f 219 2015-08-17 18:05:54Z coats $"
 C Adapted from USGS general cartographic transformation package, version 2.0.2
 C with portability and F90-related enhancements
 C EDSS/Models-3 I/O API.  Modifications copyright (C) 1992-2000 MCNC
@@ -264,7 +264,7 @@ C      OTHERWISE , ERROR CODE FROM PROJECTION COMPUTATIONAL MODULE.
       SAVE
 
       CHARACTER*72, SAVE :: SVN_ID =
-     &'$Id:: gctp.f 194 2015-06-18 13:02:48Z coats                   $'
+     &'$Id:: gctp.f 219 2015-08-17 18:05:54Z coats                   $'
 
       INTEGER   NAD27(134), NAD83(134), NADUT(54), SPTYPE(134)
       INTEGER   SYSUNT(24), SWITCH(23), ITER

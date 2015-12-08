@@ -1,13 +1,13 @@
-
+ 
       LOGICAL FUNCTION READ3( FNAME, VNAME, LAYER, JDATE,JTIME, BUFFER)
 
 C***********************************************************************
-C Version "$Id: read3.F 187 2015-05-05 17:02:57Z coats $"
+C Version "$Id: read3.F 230 2015-10-08 20:44:26Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
 C (C) 2007-2013 Carlie J. Coats, Jr., and
-C (C) 2014 UNC Institute for the Environment.
+C (C) 2014-2015 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
@@ -70,7 +70,12 @@ C
 C       Modified 11/2004 by CJC:  new "verbose-flag" argument to RDTFLAG
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
+C
+C       Modified 08/2015 by CJC: USE MODNCFIO, NF_*() for I/O API v3.2
+C       Support for MPI/PnetCDF files.
 C***********************************************************************
+
+        USE MODNCFIO
 
         IMPLICIT NONE
 
@@ -78,7 +83,6 @@ C...........   INCLUDES:
 
         INCLUDE 'PARMS3.EXT'
         INCLUDE 'STATE3.EXT'
-        INCLUDE 'NETCDF.EXT'
 #ifdef IOAPICPL
         INCLUDE 'STATE3V.EXT'
 #endif
@@ -254,7 +258,7 @@ C.......   If virtual file, use READ3V():
 
 
 C...........   Compute record number, and check availability:
-C...........   Note:  rdtflag() calls NCSNC()
+C...........   Note:  rdtflag() calls NF_SYNC()
 
         IF ( .NOT. RDTFLAG( FID,VID, JDATE,JTIME, STEP, .TRUE. ) ) THEN
 
@@ -274,6 +278,10 @@ C...........   Read data from file into BUFFER()
             READ3 = RDCUSTOM( FID, VID, LAYER, STEP, BUFFER )
 
         ELSE IF ( FTYPE3( FID ) .EQ. GRDDED3 ) THEN
+
+            READ3 = RDGRDDED( FID, VID, LAYER, STEP, BUFFER )
+
+        ELSE IF ( FTYPE3( FID ) .EQ. MPIGRD3 ) THEN
 
             READ3 = RDGRDDED( FID, VID, LAYER, STEP, BUFFER )
 
@@ -322,13 +330,7 @@ C******************  FORMAT  STATEMENTS   ******************************
 
 C...........   Error and warning message formats..... 91xxx
 
-91000   FORMAT ( 5A )
-
 91010   FORMAT ( 3 ( A , :, I5, :, 2X ) )
-
-91020   FORMAT ( A , I9, ':' , I6.6, :, A )
-
-91030   FORMAT ( A , I6.6 )
 
 91040   FORMAT ( 3 ( '"', A16, '"', :, 4X ) )
 

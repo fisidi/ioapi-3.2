@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <HTML>
 <HEAD>
-<!-- "$Id: index.html 160 2015-02-17 15:11:49Z coats $" -->
+<!-- "$Id: index.html 236 2015-10-14 19:52:34Z coats $" -->
 <META NAME="MSSmartTagsPreventParsing" CONTENT="TRUE">
 <TITLE>
     The EDSS/Models-3 I/O&nbsp;API
@@ -56,8 +56,8 @@
               &quot;netCDF files&quot;&nbsp;!!</EM>
      </DL>
      </STRONG>
-     Instead, netCDF is one of <U>four distinct lower layers</U> on
-     which the data and metadata structures for I/O&nbsp;API files are
+     Instead, netCDF is one of <U>four (and a half) distinct lower layers</U>
+     on which the data and metadata structures for I/O&nbsp;API files are
      currently available; additional lower layers have been incorporated
      at times in the past, and may very well be incorporated at various
      times in the future.
@@ -89,6 +89,9 @@
         <BR>
         Deprecate direct use of <CODE>INCLUDE</CODE>-files.
         <BR>
+        Deprecate use of <CODE>M3ERR()</CODE> routine in favor of the more
+        general <CODE>M3EXIT()</CODE>
+        <BR>
         Deprecate <VAR>m3tools/utmtool</VAR>, in favor of its
         replacement <VAR>m3tools/projtool</VAR>.
         <P>
@@ -116,6 +119,17 @@
         <CODE>INTERFACE</CODE>s formerly in
         <CODE>MODULE&nbsp;M3UTILIO</CODE>.
         <BR>
+        PnetCDF/MPI distributed I/O support for CMAQ.  New
+        <CODE>MODULE&nbsp;NCFIO</CODE> safely encapsulates netCDF and
+        PnetCDF declarations, replacing include-file <CODE>NETCDF.EXT</CODE>
+        (and <CODE>pnetcdf.inc</CODE>).
+        <BR>
+        Replace netCDF-2 <CODE>CALL&nbsp;NC*()</CODE> statements
+        throughout with the cvorresponding netCDF-3
+        <CODE>IERR&nbsp;=&nbsp;NF_*()</CODE>, to accommodate the fact
+        that recent versions of netCDF-Fortran silently did away with
+        the former.
+        <BR>
         Remove previously-deprecated <VAR>m3tools/utmtool</VAR>
         (superseded by <VAR>m3tools/projtool</VAR>).
      </DL>
@@ -138,15 +152,15 @@
     hydrological modeling systems. There was a external-package wrapper for
     the I/O&nbsp;API in the <A HREF = "http://wrf-model.org/index.php">Weather
     Research and Forecasting Model [WRF]</A>, which optionally uses I/O&nbsp;API
-    coupling mode to couple WRF-Chem with SMOKE&mdash;an effort
-    unfortunately dropped by NCAR.
+    for output, enabling the use of I/O&nbsp;API coupling mode to couple
+    WRF-Chem with SMOKE&mdash;an effort unfortunately dropped by NCAR.
     <P>
 
-    Since it is built around an object based conception of environmental
-    modeling, the I/O&nbsp;API provides a variety of data structure
-    types for organizing the data, and a set of access routines which
-    offer selective direct access to the data in terms meaningful to the
-    modeler. For example,
+    Since it is built around an <STRONG>object based conception of
+    environmental modeling</STRONG>, the I/O&nbsp;API provides a variety
+    of data structure types for organizing the data, and a set of access
+    routines which offer selective direct access to the data in terms
+    meaningful to the modeler. For example,
          <BLOCKQUOTE><CODE>
          Read layer 1 of variable 'OZONE' from 'CONCFILE' for
          5:00&nbsp;PM GMT on July&nbsp;19, 1988 and put the result
@@ -157,7 +171,7 @@
     that this <CODE>READ3</CODE> call retrieves exactly this ozone data
     immediately.  It does not have to read through previous  hours of
     data, nor whatever other variables (such as <VAR>NOX</VAR> or
-    </VAR>PAN</VAR>) are in what order in the file.  Data can be read or
+    <VAR>PAN</VAR>) are in what order in the file.  Data can be read or
     written in any order (or not at all). This characteristic provides
     the following advantages:
     <UL>
@@ -167,10 +181,10 @@
 
         <LI> <STRONG>modularity:</STRONG>  Data can be read or written
              in any order (or not at all).  The same input files serve
-             both MAQSIP engineering models and full-chemistry
+             both CMAQ and MAQSIP engineering models and full-chemistry
              models -- the former reading just a few of the variables
-             from the files, the latter reading most of them.
-             The modular-model structure used for MAQSIP and Models-3
+             from the files, the latter reading most of them. The
+             modular-model structure used for CMAQ, MAQSIP, and Models-3
              depends upon this.
 
         <LI> <STRONG>simplicity:</STRONG>  data is presented in
@@ -269,9 +283,9 @@
     read or write entire time series (with multiple time steps) as
     single operations, and research projects include data-parallel I/O
     and a very powerful &quot;geospatial cell complex&quot; data type
-    with polygonal-cell decompositions that may be both time
-    independent (as for finite elememt modeling) and time dependent (as
-    for moving-mesh plume-in-grid modeling).
+    with polygonal-cell decompositions that may be both time independent
+    (as for finite elememt modeling) and time dependent (as for
+    moving-mesh plume-in-grid modeling).
     <P>
 
     <STRONG>Copyright</STRONG>
@@ -283,13 +297,13 @@
     Institute for the Environment. The I/O&nbsp;API source code and
     documentation are copyright  &copy; 1992-2002 MCNC and
     Carlie&nbsp;J.&nbsp;Coats,&nbsp;Jr.,  &copy; 2003-2013 BAMS,
-    &copy; 2005-2013 Carlie&nbsp;J.&nbsp;Coats, Jr., and &copy; 2014-
+    &copy; 2005-2013 Carlie&nbsp;J.&nbsp;Coats,&nbsp;Jr., and &copy; 2014-
     UNC Institute for the Environment.  The library source code is
     distributed under the
     <A HREF="https://www.gnu.org/licenses/lgpl-2.1.html">GNU
     Lesser (library) Public License (LGPL) Version&nbsp;2.1</A>,
     and the tools-program source code is distrubuted under the
-    <A HREF=""https://www.gnu.org/licenses/gpl-2.0.html>GNU General
+    <A HREF="https://www.gnu.org/licenses/gpl-2.0.html">GNU General
     Public License, Version&nbsp;2</A>, subject to
     copyright-statement retention constraints. See the
     <A HREF = "NOTICES.html"><EM>Notices:  Copyright, and
@@ -299,7 +313,7 @@
     </BLOCKQUOTE>
 
     <PRE>
-    $Id: index.html 160 2015-02-17 15:11:49Z coats $
+    $Id: index.html 236 2015-10-14 19:52:34Z coats $
     </PRE>
 
  </BODY>

@@ -5,12 +5,12 @@
      &                    RESULT( WFLAG )
 
 C***********************************************************************
-C Version "$Id: write4d.F 171 2015-02-24 08:18:01Z coats $"
+C Version "$Id: write4d.F 230 2015-10-08 20:44:26Z coats $"
 C EDSS/Models-3 I/O API.
 C Copyright (C) 1992-2002 MCNC and Carlie J. Coats, Jr.,
 C (C) 2003-2013 Baron Advanced Meteorological Systems,
 C (C) 2007-2013 Carlie J. Coats, Jr., and
-C (C) 2014 UNC Institute for the Environment.
+C (C) 2014-2015 UNC Institute for the Environment.
 C Distributed under the GNU LESSER GENERAL PUBLIC LICENSE version 2.1
 C See file "LGPL.txt" for conditions of use.
 C.........................................................................
@@ -50,18 +50,18 @@ C       WRITE4D = .TRUE. for success.
 C
 C       Modified 03/2010 by CJC: F9x changes for I/O API v3.1
 C
-C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO;
-C       support for M3INT8 variables
+C       Modified 02/2015 by CJC for I/O API 3.2: USE M3UTILIO, MODNCFIO;
+C       support for M3INT8 variables.  USE NF_*() interfaces
 C***********************************************************************
 
         USE M3UTILIO
+        USE MODNCFIO
 
         IMPLICIT NONE
 
 C...........   INCLUDES:
 
         INCLUDE 'STATE3.EXT'
-        INCLUDE 'NETCDF.EXT'
 
 
 C...........   ARGUMENTS and their descriptions:
@@ -221,7 +221,7 @@ C.......   Find netCDF index for the file, and check time step availability:
         ELSE IF ( VOLAT3( FID ) ) THEN     !  volatile file:  synch with disk
 
 !$OMP      CRITICAL( S_NC )
-           CALL NCSNC( CDFID3( FID ), IERR )
+           IERR = nf_sync( CDFID3( FID ) )
 !$OMP      END CRITICAL( S_NC )
            IF ( IERR .NE. 0 ) THEN
 
@@ -390,7 +390,7 @@ C...........   from file into BUFFER(), selecting by file type:
      &          TRIM( VAR16 ) // ' written to ' //
      &          TRIM( FIL16 ) // ' for sequence',
      &          JDATE, ':', JTIME, ':', TSTEP, ':', NRECS
-	    CALL M3MSG2( MESG )
+        CALL M3MSG2( MESG )
 
         WFLAG = .TRUE.
 
