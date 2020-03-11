@@ -143,14 +143,14 @@ C   begin body of function  WRBUF3
 
                 END IF
 
-            ELSE IF ( LDATE3( VID,FID ) .EQ. ZDATE  .AND.
-     &                LTIME3( VID,FID ) .EQ. ZTIME ) THEN  ! retreat 1 time step
+            ELSE IF ( NDATE3( VID,FID ) .EQ. ZDATE  .AND.
+     &                NTIME3( VID,FID ) .EQ. ZTIME ) THEN  ! retreat 1 time step
 
                 ILAST3( VID,FID ) = 1 - IDUM            !  case _must_ be
-                NDATE3( VID,FID ) = LDATE3( VID,FID )
-                NTIME3( VID,FID ) = LTIME3( VID,FID )
-                LDATE3( VID,FID ) = JDATE               !  time-dependent
-                LTIME3( VID,FID ) = JTIME
+                LDATE3( VID,FID ) = NDATE3( VID,FID )
+                LTIME3( VID,FID ) = NTIME3( VID,FID )
+                NDATE3( VID,FID ) = JDATE               !  time-dependent
+                NTIME3( VID,FID ) = JTIME
 
             ELSE IF ( NDATE3( VID,FID ) .EQ. IMISS3 ) THEN  ! second call,
                                                             ! time dependent case
@@ -164,9 +164,6 @@ C   begin body of function  WRBUF3
                 ELSE IF  ( LDATE3( VID,FID ) .EQ. ZDATE  .AND.
      &                     LTIME3( VID,FID ) .EQ. ZTIME ) THEN  ! step forward
 
-                    ILAST3( VID,FID ) = 1 - IDUM
-                    LDATE3( VID,FID ) = NDATE3( VID,FID )
-                    LTIME3( VID,FID ) = NTIME3( VID,FID )
                     NDATE3( VID,FID ) = JDATE
                     NTIME3( VID,FID ) = JTIME
 
@@ -231,7 +228,7 @@ C   begin body of function  WRBUF3
 
                     ELSE
 
-                        ILAST3( V,FID ) = IDUM
+                        ILAST3( V,FID ) = 0 
                         LDATE3( V,FID ) = 0
                         LTIME3( V,FID ) = 0
                         NDATE3( V,FID ) = 0
@@ -242,12 +239,9 @@ C   begin body of function  WRBUF3
                 ELSE IF ( NDATE3( V,FID ) .EQ. ADATE  .AND.
      &                    NTIME3( V,FID ) .EQ. ATIME ) THEN ! advance 1 timestep
 
-                    WFLAG = ( 0 .NE. BUFPUT3( FID, V, SIZE,
-     &                                        1-IDUM , BUFFER( I ) ) )
-
                     IF ( JSTEP .NE. 0 ) THEN
 
-                        ILAST3( V,FID ) = IDUM
+                        ILAST3( V,FID ) = 1 - IDUM
                         LDATE3( V,FID ) = NDATE3( V,FID )
                         LTIME3( V,FID ) = NTIME3( V,FID )
                         NDATE3( V,FID ) = JDATE
@@ -255,7 +249,7 @@ C   begin body of function  WRBUF3
 
                     ELSE
 
-                        ILAST3( V,FID ) = 1 - IDUM
+                        ILAST3( V,FID ) = 0 
                         LDATE3( V,FID ) = 0
                         LTIME3( V,FID ) = 0
                         NDATE3( V,FID ) = 0
@@ -263,17 +257,14 @@ C   begin body of function  WRBUF3
 
                     END IF
 
-                ELSE IF ( LDATE3( V,FID ) .EQ. ZDATE  .AND.
-     &                    LTIME3( V,FID ) .EQ. ZTIME ) THEN  ! retreat 1 time step
+                ELSE IF ( NDATE3( V,FID ) .EQ. ZDATE  .AND.
+     &                    NTIME3( V,FID ) .EQ. ZTIME ) THEN  ! retreat 1 time step
 
-                    WFLAG = ( 0 .NE. BUFPUT3( FID, V, SIZE,
-     &                                        IDUM , BUFFER( I ) ) )
-
-                    ILAST3( V,FID ) = IDUM      !  case must be time-dependent
-                    NDATE3( V,FID ) = LDATE3( V,FID )
-                    NTIME3( V,FID ) = LTIME3( V,FID )
-                    LDATE3( V,FID ) = JDATE
-                    LTIME3( V,FID ) = JTIME
+                    ILAST3( V,FID ) = 1 - IDUM      !  case must be time-dependent
+                    LDATE3( V,FID ) = NDATE3( V,FID )
+                    LTIME3( V,FID ) = NTIME3( V,FID )
+                    NDATE3( V,FID ) = JDATE
+                    NTIME3( V,FID ) = JTIME
 
                 ELSE IF ( NDATE3( V,FID ) .EQ. IMISS3 ) THEN  ! second call,
                                                               ! time dependent
@@ -288,9 +279,6 @@ C   begin body of function  WRBUF3
                     ELSE IF (  LDATE3( V,FID ) .EQ. ZDATE  .AND.
      &                         LTIME3( V,FID ) .EQ. ZTIME ) THEN ! step backward
 
-                        ILAST3( V,FID ) = IDUM
-                        LDATE3( V,FID ) = NDATE3( V,FID )
-                        LTIME3( V,FID ) = NTIME3( V,FID )
                         NDATE3( V,FID ) = JDATE
                         NTIME3( V,FID ) = JTIME
 

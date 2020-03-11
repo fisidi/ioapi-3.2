@@ -77,12 +77,13 @@ C...........   EXTERNAL FUNCTIONS and their descriptions:
 
 C...........   SCRATCH LOCAL VARIABLES and their descriptions:
 
-        INTEGER       VAR, STEP       !  loop counter (over variables)
+        INTEGER       VAR, STEP, SIZE, I       !  loop counter (over variables)
         CHARACTER*256 MESG
 
 
 C***********************************************************************
 C   begin body of function  XTBUF3
+        SIZE = (ROW1-ROW0 + 1)*(COL1-COL0 + 1)*(LAY1-LAY0 + 1)  
 
         IF ( VID .GT. 0 ) THEN		!  xtract on just this variable
         
@@ -140,7 +141,7 @@ C   begin body of function  XTBUF3
             END IF
                 
         ELSE				!  xtract on all variables
-        
+            I = 1 
             DO  11  VAR = 1, NVARS3( FID )
         
                 IF ( VTYPE3( VAR,FID ) .NE. M3REAL ) THEN
@@ -170,7 +171,6 @@ C   begin body of function  XTBUF3
                     STEP = 1 - ILAST3( VAR,FID )        !  formula swaps 0 and 1
                     
                 ELSE
-                    
                     WRITE( MESG, '( 4A )' )
      &                  'Date and time not available for ',
      &                   VLIST3( VAR,FID ), ' in ', FLIST3( FID )
@@ -180,14 +180,13 @@ C   begin body of function  XTBUF3
                     
                 END IF
                 
-                IF ( 0 .EQ. BUFXTR3( FID, VAR, 
+                XTFLAG = ( 0 .NE. BUFXTR3( FID, VAR, 
      &                               LAY0, LAY1, ROW0, ROW1, 
      &                               COL0, COL1, NLAYS3( FID ), 
      &                               NROWS3( FID ), NCOLS3( FID ), 
-     &                               STEP, BUFFER ) ) THEN
-                        XTFLAG = .FALSE.
-                        RETURN
-                END IF		!  if bufxtr3() failed.
+     &                               STEP, BUFFER( I ) ) ) 
+                 
+                I = I + SIZE !  set up for next variable's slice of buffer()                
 
 11          CONTINUE
                 

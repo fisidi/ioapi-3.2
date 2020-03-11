@@ -615,10 +615,14 @@ FINT BUFCRE3 ( FINT  *fndx,     /** M3 file index **/
                                    /** SET UP EACH VARIABLE'S ADDRESS **/
         for ( i=1 ;  i <= (*nvars) ;  i++ )
             {
-            if      ( btype[i] == M3REAL ) asize = rsize * sizeof( FREAL ) ;
-            else if ( btype[i] == M3DBLE ) asize = rsize * sizeof( double ) ;
-            else if ( btype[i] == M3INT  ) asize = rsize * sizeof( FINT ) ;
-            else if ( btype[i] == M3INT8 ) asize = rsize * sizeof( int64_t ) ;
+            if      ( btype[i-1] == M3REAL ) asize = rsize * sizeof( FREAL ) ;
+            else if ( btype[i-1] == M3DBLE ) asize = rsize * sizeof( double ) ;
+            else if ( btype[i-1] == M3INT  ) asize = rsize * sizeof( FINT ) ;
+            else if ( btype[i-1] == M3INT8 ) asize = rsize * sizeof( int64_t ) ;
+            else {
+            	m3mesgc( "Error allocating internal buffer for BUFCRE3()" ) ;
+            	return(0); 
+            }
             if ( ! ( baddr[ *fndx ][ i ] = malloc( (size_t) asize ) ) )
                 {
                 m3mesgc( "Error allocating internal buffer for BUFCRE3()" ) ;

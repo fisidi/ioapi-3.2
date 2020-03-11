@@ -232,14 +232,17 @@ LOGICAL FUNCTION  XTRACT3 ( FNAME, VNAME,                           &
     END IF          !  end range checks on col, row, layer
 
 
+    IF ( CDFID3( FID ) .NE. BUFFIL3 ) THEN ! RDTFLAG only works for files on disk
+
     !!   Note:  rdtflag() calls NCSNC()
-
-    IF ( .NOT. RDTFLAG( FID,VID, JDATE,JTIME, STEP, .TRUE. ) ) THEN
-
-        MESG = 'Time step not available for file:  ' // FNAME
-        CALL M3WARN( 'XTRACT3', JDATE, JTIME, MESG )
-        XTRACT3 = .FALSE.
-        RETURN
+      IF ( .NOT. RDTFLAG( FID,VID, JDATE,JTIME, STEP, .TRUE. ) ) THEN
+  
+          MESG = 'Time step not available for file:  ' // FNAME
+          CALL M3WARN( 'XTRACT3', JDATE, JTIME, MESG )
+          XTRACT3 = .FALSE.
+          RETURN
+  
+      END IF
 
     END IF
 
